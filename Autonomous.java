@@ -56,7 +56,8 @@ public class Autonomous {
 		// auto line is 10 feet from the alliance wall, so move forward 10.5 feet = 126 inches
 		move(126, 0.7);
 	}
-	
+	//center of switches are 14 ft from alliance wall, switch panels are 4 ft deep, so edge of switch should be 16 ft from wall
+	//switch fence is 12 ft 9.5 in long
 	public static void placeCubeOnSwitch() {
 		if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==1) {
 			
