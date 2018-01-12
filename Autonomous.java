@@ -167,7 +167,7 @@ public class Autonomous {
 		int successes = 0;
 		while (successes < 5) {
 			Initialization.elevator.set(-speed); // assuming negative speed moves the elevator down
-			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.5) { // inches/second
+			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.1) { // inches/second
 				successes++;
 			}
 		}
