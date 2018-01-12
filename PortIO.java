@@ -9,26 +9,25 @@ public class PortIO {
 	//----------------------------------------PWM PORTS-------------------------------------------//
 		
 		// Drive Motor Controllers
-	public static final int FR = 0;	
-	public static final int BR = 1;
-	public static final int  FL = 2;
-	public static final int  BL = 3;
+			public static final int FR = 0;	
+			public static final int BR = 1;
+			public static final int  FL = 2;
+			public static final int  BL = 3;
 	
-	// Elevator Motor Controller
-	public static final int elv = 4;
+		// Elevator Motor Controller
+			public static final int elv = 4;
 		
 	//----------------------------------------DIO PORTS-------------------------------------------//
 
 		// Encoders
-	
-		public static final int rdEncoder1 = 0;
-		public static final int rdEncoder2 = 1;
+			public static final int rdEncoder1 = 0;
+			public static final int rdEncoder2 = 1;
 
-		public static final int ldEncoder1 = 2;
-		public static final int ldEncoder2 = 3;
+			public static final int ldEncoder1 = 2;
+			public static final int ldEncoder2 = 3;
 		
-		public static final int elevatorEncoder1 = 4;
-		public static final int elevatorEncoder2 = 5;
+			public static final int elevatorEncoder1 = 4;
+			public static final int elevatorEncoder2 = 5;
 		
 		
 	//------------------------------------------PCM Ports---------------------------------------------//
@@ -38,8 +37,8 @@ public class PortIO {
 	//------------------------------------------USB Ports---------------------------------------------//
 
 		// Joysticks
-		public static final int driver = 0;
-		public static final int operator = 1;
+			public static final int driver = 0;
+			public static final int operator = 1;
 		
 		
 		//Camera

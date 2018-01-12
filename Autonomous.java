@@ -35,11 +35,9 @@ public class Autonomous {
 		while (Math.abs(Initialization.rightDriveEncoder.getDistance()) < Math.abs(dist)) {
 		 	//SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());SmartDashboard.putNumber("RightEncoderDist", Initialization.rightDriveEncoder.getDistance());SmartDashboard.putNumber("LeftEncoderDist", Initialization.leftDriveEncoder.getDistance());
 			if (dist > 0) {
-				Initialization.gearaffesDrive.arcadeDrive(speed,
-						Initialization.gyro.getAngle() * Initialization.move_KP);
+				Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gyro.getAngle() * Initialization.move_KP);
 			} else {
-				Initialization.gearaffesDrive.arcadeDrive(-speed,
-						Initialization.gyro.getAngle() * Initialization.move_KP);
+				Initialization.gearaffesDrive.arcadeDrive(-speed, Initialization.gyro.getAngle() * Initialization.move_KP);
 			}
 		}
 		Initialization.gearaffesDrive.arcadeDrive(0, -Initialization.gyro.getAngle() * Initialization.move_KP);

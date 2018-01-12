@@ -7,6 +7,9 @@
 
 package org.usfirst.frc.team5404.robot;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 
@@ -30,23 +33,26 @@ public class Robot extends TimedRobot {
 	boolean hasRun = false;
 	@Override
 	public void autonomousPeriodic() {
-		//if(!hasRun) {
+		if (!hasRun) {
 			Autonomous.crossBaseline();
-		//	hasRun = true;
-	//	}
-		
+			hasRun = false;
+		}
+
 	}
 
 	public void teleopInit() {
 		resetSensors();
 		calibrateSensors();
-		Initialization.movePower = Initialization.prefs.getDouble("Move Power", 70)/100;
-		Initialization.rotationPower = Initialization.prefs.getDouble("Rotation Power", 70)/100;
+		Initialization.moveMultiplier = Initialization.prefs.getDouble("Move Multiplier", 70)/100;
+		Initialization.rotateMultiplier = Initialization.prefs.getDouble("Rotate Multiplier", 70)/100;
+		Initialization.elevateMultiplier = Initialization.prefs.getDouble("Elevate Multiplier", 70)/100;
 	}
 	
 	@Override
 	public void teleopPeriodic() {
-	Teleop.drive();
+		Teleop.drive();
+		//Teleop.elevate();
+		//Teleop.climb();
 	}
 
 	public void disabledInit() {
@@ -84,6 +90,11 @@ public class Robot extends TimedRobot {
 		 }catch(NullPointerException e) {
 			 	System.err.println("One or more of the field element positions could not be determined");
 		 }
+	}
+	
+	public static double formatNumber(double value) {
+		NumberFormat formatValue = new DecimalFormat("###.00");
+		return Double.valueOf(formatValue.format(value));
 	}
 	
 }
