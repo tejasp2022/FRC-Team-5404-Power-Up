@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
 	
-	public static void move(double dist, double speed) {
+	/*public static void move(double dist, double speed) {
 		//Initialization.rightDriveEncoder.reset();
 		//Initialization.leftDriveEncoder.reset();
 		//Initialization.gyro.reset();
@@ -22,12 +22,31 @@ public class Autonomous {
 			}
 		} else {
 		 Initialization.gearaffesDrive.arcadeDrive(0, 0);
-		  //Initialization.rightDriveEncoder.reset();
+		 //Initialization.rightDriveEncoder.reset();
 		 //Initialization.leftDriveEncoder.reset();
-		  //Initialization.gyro.reset();
+		 //Initialization.gyro.reset();
 		}
-	}
+	}*/
 	
+	public static void move(double dist, double speed) {
+		Initialization.rightDriveEncoder.reset();
+		Initialization.leftDriveEncoder.reset();
+		Initialization.gyro.reset();
+		while (Math.abs(Initialization.rightDriveEncoder.getDistance()) < Math.abs(dist)) {
+		 	//SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());SmartDashboard.putNumber("RightEncoderDist", Initialization.rightDriveEncoder.getDistance());SmartDashboard.putNumber("LeftEncoderDist", Initialization.leftDriveEncoder.getDistance());
+			if (dist > 0) {
+				Initialization.gearaffesDrive.arcadeDrive(speed,
+						Initialization.gyro.getAngle() * Initialization.move_KP);
+			} else {
+				Initialization.gearaffesDrive.arcadeDrive(-speed,
+						Initialization.gyro.getAngle() * Initialization.move_KP);
+			}
+		}
+		Initialization.gearaffesDrive.arcadeDrive(0, -Initialization.gyro.getAngle() * Initialization.move_KP);
+		Initialization.rightDriveEncoder.reset();
+		Initialization.leftDriveEncoder.reset();
+		Initialization.gyro.reset();
+	}
 	
 	public static void moveUntilContact(double dist, double highSpeed, double lowSpeed) {
 		Initialization.rightDriveEncoder.reset();
@@ -144,11 +163,11 @@ public class Autonomous {
 		}
 	}
 	
-	public static void elevatorToBase() {
+	public static void elevatorToBase(double speed) {
 		int successes = 0;
 		while (successes < 5) {
-			Initialization.elevator.set(-0.45);
-			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.1) { // inches/second
+			Initialization.elevator.set(-speed); // assuming negative speed moves the elevator down
+			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.5) { // inches/second
 				successes++;
 			}
 		}
@@ -156,20 +175,20 @@ public class Autonomous {
 		Initialization.elevatorEncoder.reset();
 	}
 	
-	public static void setElevatorHeight(double height) {
+	public static void setElevatorHeight(double height, double speed) {
 		double dist = height - Math.abs(Initialization.elevatorEncoder.getDistance());
 		if (dist == -Math.abs(Initialization.elevatorEncoder.getDistance())) {
-			elevatorToBase();
+			elevatorToBase(speed);
 		} else if (dist > 0) {
 			while (Math.abs(Initialization.elevatorEncoder.getDistance()) < height) {
-				Initialization.elevator.set(0.45); // assuming positive speed moves the elevator up
+				Initialization.elevator.set(speed); // assuming positive speed moves the elevator up
 			}
 			Initialization.elevator.set(0);
 		} else if (dist < 0) {
 			while (Math.abs(Initialization.elevatorEncoder.getDistance()) > height) {
-				Initialization.elevator.set(-0.45); // assuming negative speed moves the elevator down
+				Initialization.elevator.set(-speed); // assuming negative speed moves the elevator down
 			}
 			Initialization.elevator.set(0);
 		}
-	}	
+	}
 }

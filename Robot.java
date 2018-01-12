@@ -16,6 +16,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		resetSensors();
 		calibrateSensors();
+		Initialization.gearaffesDrive.setSafetyEnabled(false);
 	}
 	
 	@Override
