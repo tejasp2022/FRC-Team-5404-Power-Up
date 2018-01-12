@@ -156,21 +156,20 @@ public class Autonomous {
 		Initialization.elevatorEncoder.reset();
 	}
 	
-	public static void setElevatorHeight(double height){
-	double dist = height - Math.abs(Initialization.elevatorEncoder.getDistance());
-	if (dist == -Math.abs(Initialization.elevatorEncoder.getDistance())){
-		elevatorToBase();
-	} else if (dist > 0){
-		while (Math.abs(Initialization.elevatorEncoder.getDistance()) < height){
-			elevator.set(0.45); //assuming positive speed moves the elevator up
+	public static void setElevatorHeight(double height) {
+		double dist = height - Math.abs(Initialization.elevatorEncoder.getDistance());
+		if (dist == -Math.abs(Initialization.elevatorEncoder.getDistance())) {
+			elevatorToBase();
+		} else if (dist > 0) {
+			while (Math.abs(Initialization.elevatorEncoder.getDistance()) < height) {
+				Initialization.elevator.set(0.45); // assuming positive speed moves the elevator up
+			}
+			Initialization.elevator.set(0);
+		} else if (dist < 0) {
+			while (Math.abs(Initialization.elevatorEncoder.getDistance()) > height) {
+				Initialization.elevator.set(-0.45); // assuming negative speed moves the elevator down
+			}
+			Initialization.elevator.set(0);
 		}
-	} else if (dist < 0){
-		while (Math.abs(Initialization.elevatorEncoder.getDistance()) > height){
-			elevator.set(-0.45); //assuming negative speed moves the elevator down
-		}
-	}
-}
-
-	
-	
+	}	
 }
