@@ -23,21 +23,29 @@ public class Robot extends TimedRobot {
 		getMatchData();
 		resetSensors();
 		calibrateSensors();
+		
 	}
 
+	boolean hasRun = false;
 	@Override
 	public void autonomousPeriodic() {
-
+		//if(!hasRun) {
+			Autonomous.crossBaseline();
+		//	hasRun = true;
+	//	}
+		
 	}
 
 	public void teleopInit() {
 		resetSensors();
 		calibrateSensors();
+		Initialization.movePower = Initialization.prefs.getDouble("Move Power", 70)/100;
+		Initialization.rotationPower = Initialization.prefs.getDouble("Rotation Power", 70)/100;
 	}
 	
 	@Override
 	public void teleopPeriodic() {
-	
+	Teleop.drive();
 	}
 
 	public void disabledInit() {
@@ -55,8 +63,10 @@ public class Robot extends TimedRobot {
 		Initialization.gyro.reset();
 	}
 	public void calibrateSensors() {
-		Initialization.rightDriveEncoder.setDistancePerPulse(Initialization.INCHES_PER_TICK);
-		Initialization.leftDriveEncoder.setDistancePerPulse(Initialization.INCHES_PER_TICK);
+		Initialization.elevatorEncoder.setDistancePerPulse(Initialization.ELEVATOR_INCHES_PER_TICK);
+		Initialization.rightDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
+		Initialization.leftDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
+		Initialization.elevatorEncoder.setSamplesToAverage(1);
 		Initialization.rightDriveEncoder.setSamplesToAverage(1);
 		Initialization.leftDriveEncoder.setSamplesToAverage(1);
 	}
