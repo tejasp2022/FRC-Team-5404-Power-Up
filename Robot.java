@@ -93,8 +93,7 @@ public class Robot extends TimedRobot {
 	}
 	
 	public static double formatNumber(double value) {
-		NumberFormat formatValue = new DecimalFormat("###.00");
-		return Double.valueOf(formatValue.format(value));
+		return Double.valueOf(new DecimalFormat("###.00").format(value));
 	}
 	
 }
