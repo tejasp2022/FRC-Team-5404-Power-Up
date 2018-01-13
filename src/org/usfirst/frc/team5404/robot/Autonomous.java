@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
 	static ArrayList<Function<Void,Boolean>> funcyList = new ArrayList<Function<Void,Boolean>>();
+	static ArrayList<Function<Void,Boolean>> funcyListScale = new ArrayList<Function<Void,Boolean>>();
 	static int successes = 0;
 	
 	public static boolean move(double dist, double speed) {
@@ -111,18 +112,11 @@ public class Autonomous {
 	
 	
 	public static void placeCubeOnScale() {
-		if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 1) {
-
-		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 2) {
-
-		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 3) {
-
-		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 1) {
-
-		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 2) {
-
-		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 3) {
-
+		if(Robot.autoProcess < funcyListScale.size()) {
+			if(funcyListScale.get(Robot.autoProcess).apply(null)) {
+				Robot.resetSensors();
+				Robot.autoProcess++;
+			}
 		}
 	}
 	

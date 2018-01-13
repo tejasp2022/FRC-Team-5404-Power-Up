@@ -39,7 +39,6 @@ public class Robot extends TimedRobot {
 		else if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==2) {
 			Autonomous.funcyList.add( (Void)-> Autonomous.move(59-Initialization.robotDepth, 0.45) );
 			Autonomous.funcyList.add( (Void)-> Autonomous.rotate(-90, 0.45) );
-			Autonomous.funcyList.add( (Void)-> Autonomous.moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2));
 			Autonomous.funcyList.add( (Void)-> Autonomous.move(42+Initialization.robotWidth/2, 0.45));
 			Autonomous.funcyList.add( (Void)-> Autonomous.rotate(90, 0.45));
 			Autonomous.funcyList.add( (Void)-> Autonomous.moveUntilContact(81, 0.45, 0.2));
@@ -73,6 +72,42 @@ public class Robot extends TimedRobot {
 			Autonomous.funcyList.add( (Void)-> Autonomous.move(168 - Initialization.robotDepth/2, 0.45));
 			Autonomous.funcyList.add( (Void)-> Autonomous.rotate(-90,0.45));
 			Autonomous.funcyList.add( (Void)-> Autonomous.moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2));
+		}
+		
+		if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 1) {
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(323.65 - Initialization.robotDepth/2,0.45) );
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(90,0.45) );
+			//do something elevator related
+		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 2) {
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(59-Initialization.robotDepth, 0.45) );
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(-90, 0.45) );
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(120+Initialization.robotWidth/2, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(90, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(264.65, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(90, 0.45));
+		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 3) {
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(228-Initialization.robotWidth/2,0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(-90, 0.45) );
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(264-Initialization.robotWidth, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(90, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(95.65,0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(90, 0.45));
+		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 1) {
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(228-Initialization.robotWidth/2,0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(90, 0.45) );
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(264-Initialization.robotWidth, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(-90, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(95.65,0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(-90, 0.45));
+		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 2) {
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(59-Initialization.robotDepth, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(90, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(120-Initialization.robotWidth/2, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(-90, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(264.65, 0.45));
+		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 3) {
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.move(323.65 - Initialization.robotDepth/2, 0.45));
+			Autonomous.funcyListScale.add( (Void)-> Autonomous.rotate(-90,0.45));
 		}
 	}
 
