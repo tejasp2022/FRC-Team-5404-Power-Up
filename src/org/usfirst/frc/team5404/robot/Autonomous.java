@@ -5,9 +5,14 @@
 ***************************************************************************************/
 package org.usfirst.frc.team5404.robot;
 
+import java.util.ArrayList;
+import java.util.function.Function;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
+	static ArrayList<Function<Void,Boolean>> funcyList = new ArrayList<Function<Void,Boolean>>();
+	static int successes = 0;
 	
 	public static boolean move(double dist, double speed) {
 		//Initialization.rightDriveEncoder.reset();
@@ -48,23 +53,19 @@ public class Autonomous {
 		Initialization.gyro.reset();
 	}*/
 	
-	public static void moveUntilContact(double dist, double highSpeed, double lowSpeed) {
-		Initialization.rightDriveEncoder.reset();
-		Initialization.leftDriveEncoder.reset();
-		Initialization.gyro.reset();
-		int successes = 0;
-		while(successes<5) {
+	public static boolean moveUntilContact(double dist, double highSpeed, double lowSpeed) {
+		
+		if(successes<5) {
 			double speed = Math.abs(Initialization.rightDriveEncoder.getDistance()) < 0.9*dist ? highSpeed : lowSpeed;
 			//SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());SmartDashboard.putNumber("RightEncoderDist", Initialization.rightDriveEncoder.getDistance());SmartDashboard.putNumber("LeftEncoderDist", Initialization.leftDriveEncoder.getDistance());
 			Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gyro.getAngle() * Initialization.move_KP);
 			if(Math.abs(Initialization.rightDriveEncoder.getRate())<=0.5){ //inches/second 
 				successes++;
 			}
+			return false;
 		}
-		Initialization.gearaffesDrive.arcadeDrive(0, -Initialization.gyro.getAngle() * Initialization.move_KP);
-		Initialization.rightDriveEncoder.reset();
-		Initialization.leftDriveEncoder.reset();
-		Initialization.gyro.reset();
+		Initialization.gearaffesDrive.arcadeDrive(0, 0);
+		return true;
 	}
 	
 	
@@ -99,65 +100,12 @@ public class Autonomous {
 	
 	
 	public static void placeCubeOnSwitch() {
-		if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==1) {
-			switch(Robot.autoProcess) {
-			case 0:
-				if(move(168 - Initialization.robotDepth/2, 0.45)) {
-					Robot.autoProcess++;
-					Robot.resetSensors();
-					//Move Forward 168 Inches - (robot depth/2)
-				}
-				break;
-			case 1:
-				if(rotate(90,0.45)) {
-					Robot.autoProcess++;
-					Robot.resetSensors();
-					//Rotate Right 90 degrees
-				}
-				break;
-			case 2:
-				moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2);//Move Forward Until Contact -> 55.56 Inches - (robot width/2)
-				break;
+		//new stuff using ArrayList of Functions
+		if(Robot.autoProcess < funcyList.size()) {
+			if(funcyList.get(Robot.autoProcess).apply(null)) {
+				Robot.resetSensors();
+				Robot.autoProcess++;
 			}
-			 
-			 
-		
-		} else if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==2) {
-			move(59-Initialization.robotDepth, 0.45); //Move Forward 59 Inches - robot depth
-			rotate(-90, 0.45); //Rotate Left 90 degrees
-			move(42+Initialization.robotWidth/2, 0.45); //Move Forward 42 Inches + (robot width/2)
-			rotate(90, 0.45); //Rotate Right 90 degrees
-			moveUntilContact(81, 0.45, 0.2); //Move Forward Until Contact -> 81 Inches
-		
-		} else if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==3) {
-			move(228-Initialization.robotWidth/2,0.45); //Move Forward 228 Inches - (robot width/2)
-			rotate(-90, 0.45); //Rotate Left 90 degrees
-			move(264-Initialization.robotWidth, 0.45); //Move Forward 264 Inches - robot width
-			rotate(-90, 0.45); //Rotate Left 90 degrees
-			move(60,0.45); //Move Forward 60 inches
-			rotate(-90, 0.45); //Rotate Left 90 degrees
-			moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2); //Move Forward Until Contact -> 55.56 Inches - (robot width/2)
-		
-		} else if(Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition ==1) {
-			move(228-Initialization.robotWidth/2,0.45); //Move Forward 228 Inches - (robot width/2)
-			rotate(90, 0.45); //Rotate Right 90 degrees
-			move(264-Initialization.robotWidth, 0.45); //Move Forward 264 Inches - robot width
-			rotate(90, 0.45); //Rotate Right 90 degrees
-			move(60,0.45); //Move Forward 60 inches
-			rotate(90, 0.45); //Rotate Right 90 degrees
-			moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2); //Move Forward Until Contact -> 55.56 Inches - (robot width/2)
-		
-		} else if(Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition ==2) {
-			move(59-Initialization.robotDepth, 0.45); //Move Forward 59 Inches - robot depth
-			rotate(90, 0.45); //Rotate Right 90 degrees
-			move(66-Initialization.robotWidth/2, 0.45); //Move Forward 66 Inches - (robot width/2)
-			rotate(-90, 0.45); //Rotate Left 90 degrees
-			moveUntilContact(81, 0.45, 0.2); //Move Forward Until Contact -> 81 Inches
-		
-		} else if(Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition ==3) {
-			move(168 - Initialization.robotDepth/2, 0.45); //Move Forward 168 Inches - (robot depth/2)
-			rotate(-90,0.45); //Rotate Left 90 degrees
-			moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2); //Move Forward Until Contact -> 55.56 Inches - (robot width/2)
 		}
 	}
 	
