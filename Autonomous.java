@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
 	
-	/*public static void move(double dist, double speed) {
+	public static boolean move(double dist, double speed) {
 		//Initialization.rightDriveEncoder.reset();
 		//Initialization.leftDriveEncoder.reset();
 		//Initialization.gyro.reset();
@@ -20,15 +20,17 @@ public class Autonomous {
 			} else {
 				Initialization.gearaffesDrive.arcadeDrive(-speed, Initialization.gyro.getAngle() * Initialization.move_KP);
 			}
+			return true;
 		} else {
 		 Initialization.gearaffesDrive.arcadeDrive(0, 0);
+		 return false;
 		 //Initialization.rightDriveEncoder.reset();
 		 //Initialization.leftDriveEncoder.reset();
 		 //Initialization.gyro.reset();
 		}
-	}*/
+	}
 	
-	public static void move(double dist, double speed) {
+	/*public static void move(double dist, double speed) {
 		Initialization.rightDriveEncoder.reset();
 		Initialization.leftDriveEncoder.reset();
 		Initialization.gyro.reset();
@@ -44,7 +46,7 @@ public class Autonomous {
 		Initialization.rightDriveEncoder.reset();
 		Initialization.leftDriveEncoder.reset();
 		Initialization.gyro.reset();
-	}
+	}*/
 	
 	public static void moveUntilContact(double dist, double highSpeed, double lowSpeed) {
 		Initialization.rightDriveEncoder.reset();
@@ -66,11 +68,8 @@ public class Autonomous {
 	}
 	
 	
-	public static void rotate(double angle, double power) {
-		Initialization.rightDriveEncoder.reset();
-		Initialization.leftDriveEncoder.reset();
-		Initialization.gyro.reset();
-		while (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle)) {
+	public static boolean rotate(double angle, double power) {
+		if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle)) {
 			SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());
 			if (angle > 0) {
 				Initialization.gearaffesDrive.arcadeDrive(0, power);
@@ -82,14 +81,14 @@ public class Autonomous {
 				//Initialization.left.set(-1 * power);
 				//Initialization.right.set(-1 * power);
 			}
+			return true;
+		} else {
+			Initialization.gearaffesDrive.arcadeDrive(0, 0);
+			return false;
 		}
-		Initialization.gearaffesDrive.arcadeDrive(0, 0);
 		//Initialization.left.set(0);
 		//Initialization.right.set(0);
 
-		Initialization.rightDriveEncoder.reset();
-		Initialization.leftDriveEncoder.reset();
-		Initialization.gyro.reset();
 	}
 	
 	
@@ -101,9 +100,27 @@ public class Autonomous {
 	
 	public static void placeCubeOnSwitch() {
 		if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==1) {
-			move(168 - Initialization.robotDepth/2, 0.45); //Move Forward 168 Inches - (robot depth/2)
-			rotate(90,0.45); //Rotate Right 90 degrees
-			moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2); //Move Forward Until Contact -> 55.56 Inches - (robot width/2)
+			switch(Robot.autoProcess) {
+			case 0:
+				if(move(168 - Initialization.robotDepth/2, 0.45)) {
+					Robot.autoProcess++;
+					Robot.resetSensors();
+					//Move Forward 168 Inches - (robot depth/2)
+				}
+				break;
+			case 1:
+				if(rotate(90,0.45)) {
+					Robot.autoProcess++;
+					Robot.resetSensors();
+					//Rotate Right 90 degrees
+				}
+				break;
+			case 2:
+				moveUntilContact(55.56 - Initialization.robotWidth/2, 0.45, 0.2);//Move Forward Until Contact -> 55.56 Inches - (robot width/2)
+				break;
+			}
+			 
+			 
 		
 		} else if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==2) {
 			move(59-Initialization.robotDepth, 0.45); //Move Forward 59 Inches - robot depth

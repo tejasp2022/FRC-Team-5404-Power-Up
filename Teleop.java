@@ -21,4 +21,16 @@ public class Teleop {
 	public static void climb(){
 		
 	}
+	
+	public static void diagnosticData() {
+		Initialization.pdp.getVoltage();
+		Initialization.pdp.getTotalCurrent();
+		Initialization.pdp.getTotalPower();
+		Initialization.pdp.getTotalEnergy();
+		Initialization.pdp.getTemperature();
+		double[] currentByChannel = new double[15];
+		for(int i=0; i<15; i++) {
+			currentByChannel[i] = Initialization.pdp.getCurrent(i+1);
+		}
+	}
 }

@@ -8,13 +8,13 @@
 package org.usfirst.frc.team5404.robot;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 public class Robot extends TimedRobot {
 
+	public static int autoProcess = 0;
 	@Override
 	public void robotInit() {
 		resetSensors();
@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void autonomousInit() {
+		autoProcess = 0;
 		getMatchData();
 		resetSensors();
 		calibrateSensors();
@@ -33,10 +34,11 @@ public class Robot extends TimedRobot {
 	boolean hasRun = false;
 	@Override
 	public void autonomousPeriodic() {
-		if (!hasRun) {
+		/*if (!hasRun) {
 			Autonomous.crossBaseline();
 			hasRun = false;
-		}
+		}*/
+		Autonomous.placeCubeOnSwitch();
 
 	}
 
@@ -64,7 +66,7 @@ public class Robot extends TimedRobot {
 		
 	}
 	
-	public void resetSensors() {
+	public static void resetSensors() {
 		Initialization.rightDriveEncoder.reset();
 		Initialization.leftDriveEncoder.reset();
 		Initialization.gyro.reset();
@@ -84,11 +86,11 @@ public class Robot extends TimedRobot {
 	
 	public static void getMatchData() {
 		 try{
-			 	Initialization.ourSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(0); // either L or R
-				Initialization.scalePosition = DriverStation.getInstance().getGameSpecificMessage().charAt(1);
-				Initialization.opposingSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(2);
+			 Initialization.ourSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(0); // either L or R
+			 Initialization.scalePosition = DriverStation.getInstance().getGameSpecificMessage().charAt(1);
+			 Initialization.opposingSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(2);
 		 }catch(NullPointerException e) {
-			 	System.err.println("One or more of the field element positions could not be determined");
+			 System.err.println("One or more of the field element positions could not be determined");
 		 }
 	}
 	
