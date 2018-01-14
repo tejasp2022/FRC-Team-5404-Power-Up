@@ -7,12 +7,11 @@ package org.usfirst.frc.team5404.robot;
 
 public class Autonomous {
 
-	
+	// Autonomous Routines	
 	public static boolean crossBaseline() {
 		return move(126, 0.45);
 	}
 	
-	// Autonomous Routines
 	public static void placeCubeOnSwitch() {
 		if(Robot.autoProcess < Initialization.switchSequence.size()) {
 			if(Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
