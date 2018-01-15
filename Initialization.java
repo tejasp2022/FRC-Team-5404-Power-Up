@@ -1,5 +1,5 @@
 /***************************************************************************************
-*    Title: Gearaffes Robotics Team: FIRST Robotics Competition 2018 Code
+*    Title: Gearaffes Robotics Team FIRST Robotics Competition 2018 Code
 *    Authors: Tejas Priyadarshi, Christopher Seiler, Anoop Bhat
 *    Contact: http://www.frc5404.org/
 ***************************************************************************************/
@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Initialization {
 	// Constants
-	public static final double robotDepth = 32.25; //35.5 for last year's bot;
-	public static final double robotWidth = 27.5; //38.5 for last year's bot;
+	public static final double robotDepth = 32.25; //32.25; //35.5 for last year's bot;
+	public static final double robotWidth = 27.5; //27.5; //38.5 for last year's bot;
 
 	// Global Variables
 	public static char ourSwitchPosition;
@@ -34,8 +34,9 @@ public class Initialization {
 
 	// Autonomous Moving Powers
 	public static double autoMovePower = 0.7;
-	public static double autoMoveUntilContactPower = 0.55;
-	public static double autoRotatePower = 0.45;
+	public static double autoMoveContactHigh = 0.55;
+	public static double autoMoveContactLow = 0.3;
+	public static double autoRotatePower = 0.5;
 	
 	// Joysticks
 	public static Joystick driver = new Joystick(PortIO.driver);
@@ -61,7 +62,7 @@ public class Initialization {
 	// Drive Encoders
 	public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
 	public static Encoder leftDriveEncoder = new Encoder(PortIO.ldEncoder1, PortIO.ldEncoder2);
-	static final double DRIVE_TICKS_PER_REV = 213.6; //128 for last year's bot
+	static final double DRIVE_TICKS_PER_REV = 213.6;//213.6; //128 for last year's bot
 	static double DRIVE_INCH_PER_REV = 18.8496;
 	static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV;
 

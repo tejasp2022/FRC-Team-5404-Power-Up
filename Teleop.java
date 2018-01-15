@@ -1,5 +1,5 @@
 /***************************************************************************************
-*    Title: Gearaffes Robotics Team: FIRST Robotics Competition 2018 Code
+*    Title: Gearaffes Robotics Team FIRST Robotics Competition 2018 Code
 *    Authors: Tejas Priyadarshi, Christopher Seiler, Anoop Bhat
 *    Contact: http://www.frc5404.org/
 ***************************************************************************************/
@@ -9,21 +9,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Teleop {
 	public static void drive(){
-		Initialization.gearaffesDrive.arcadeDrive(-Initialization.moveMultiplier * Initialization.driver.getRawAxis(1), Initialization.rotateMultiplier * Initialization.driver.getRawAxis(4), true);
-		//SmartDashboard.putNumber("Robot Speed (FPS)", Robot.formatNumber(Math.abs(Initialization.rightDriveEncoder.getRate())/12));
-		SmartDashboard.putNumber("Gyro Angle", Initialization.gyro.getAngle());
+		Initialization.gearaffesDrive.arcadeDrive(-Initialization.moveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Initialization.rotateMultiplier * Math.pow(Initialization.driver.getRawAxis(4), 2), false);
+		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate())/12));
 	}
 	
 	public static void elevate() {
 		Initialization.elevator.set(Initialization.elevateMultiplier * Math.pow(Initialization.operator.getRawAxis(1), 2));
-		SmartDashboard.putNumber("Elevator Height (Feet)", Robot.formatNumber(Math.abs(Initialization.elevatorEncoder.getDistance())/12));
+		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance())/12));
+		if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.1 && Math.abs(Initialization.elevator.get())>0) {
+			Initialization.elevatorEncoder.reset();
+		}
 	}
 	
 	public static void climb(){
-		
-	}
-	
-	public static void diagnosticData() {
-		
+		// Climbing Code Here
 	}
 }
