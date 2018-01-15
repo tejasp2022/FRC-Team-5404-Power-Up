@@ -91,7 +91,6 @@ public class Autonomous {
 	}
 	
 	public static boolean elevatorToBase(double speed) {
-		//int successes = 0;
 		if(successesElevator < 5) {
 			Initialization.elevator.set(-speed); // assuming negative speed moves the elevator down
 			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.1) {
