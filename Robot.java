@@ -7,7 +7,6 @@ package org.usfirst.frc.team5404.robot;
 
 import java.text.DecimalFormat;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -44,6 +43,7 @@ public class Robot extends TimedRobot {
 		Teleop.drive();
 		//Teleop.elevate();
 		//Teleop.climb();
+		Teleop.rumble();
 	}
 
 	public void disabledInit() {
@@ -63,9 +63,9 @@ public class Robot extends TimedRobot {
 		Initialization.elevatorEncoder.setDistancePerPulse(Initialization.ELEVATOR_INCHES_PER_TICK);
 		Initialization.rightDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
 		Initialization.leftDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
-		Initialization.elevatorEncoder.setSamplesToAverage(1);
-		Initialization.rightDriveEncoder.setSamplesToAverage(10);
-		Initialization.leftDriveEncoder.setSamplesToAverage(10);
+		Initialization.elevatorEncoder.setSamplesToAverage(5);
+		Initialization.rightDriveEncoder.setSamplesToAverage(5);
+		Initialization.leftDriveEncoder.setSamplesToAverage(5);
 	}
 	
 	public void setAutonFalse() {
@@ -81,5 +81,4 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Right Encoder Distance", formatValue(Math.abs(Initialization.rightDriveEncoder.getDistance())));
 		SmartDashboard.putNumber("Gyro Angle", formatValue(Initialization.gyro.getAngle()));
 	}
-	
 }
