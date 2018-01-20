@@ -14,8 +14,8 @@ public class Teleop {
 	 * Drives the robot using input from the driver's joystick
 	 */
 	public static void drive(){
-		double finalMoveMultiplier = Initialization.operator.getRawButton(0) ? 1 : (Initialization.operator.getRawButton(1) ? 0.5 : Initialization.moveMultiplier);
-		double finalRotateMultiplier = Initialization.operator.getRawButton(0) ? 1 : (Initialization.operator.getRawButton(1) ? 0.5 : Initialization.rotateMultiplier);
+		double finalMoveMultiplier = Initialization.driver.getRawButton(6) ? 1 : (Initialization.driver.getRawButton(5) ? 0.5 : Initialization.moveMultiplier);
+		double finalRotateMultiplier = Initialization.driver.getRawAxis(3)>0.8 ? 1 : (Initialization.driver.getRawAxis(2)>0.8 ? 0.5 : Initialization.rotateMultiplier);
 		Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1))* -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier * Math.pow(Initialization.driver.getRawAxis(4), 2), false);
 		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate())/12));
 	}
@@ -28,24 +28,25 @@ public class Teleop {
 	public static void elevate() {	
 		if(processInProgress) {
 			Autonomous.setElevatorHeight(elevatorTargetHeight, elevatorSpeed);
+		
 		} else if(Initialization.operator.getRawButtonPressed(0)) {
 			processInProgress = true;
-			elevatorTargetHeight = 24;
+			elevatorTargetHeight = 0;
 			elevatorSpeed = 0.7;
 				
 		} else if (Initialization.operator.getRawButtonPressed(1) ) {
 			processInProgress = true;
-			elevatorTargetHeight = 36;
+			elevatorTargetHeight = 54; //4.5 feet
 			elevatorSpeed = 0.7;
 							
 		} else if (Initialization.operator.getRawButtonPressed(2) ) {
 			processInProgress = true;
-			elevatorTargetHeight = 48;
+			elevatorTargetHeight = 66; // 5.5 feet
 			elevatorSpeed = 0.7;
 							
 		} else if (Initialization.operator.getRawButtonPressed(2) ) {
 			processInProgress = true;
-			elevatorTargetHeight = 60;
+			elevatorTargetHeight = 78; //6.5 feet
 			elevatorSpeed = 0.7;
 							
 		} else {
@@ -63,6 +64,28 @@ public class Teleop {
 	public static void climb(){
 		// Climbing Code Here
 	}
+	
+	public static boolean rumbleInProgress = false;
+	public static Timer rumbleTimer = new Timer();
+	public static void eRumble(double time, boolean driver, boolean operator) {
+		if(!rumbleInProgress) {
+			rumbleTimer.reset();
+			rumbleTimer.start();
+			rumbleInProgress = true;
+		} else if (rumbleTimer.get()<time) {
+			if (driver) {
+				Initialization.driver.setRumble(RumbleType.kLeftRumble, 1);
+				Initialization.driver.setRumble(RumbleType.kRightRumble, 1);
+			}
+			if (operator) {
+				Initialization.operator.setRumble(RumbleType.kLeftRumble, 1);
+				Initialization.operator.setRumble(RumbleType.kRightRumble, 1);
+			}
+		} else {
+			rumbleInProgress = false;
+		}
+	}
+	
 	
 	public static void rumble(){
 		if((Timer.getMatchTime()<30 && Timer.getMatchTime()>29.5) || (Timer.getMatchTime()<29 && Timer.getMatchTime()>28.5) || (Timer.getMatchTime()<28 && Timer.getMatchTime()>27.5)){

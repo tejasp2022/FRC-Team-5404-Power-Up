@@ -116,6 +116,7 @@ public class Autonomous {
 			} else {
 				Initialization.elevator.set(0);
 				Teleop.processInProgress = false;
+				if()
 				return true;
 			}
 		} else if (dist < 0) {
