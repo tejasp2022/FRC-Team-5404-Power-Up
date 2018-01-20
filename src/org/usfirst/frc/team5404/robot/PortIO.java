@@ -1,5 +1,5 @@
 /***************************************************************************************
-*    Title: Gearaffes Robotics Team: FIRST Robotics Competition 2018 Code
+*    Title: Gearaffes Robotics Team FIRST Robotics Competition 2018 Code
 *    Authors: Tejas Priyadarshi, Christopher Seiler, Anoop Bhat
 *    Contact: http://www.frc5404.org/
 ***************************************************************************************/
@@ -11,8 +11,8 @@ public class PortIO {
 		// Drive Motor Controllers
 			public static final int FR = 0;	
 			public static final int BR = 1;
-			public static final int  FL = 2;
-			public static final int  BL = 3;
+			public static final int FL = 2;
+			public static final int BL = 3;
 	
 		// Elevator Motor Controller
 			public static final int elv = 4;
@@ -39,7 +39,4 @@ public class PortIO {
 		// Joysticks
 			public static final int driver = 0;
 			public static final int operator = 1;
-		
-		
-		//Camera
 }

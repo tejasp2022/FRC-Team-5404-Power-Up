@@ -1,9 +1,12 @@
 /***************************************************************************************
-*    Title: Gearaffes Robotics Team: FIRST Robotics Competition 2018 Code
+*    Title: Gearaffes Robotics Team FIRST Robotics Competition 2018 Code
 *    Authors: Tejas Priyadarshi, Christopher Seiler, Anoop Bhat
 *    Contact: http://www.frc5404.org/
 ***************************************************************************************/
 package org.usfirst.frc.team5404.robot;
+
+import java.util.ArrayList;
+import java.util.function.Function;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -17,17 +20,24 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Initialization {
+	// Robot Dimensions
+	public static final double robotDepth = 32.25;  // This Year: 32.25       Last Year: 35.5
+	public static final double robotWidth = 27.5;  //  This Year: 27.5        Last Year: 38.5
 
-	// Constants
-	public static final double robotDepth = 1;
-	public static final double robotWidth = 1;
-
-	// Global Variables
+	// Autonomous Positioning Variables
 	public static char ourSwitchPosition;
 	public static char scalePosition;
 	public static char opposingSwitchPosition;
-	public static int robotStartingPosition;
+	public static int robotStartingPosition = 1;
+	public static ArrayList<Function<Void,Boolean>> switchSequence = new ArrayList<Function<Void,Boolean>>();
+	public static ArrayList<Function<Void,Boolean>> scaleSequence = new ArrayList<Function<Void,Boolean>>();
 
+	// Autonomous Moving Speeds
+	public static double autoMovePower = 0.7;
+	public static double autoMoveContactHigh = 0.55;
+	public static double autoMoveContactLow = 0.3;
+	public static double autoRotatePower = 0.5;
+	
 	// Joysticks
 	public static Joystick driver = new Joystick(PortIO.driver);
 	public static Joystick operator = new Joystick(PortIO.operator);
@@ -38,12 +48,13 @@ public class Initialization {
 	public static VictorSP FL = new VictorSP(PortIO.FL);
 	public static VictorSP BL = new VictorSP(PortIO.BL);
 
+	// Motor Controller Variables
 	static double moveMultiplier;
 	static double rotateMultiplier;
 	static SpeedControllerGroup leftGroup = new SpeedControllerGroup(FL, BL);
 	static SpeedControllerGroup rightGroup = new SpeedControllerGroup(FR, BR);
 	static DifferentialDrive gearaffesDrive = new DifferentialDrive(leftGroup, rightGroup);
-	static double move_KP = 0.06; // needs to be changed
+	static double move_KP = 0.06;
 
 	// Elevator Motor Controller
 	public static Spark elevator = new Spark(PortIO.elv);
@@ -52,8 +63,8 @@ public class Initialization {
 	// Drive Encoders
 	public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
 	public static Encoder leftDriveEncoder = new Encoder(PortIO.ldEncoder1, PortIO.ldEncoder2);
-	static final double DRIVE_TICKS_PER_REV = 128; // needs to be changed
-	static double DRIVE_INCH_PER_REV = 18.8496; // needs to be changed
+	static final double DRIVE_TICKS_PER_REV = 213.6; // This Year: 213.6    Last Year: 128
+	static double DRIVE_INCH_PER_REV = 18.8496;
 	static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV;
 
 	// Elevator Encoders
@@ -62,7 +73,7 @@ public class Initialization {
 
 	// Gyros
 	public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-	static final double MultiplierForGyro = 1.175; // needs to be changed
+	static final double MultiplierForGyro = 1;
 
 	// Solenoids
 

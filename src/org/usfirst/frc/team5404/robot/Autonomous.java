@@ -1,151 +1,264 @@
 /***************************************************************************************
-*    Title: Gearaffes Robotics Team: FIRST Robotics Competition 2018 Code
+*    Title: Gearaffes Robotics Team FIRST Robotics Competition 2018 Code
 *    Authors: Tejas Priyadarshi, Christopher Seiler, Anoop Bhat
 *    Contact: http://www.frc5404.org/
 ***************************************************************************************/
 package org.usfirst.frc.team5404.robot;
 
-import java.util.ArrayList;
-import java.util.function.Function;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Autonomous {
-	static ArrayList<Function<Void,Boolean>> funcyList = new ArrayList<Function<Void,Boolean>>();
-	static ArrayList<Function<Void,Boolean>> funcyListScale = new ArrayList<Function<Void,Boolean>>();
-	static int successes = 0;
+
+	// Autonomous Routines
 	
-	public static boolean move(double dist, double speed) {
-		//Initialization.rightDriveEncoder.reset();
-		//Initialization.leftDriveEncoder.reset();
-		//Initialization.gyro.reset();
-		if (Math.abs(Initialization.rightDriveEncoder.getDistance()) < Math.abs(dist)) {
-			//SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());SmartDashboard.putNumber("RightEncoderDist", Initialization.rightDriveEncoder.getDistance());SmartDashboard.putNumber("LeftEncoderDist", Initialization.leftDriveEncoder.getDistance());
-			if (dist > 0) {
-				Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gyro.getAngle() * Initialization.move_KP);
-			} else {
-				Initialization.gearaffesDrive.arcadeDrive(-speed, Initialization.gyro.getAngle() * Initialization.move_KP);
+	public static boolean crossBaseline() {
+		return move(126, 0.7);
+	}
+	
+	public static void placeCubeOnSwitch() {
+		Timer.delay(Initialization.prefs.getDouble("Autonomous Delay", 0));
+		if(Robot.autoProcess < Initialization.switchSequence.size()) {
+			if(Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
+				Robot.resetSensors();
+				Robot.autoProcess++;
+				Autonomous.successesContact = 0;
+				Autonomous.successesElevator = 0;
 			}
-			return true;
-		} else {
-		 Initialization.gearaffesDrive.arcadeDrive(0, 0);
-		 return false;
-		 //Initialization.rightDriveEncoder.reset();
-		 //Initialization.leftDriveEncoder.reset();
-		 //Initialization.gyro.reset();
 		}
 	}
 	
-	/*public static void move(double dist, double speed) {
-		Initialization.rightDriveEncoder.reset();
-		Initialization.leftDriveEncoder.reset();
-		Initialization.gyro.reset();
-		while (Math.abs(Initialization.rightDriveEncoder.getDistance()) < Math.abs(dist)) {
-		 	//SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());SmartDashboard.putNumber("RightEncoderDist", Initialization.rightDriveEncoder.getDistance());SmartDashboard.putNumber("LeftEncoderDist", Initialization.leftDriveEncoder.getDistance());
-			if (dist > 0) {
-				Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gyro.getAngle() * Initialization.move_KP);
-			} else {
-				Initialization.gearaffesDrive.arcadeDrive(-speed, Initialization.gyro.getAngle() * Initialization.move_KP);
+	public static void placeCubeOnScale() {
+		Timer.delay(Initialization.prefs.getDouble("Autonomous Delay", 0));
+		if(Robot.autoProcess < Initialization.scaleSequence.size()) {
+			if(Initialization.scaleSequence.get(Robot.autoProcess).apply(null)) {
+				Robot.resetSensors();
+				Robot.autoProcess++;
+				Autonomous.successesContact = 0;
+				Autonomous.successesElevator = 0;
 			}
 		}
-		Initialization.gearaffesDrive.arcadeDrive(0, -Initialization.gyro.getAngle() * Initialization.move_KP);
-		Initialization.rightDriveEncoder.reset();
-		Initialization.leftDriveEncoder.reset();
-		Initialization.gyro.reset();
-	}*/
+	}
 	
+	//building blocks
+	
+	public static boolean move(double dist, double speed) {
+		if (Math.abs(Initialization.leftDriveEncoder.getDistance()) < Math.abs(dist)) {
+			if (dist > 0) {
+				Initialization.gearaffesDrive.arcadeDrive(speed, -Initialization.gyro.getAngle() * Initialization.move_KP);
+			} else {
+				Initialization.gearaffesDrive.arcadeDrive(-speed, -Initialization.gyro.getAngle() * Initialization.move_KP);
+			}
+			Robot.displaySensors();
+			return false;
+		} else {
+		 Initialization.gearaffesDrive.arcadeDrive(0, 0);
+		 return true;
+		}
+	}
+	
+	public static int successesContact = 0;
+	public static int successesElevator = 0;
 	public static boolean moveUntilContact(double dist, double highSpeed, double lowSpeed) {
-		
-		if(successes<5) {
-			double speed = Math.abs(Initialization.rightDriveEncoder.getDistance()) < 0.9*dist ? highSpeed : lowSpeed;
-			//SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());SmartDashboard.putNumber("RightEncoderDist", Initialization.rightDriveEncoder.getDistance());SmartDashboard.putNumber("LeftEncoderDist", Initialization.leftDriveEncoder.getDistance());
-			Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gyro.getAngle() * Initialization.move_KP);
-			if(Math.abs(Initialization.rightDriveEncoder.getRate())<=0.5){ //inches/second 
-				successes++;
+		Robot.displaySensors();
+		if(successesContact<5) {
+			double speed = Math.abs(Initialization.leftDriveEncoder.getDistance()) < 0.8*dist ? highSpeed : lowSpeed;
+			Initialization.gearaffesDrive.arcadeDrive(speed, -Initialization.gyro.getAngle() * Initialization.move_KP);
+			if(Math.abs(Initialization.leftDriveEncoder.getRate())<=0.5){ //inches/second 
+				successesContact++;
 			}
 			return false;
+		} else {
+			Initialization.gearaffesDrive.arcadeDrive(0, 0);
+			return true;
 		}
-		Initialization.gearaffesDrive.arcadeDrive(0, 0);
-		return true;
 	}
 	
 	
 	public static boolean rotate(double angle, double power) {
 		if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle)) {
-			SmartDashboard.putNumber("GyroAngle", Initialization.gyro.getAngle());
+			Robot.displaySensors();
 			if (angle > 0) {
 				Initialization.gearaffesDrive.arcadeDrive(0, power);
-				//Initialization.left.set(1 * power);
-				//Initialization.right.set(1 * power);
-				
 			} else {
 				Initialization.gearaffesDrive.arcadeDrive(0, -power);
-				//Initialization.left.set(-1 * power);
-				//Initialization.right.set(-1 * power);
 			}
-			return true;
+			return false;
 		} else {
 			Initialization.gearaffesDrive.arcadeDrive(0, 0);
-			return false;
-		}
-		//Initialization.left.set(0);
-		//Initialization.right.set(0);
-
-	}
-	
-	
-	public static void crossBaseline() {
-		// auto line is 10 feet from the alliance wall, so move forward 10.5 feet = 126 inches
-		move(126, 0.45);
-	}
-	
-	
-	public static void placeCubeOnSwitch() {
-		//new stuff using ArrayList of Functions
-		if(Robot.autoProcess < funcyList.size()) {
-			if(funcyList.get(Robot.autoProcess).apply(null)) {
-				Robot.resetSensors();
-				Robot.autoProcess++;
-			}
+			return true;
 		}
 	}
 	
-	
-	public static void placeCubeOnScale() {
-		if(Robot.autoProcess < funcyListScale.size()) {
-			if(funcyListScale.get(Robot.autoProcess).apply(null)) {
-				Robot.resetSensors();
-				Robot.autoProcess++;
-			}
-		}
-	}
-	
-	public static void elevatorToBase(double speed) {
-		int successes = 0;
-		while (successes < 5) {
+	public static boolean elevatorToBase(double speed) {
+		if(successesElevator < 5) {
 			Initialization.elevator.set(-speed); // assuming negative speed moves the elevator down
-			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.1) { // inches/second
-				successes++;
+			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.1) {
+				successesElevator++;
 			}
+			return false;
+		} else {
+			Initialization.elevator.set(0);
+			Initialization.elevatorEncoder.reset();
+			Teleop.processInProgress = false;
+			return true;
+		}	
+	}
+
+	public static boolean setElevatorHeight(double height, double speed) {	
+		double dist = height - Math.abs(Initialization.elevatorEncoder.getDistance());
+		if (height==0) {
+			return elevatorToBase(speed);
+		} else if (dist > 0) { 
+			if (Math.abs(Initialization.elevatorEncoder.getDistance()) < height - 1) { //1 inch deadzone
+				Initialization.elevator.set(speed); // assuming positive speed moves the elevator up
+				return false;
+			} else {
+				Initialization.elevator.set(0);
+				Teleop.processInProgress = false;
+				if()
+				return true;
+			}
+		} else if (dist < 0) {
+			if (Math.abs(Initialization.elevatorEncoder.getDistance()) > height +1) { //1 inch deadzone
+				Initialization.elevator.set(-speed); // assuming negative speed moves the elevator down
+				return false;
+			} else {
+				Initialization.elevator.set(0);
+				Teleop.processInProgress = false;
+				return true;
+			}
+		} else {
+			Teleop.processInProgress = false;
+			return true;
 		}
-		Initialization.elevator.set(0);
-		Initialization.elevatorEncoder.reset();
 	}
 	
-	public static void setElevatorHeight(double height, double speed) {
-		double dist = height - Math.abs(Initialization.elevatorEncoder.getDistance());
-		if (dist == -Math.abs(Initialization.elevatorEncoder.getDistance())) {
-			elevatorToBase(speed);
-		} else if (dist > 0) {
-			while (Math.abs(Initialization.elevatorEncoder.getDistance()) < height) {
-				Initialization.elevator.set(speed); // assuming positive speed moves the elevator up
-			}
-			Initialization.elevator.set(0);
-		} else if (dist < 0) {
-			while (Math.abs(Initialization.elevatorEncoder.getDistance()) > height) {
-				Initialization.elevator.set(-speed); // assuming negative speed moves the elevator down
-			}
-			Initialization.elevator.set(0);
+	public static void getMatchData() {
+		 try{
+			 Initialization.ourSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
+			 Initialization.scalePosition = DriverStation.getInstance().getGameSpecificMessage().charAt(1);
+			 Initialization.opposingSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(2);
+		 }catch(NullPointerException e) {
+			 System.err.println("One or more of the field element positions could not be determined");
+		 }
+	}
+	
+	public static boolean delay(double delay) {
+		Timer.delay(delay);
+		return true;
+	}
+	
+	public static void determineAutonomousSequence() {
+		//Switch Sequence
+		Initialization.switchSequence.clear();
+		if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==1) {
+			Initialization.switchSequence.add((Void)-> move(168 - Initialization.robotDepth/2,Initialization.autoMovePower) );
+			Initialization.switchSequence.add((Void)-> delay(0.5));
+			Initialization.switchSequence.add((Void)-> rotate(90,Initialization.autoRotatePower) );
+			Initialization.switchSequence.add((Void)-> delay(0.5));
+			Initialization.switchSequence.add((Void)-> moveUntilContact(55.56 - Initialization.robotWidth/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+		} else if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==2) {
+			
+			Initialization.switchSequence.add((Void)-> move(59-Initialization.robotDepth, Initialization.autoMovePower) );
+			Initialization.switchSequence.add((Void)-> rotate(-90, Initialization.autoRotatePower) );
+			Initialization.switchSequence.add((Void)-> move(95+Initialization.robotWidth/2, Initialization.autoMovePower));				
+			Initialization.switchSequence.add((Void)-> rotate(90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> moveUntilContact(81, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			/*Initialization.switchSequence.add((Void)-> move(59-Initialization.robotDepth, Initialization.autoMovePower) );
+			Initialization.switchSequence.add((Void)-> rotate(-90, Initialization.autoRotatePower) );
+			Initialization.switchSequence.add((Void)-> move(42+Initialization.robotWidth/2, Initialization.autoMovePower));				
+			Initialization.switchSequence.add((Void)-> rotate(90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> moveUntilContact(81, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));*/	
+		} else if(Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition ==3) {
+			Initialization.switchSequence.add((Void)-> move(228-Initialization.robotWidth/2,Initialization.autoMovePower));					
+			Initialization.switchSequence.add((Void)-> rotate(-90, Initialization.autoRotatePower) );
+			Initialization.switchSequence.add((Void)-> move(264-Initialization.robotWidth, Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(-90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> move(60,Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(-90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> moveUntilContact(55.56 - Initialization.robotWidth/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));	
+		} else if(Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition ==1) {
+			Initialization.switchSequence.add((Void)-> move(228-Initialization.robotWidth/2,Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> move(264-Initialization.robotWidth, Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> move(60,Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> moveUntilContact(55.56 - Initialization.robotWidth/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));	
+		} else if(Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition ==2) {
+			Initialization.switchSequence.add((Void)-> moveUntilContact(140-Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			/*Initialization.switchSequence.add((Void)-> move(59-Initialization.robotDepth, Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> move(66-Initialization.robotWidth/2, Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(-90, Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> moveUntilContact(81, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));*/		
+		} else if(Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition ==3) {
+			Initialization.switchSequence.add((Void)-> move(168 - Initialization.robotDepth/2, Initialization.autoMovePower));
+			Initialization.switchSequence.add((Void)-> rotate(-90,Initialization.autoRotatePower));
+			Initialization.switchSequence.add((Void)-> moveUntilContact(55.56 - Initialization.robotWidth/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+		}			
+		
+		//Scale Sequence
+		Initialization.scaleSequence.clear();
+		if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 1) {
+			Initialization.scaleSequence.add((Void)-> move(323.65 - Initialization.robotDepth/2,0.7) );
+			Initialization.scaleSequence.add((Void)-> rotate(90,0.5) );
+			Initialization.scaleSequence.add((Void)-> move(4,0.7) );
+		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 2) {
+			Initialization.scaleSequence.add((Void)-> move(59-Initialization.robotDepth, 0.7) );
+			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.5) );
+			Initialization.scaleSequence.add((Void)-> move(173+Initialization.robotWidth/2, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(264.65, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(4,0.7) );
+			
+			
+			/*Initialization.scaleSequence.add((Void)-> move(59-Initialization.robotDepth, 0.7) );
+			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.5) );
+			Initialization.scaleSequence.add((Void)-> move(120+Initialization.robotWidth/2, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(264.65, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(4,0.7) );*/
+		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition == 3) {
+			Initialization.scaleSequence.add((Void)-> move(228-Initialization.robotWidth/2,0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.5) );
+			Initialization.scaleSequence.add((Void)-> move(264-Initialization.robotWidth, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(95.65,0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(4,0.7) );
+		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 1) {
+			Initialization.scaleSequence.add((Void)-> move(247-Initialization.robotWidth/2,0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.4) );
+			Initialization.scaleSequence.add((Void)-> move(264-Initialization.robotWidth, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.4));
+			Initialization.scaleSequence.add((Void)-> move(83.65,0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.4));
+			delay(0.25);
+			Initialization.scaleSequence.add((Void)-> move(10,0.7) );
+		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 2) {
+			Initialization.scaleSequence.add((Void)-> move(59-Initialization.robotDepth, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(67-Initialization.robotWidth/2, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(264.65, 0.7));
+			Initialization.scaleSequence.add((Void)-> move(4,0.7) );
+			
+			
+			
+			/*Initialization.scaleSequence.add((Void)-> move(59-Initialization.robotDepth, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(120-Initialization.robotWidth/2, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.5));
+			Initialization.scaleSequence.add((Void)-> move(264.65, 0.7));
+			Initialization.scaleSequence.add((Void)-> move(4,0.7) );*/
+		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 3) {
+			Initialization.scaleSequence.add((Void)-> move(323.65 - Initialization.robotDepth/2, 0.7));
+			Initialization.scaleSequence.add((Void)-> rotate(-90,0.7));
+			Initialization.scaleSequence.add((Void)-> move(4,0.7) );
 		}
 	}
 }
