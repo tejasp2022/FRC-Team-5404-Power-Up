@@ -116,7 +116,7 @@ public class Autonomous {
 			} else {
 				Initialization.elevator.set(0);
 				Teleop.processInProgress = false;
-				if()
+				//if()
 				return true;
 			}
 		} else if (dist < 0) {
@@ -238,7 +238,7 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void)-> move(83.65,0.7));
 			Initialization.scaleSequence.add((Void)-> rotate(-90, 0.4));
 			delay(0.25);
-			Initialization.scaleSequence.add((Void)-> move(10,0.7) );
+			Initialization.scaleSequence.add((Void)-> move(34,0.7) );
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition == 2) {
 			Initialization.scaleSequence.add((Void)-> move(59-Initialization.robotDepth, 0.7));
 			Initialization.scaleSequence.add((Void)-> rotate(90, 0.5));
