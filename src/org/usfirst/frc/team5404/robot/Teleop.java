@@ -100,4 +100,42 @@ public class Teleop {
 			Initialization.operator.setRumble(RumbleType.kRightRumble, 0);
 		}
 	}
+	
+	
+	/*
+	Boolean rumbleInProgress = false
+double setTime;
+double endTime;
+Public static void rumble(double duration, boolean driver, boolean operator){
+	if(!rumbleInProgress){
+		setTime = Timer.getMatchTime();
+		endTime = setTime + duration
+		rumbleInProgress = true;
+	} else {
+		if(Timer.getMatchTime() < duration){
+			if(driver) {
+	Initialization.driver.setRumble(RumbleType.kLeftRumble, 1);
+	Initialization.driver.setRumble(RumbleType.kRightRumble, 1);
+}
+
+if (operator) {
+	Initialization.operator.setRumble(RumbleType.kLeftRumble, 1);
+	Initialization.operator.setRumble(RumbleType.kRightRumble, 1);
+}	
+
+		} else {
+			Initialization.driver.setRumble(RumbleType.kLeftRumble, 0);
+Initialization.driver.setRumble(RumbleType.kRightRumble, 0);
+Initialization.operator.setRumble(RumbleType.kLeftRumble, 0);
+Initialization.operator.setRumble(RumbleType.kRightRumble, 0);
+rumbleInProgress = false;
+		}	
+	}
+} 
+
+	
+	*/
+	
+	
+	
 }
