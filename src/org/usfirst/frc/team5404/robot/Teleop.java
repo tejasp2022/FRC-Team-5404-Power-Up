@@ -20,42 +20,55 @@ public class Teleop {
 		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate())/12));
 	}
 	
+	
+	static boolean automationInProgress = false;
+	static double elevatorTargetHeight;
+
 	/**
 	 * Controls the elevator using input from the operator's joystick
 	 */
-	static boolean processInProgress = false;
-	static double elevatorTargetHeight, elevatorSpeed;
-	public static void elevate() {	
-		if(processInProgress) {
-			Autonomous.setElevatorHeight(elevatorTargetHeight, elevatorSpeed);
-		
-		} else if(Initialization.operator.getRawButtonPressed(0)) {
-			processInProgress = true;
-			elevatorTargetHeight = 0;
-			elevatorSpeed = 0.7;
-				
-		} else if (Initialization.operator.getRawButtonPressed(1) ) {
-			processInProgress = true;
-			elevatorTargetHeight = 54; //4.5 feet
-			elevatorSpeed = 0.7;
-							
-		} else if (Initialization.operator.getRawButtonPressed(2) ) {
-			processInProgress = true;
-			elevatorTargetHeight = 66; // 5.5 feet
-			elevatorSpeed = 0.7;
-							
-		} else if (Initialization.operator.getRawButtonPressed(2) ) {
-			processInProgress = true;
-			elevatorTargetHeight = 78; //6.5 feet
-			elevatorSpeed = 0.7;
-							
-		} else {
-			Initialization.elevator.set(Initialization.elevateMultiplier * Math.pow(Initialization.operator.getRawAxis(1), 2));
-			if (Math.abs(Initialization.elevatorEncoder.getRate()) <= 0.1 && Math.abs(Initialization.elevator.get())>0) {
+	public static void elevate() {
+		if (Initialization.topLimitSwitch.get() || Initialization.bottomLimitSwitch.get()) {
+			Initialization.elevator.set(0);
+			if (Initialization.bottomLimitSwitch.get()) {
 				Initialization.elevatorEncoder.reset();
 			}
+		} else {
+			boolean goSlowBottom = (Math.abs(Initialization.elevatorEncoder.getDistance()) < 12 && Math.signum(Initialization.elevator.get()) == -1);
+			boolean goSlowTop = (Math.abs(Initialization.elevatorEncoder.getDistance()) > 72 && Math.signum(Initialization.elevator.get()) == 1);
+			if (automationInProgress) {
+				double speed = goSlowBottom ? Initialization.automationBottomSpeed : goSlowTop ? Initialization.automationBottomSpeed : Initialization.automationHighSpeed;
+				Autonomous.setElevatorHeight(elevatorTargetHeight, speed);
+
+			} else if (Initialization.operator.getRawButtonPressed(1)) { // A
+				automationInProgress = true;
+				Autonomous.successesElevator = 0;
+				elevatorTargetHeight = 0; // 0 feet
+
+			} else if (Initialization.operator.getRawButtonPressed(2)) { // B
+				automationInProgress = true;
+				elevatorTargetHeight = 24; // 2 feet
+
+			} else if (Initialization.operator.getRawButtonPressed(4)) { // X
+				automationInProgress = true;
+				elevatorTargetHeight = 48; // 4 feet
+
+			} else if (Initialization.operator.getRawButtonPressed(3)) { // Y
+				automationInProgress = true;
+				elevatorTargetHeight = 72; // 6 feet
+
+			} else {
+				double operatorOutput = -Math.signum(Initialization.operator.getRawAxis(1)) * Initialization.elevateMultiplier * Math.pow(Initialization.operator.getRawAxis(1), 2);
+				if (goSlowBottom && Math.abs(operatorOutput) > Initialization.automationBottomSpeed) {
+					Initialization.elevator.set(Math.signum(operatorOutput) * Initialization.automationBottomSpeed);
+				} else if (goSlowTop && Math.abs(operatorOutput) > Initialization.automationTopSpeed) {
+					Initialization.elevator.set(Math.signum(operatorOutput) * Initialization.automationTopSpeed);
+				} else {
+					Initialization.elevator.set(operatorOutput);
+				}
+			}
 		}
-		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance())/12));
+		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 	
 	/**
@@ -65,29 +78,41 @@ public class Teleop {
 		// Climbing Code Here
 	}
 	
-	public static boolean rumbleInProgress = false;
-	public static Timer rumbleTimer = new Timer();
-	public static void eRumble(double time, boolean driver, boolean operator) {
-		if(!rumbleInProgress) {
-			rumbleTimer.reset();
-			rumbleTimer.start();
+	public static void rangeDistance() {
+		//SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getValue());
+	}
+	
+	static Boolean rumbleInProgress = false;
+	public static double setTime;
+	public static double endTime;
+
+	public static void elevatorRumble(double duration, boolean driver, boolean operator) {
+		if (!rumbleInProgress) {
+			setTime = Timer.getFPGATimestamp();
+			endTime = setTime + duration;
 			rumbleInProgress = true;
-		} else if (rumbleTimer.get()<time) {
-			if (driver) {
-				Initialization.driver.setRumble(RumbleType.kLeftRumble, 1);
-				Initialization.driver.setRumble(RumbleType.kRightRumble, 1);
-			}
-			if (operator) {
-				Initialization.operator.setRumble(RumbleType.kLeftRumble, 1);
-				Initialization.operator.setRumble(RumbleType.kRightRumble, 1);
-			}
 		} else {
-			rumbleInProgress = false;
+			if (Timer.getMatchTime() < endTime) {
+				if (driver) {
+					Initialization.driver.setRumble(RumbleType.kLeftRumble, 1);
+					Initialization.driver.setRumble(RumbleType.kRightRumble, 1);
+				}
+				if (operator) {
+					Initialization.operator.setRumble(RumbleType.kLeftRumble, 1);
+					Initialization.operator.setRumble(RumbleType.kRightRumble, 1);
+				}
+			} else {
+				Initialization.driver.setRumble(RumbleType.kLeftRumble, 0);
+				Initialization.driver.setRumble(RumbleType.kRightRumble, 0);
+				Initialization.operator.setRumble(RumbleType.kLeftRumble, 0);
+				Initialization.operator.setRumble(RumbleType.kRightRumble, 0);
+				rumbleInProgress = false;
+			}
 		}
 	}
 	
 	
-	public static void rumble(){
+	public static void endGameRumble(){
 		if((Timer.getMatchTime()<30 && Timer.getMatchTime()>29.5) || (Timer.getMatchTime()<29 && Timer.getMatchTime()>28.5) || (Timer.getMatchTime()<28 && Timer.getMatchTime()>27.5)){
 			Initialization.driver.setRumble(RumbleType.kLeftRumble, 1);
 			Initialization.driver.setRumble(RumbleType.kRightRumble, 1);
@@ -100,42 +125,4 @@ public class Teleop {
 			Initialization.operator.setRumble(RumbleType.kRightRumble, 0);
 		}
 	}
-	
-	
-	/*
-	Boolean rumbleInProgress = false
-double setTime;
-double endTime;
-Public static void rumble(double duration, boolean driver, boolean operator){
-	if(!rumbleInProgress){
-		setTime = Timer.getMatchTime();
-		endTime = setTime + duration
-		rumbleInProgress = true;
-	} else {
-		if(Timer.getMatchTime() < duration){
-			if(driver) {
-	Initialization.driver.setRumble(RumbleType.kLeftRumble, 1);
-	Initialization.driver.setRumble(RumbleType.kRightRumble, 1);
-}
-
-if (operator) {
-	Initialization.operator.setRumble(RumbleType.kLeftRumble, 1);
-	Initialization.operator.setRumble(RumbleType.kRightRumble, 1);
-}	
-
-		} else {
-			Initialization.driver.setRumble(RumbleType.kLeftRumble, 0);
-Initialization.driver.setRumble(RumbleType.kRightRumble, 0);
-Initialization.operator.setRumble(RumbleType.kLeftRumble, 0);
-Initialization.operator.setRumble(RumbleType.kRightRumble, 0);
-rumbleInProgress = false;
-		}	
-	}
-} 
-
-	
-	*/
-	
-	
-	
 }

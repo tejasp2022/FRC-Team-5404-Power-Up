@@ -28,6 +28,13 @@ public class PortIO {
 		
 			public static final int elevatorEncoder1 = 4;
 			public static final int elevatorEncoder2 = 5;
+			
+			public static final int bottomLimitSwitch = 6;
+			public static final int topLimitSwitch = 7;
+			
+	//------------------------------------------PCM Ports---------------------------------------------//
+		// Range Finder
+			//public static final int rangeFinder = 0;
 		
 		
 	//------------------------------------------PCM Ports---------------------------------------------//

@@ -22,28 +22,33 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		Autonomous.getMatchData();
 		Autonomous.determineAutonomousSequence();
+		assignPreferenceVariables();
 		autoProcess = 0;
 		resetSensors();
 		calibrateSensors();
+		Initialization.gearaffesPID.enable();
 	}
 
+	boolean moveCalled = false;
 	public void autonomousPeriodic() {
-		Autonomous.placeCubeOnScale();
+		if(!moveCalled) {
+			if(Autonomous.move(120, 0.7)) {
+			moveCalled = true;
+			}
+		}
+		
 	}
 
 	public void teleopInit() {
 		resetSensors();
 		calibrateSensors();
-		Initialization.moveMultiplier = Initialization.prefs.getDouble("Move Multiplier", 70)/100;
-		Initialization.rotateMultiplier = Initialization.prefs.getDouble("Rotate Multiplier", 70)/100;
-		Initialization.elevateMultiplier = Initialization.prefs.getDouble("Elevate Multiplier", 70)/100;
 	}
 	
 	public void teleopPeriodic() {
 		Teleop.drive();
-		//Teleop.elevate();
+		Teleop.elevate();
+		Teleop.endGameRumble();
 		//Teleop.climb();
-		Teleop.rumble();
 	}
 
 	public void disabledInit() {
@@ -57,6 +62,7 @@ public class Robot extends TimedRobot {
 	public static void resetSensors() {
 		Initialization.rightDriveEncoder.reset();
 		Initialization.leftDriveEncoder.reset();
+		Initialization.elevatorEncoder.reset();
 		Initialization.gyro.reset();
 	}
 	public void calibrateSensors() {
@@ -80,5 +86,30 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Left Encoder Distance", formatValue(Math.abs(Initialization.leftDriveEncoder.getDistance())));
 		SmartDashboard.putNumber("Right Encoder Distance", formatValue(Math.abs(Initialization.rightDriveEncoder.getDistance())));
 		SmartDashboard.putNumber("Gyro Angle", formatValue(Initialization.gyro.getAngle()));
+	}
+	
+	public static void assignPreferenceVariables() {
+		// Autonomous Moving Speeds
+		Initialization.autoMoveSpeed = Initialization.prefs.getDouble("Auto Move Speed", 70)/100;
+		Initialization.autoMoveContactHigh = Initialization.prefs.getDouble("Auto Move Contact High", 55)/100;	
+		Initialization.autoMoveContactLow = Initialization.prefs.getDouble("Auto Move Contact Low", 30)/100;					
+		Initialization.autoRotateSpeed = Initialization.prefs.getDouble("Auto Rotate Speed", 50)/100;					
+		
+		// Automation Moving Speeds
+		Initialization.automationHighSpeed = Initialization.prefs.getDouble("Automation High Speed", 70)/100;
+		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10)/100;
+		Initialization.automationTopSpeed = Initialization.prefs.getDouble("Automation Top Speed", 40)/100;
+		
+		// Robot Starting Position
+		Initialization.robotStartingPosition = Initialization.prefs.getInt("Robot Starting Position", 1);
+		
+		// Teleop Multipliers
+		Initialization.moveMultiplier = Initialization.prefs.getDouble("Move Multiplier", 70)/100;
+		Initialization.rotateMultiplier = Initialization.prefs.getDouble("Rotate Multiplier", 50)/100;
+		Initialization.elevateMultiplier = Initialization.prefs.getDouble("Elevate Multiplier", 70)/100;
+		
+		// PID Multipliers
+		Initialization.move_KP = Initialization.prefs.getDouble("Move KP", 0.06);
+		Initialization.move_KI = Initialization.prefs.getDouble("Move KI", 0.03);
 	}
 }
