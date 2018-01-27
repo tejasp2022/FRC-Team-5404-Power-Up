@@ -96,9 +96,10 @@ public class Robot extends TimedRobot {
 		Initialization.autoRotateSpeed = Initialization.prefs.getDouble("Auto Rotate Speed", 50)/100;					
 		
 		// Automation Moving Speeds
+		Initialization.autoDelayTime = Initialization.prefs.getDouble("Autonomous Delay", 0);
 		Initialization.automationHighSpeed = Initialization.prefs.getDouble("Automation High Speed", 70)/100;
-		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10)/100;
 		Initialization.automationTopSpeed = Initialization.prefs.getDouble("Automation Top Speed", 40)/100;
+		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10)/100;
 		
 		// Robot Starting Position
 		Initialization.robotStartingPosition = Initialization.prefs.getInt("Robot Starting Position", 1);

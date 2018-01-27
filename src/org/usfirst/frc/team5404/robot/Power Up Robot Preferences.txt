@@ -12,3 +12,4 @@ double "/Preferences/Rotate Multiplier"=50
 double "/Preferences/Elevate Multiplier"=70
 double "/Preferences/Move KP"=0.06
 double "/Preferences/Move KI"=0.03
+double "/Preferences/Autonomous Delay"=0

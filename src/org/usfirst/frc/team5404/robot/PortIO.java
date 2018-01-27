@@ -15,7 +15,7 @@ public class PortIO {
 			public static final int BL = 3;
 	
 		// Elevator Motor Controller
-			public static final int elv = 4;
+			public static final int elevator = 4;
 		
 	//----------------------------------------DIO PORTS-------------------------------------------//
 

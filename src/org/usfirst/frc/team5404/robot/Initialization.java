@@ -34,6 +34,7 @@ public class Initialization {
 	public static ArrayList<Function<Void,Boolean>> scaleSequence = new ArrayList<Function<Void,Boolean>>();
 
 	// Autonomous Moving Speeds
+	public static double autoDelayTime;
 	public static double autoMoveSpeed;
 	public static double autoMoveContactHigh;
 	public static double autoMoveContactLow;
@@ -65,7 +66,7 @@ public class Initialization {
 	static double move_KI;
 	
 	// Elevator Motor Controller
-	public static Spark elevator = new Spark(PortIO.elv);
+	public static Spark elevator = new Spark(PortIO.elevator);
 	static double elevateMultiplier;
 
 	// Drive Encoders
@@ -73,11 +74,13 @@ public class Initialization {
 	public static Encoder leftDriveEncoder = new Encoder(PortIO.ldEncoder1, PortIO.ldEncoder2);
 	static final double DRIVE_TICKS_PER_REV = 213.6; 
 	static double DRIVE_INCH_PER_REV = 18.8496;
-	static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV;
+	static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV; //0.08824719
 
 	// Elevator Encoders
 	public static Encoder elevatorEncoder = new Encoder(PortIO.elevatorEncoder1, PortIO.elevatorEncoder2);
-	static final double ELEVATOR_INCHES_PER_TICK = 0.00223625; 
+	public static final double ELEVATOR_INCHES_PER_TWO_FEET = 24;
+	public static final double ELEVATOR_TICKS_PER_TWO_FEET = 10732.2526551;
+	static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_INCHES_PER_TWO_FEET/ELEVATOR_TICKS_PER_TWO_FEET; //0.00223625; 
 	
 	// Limit Switches
 	public static DigitalInput bottomLimitSwitch = new DigitalInput(PortIO.bottomLimitSwitch);
