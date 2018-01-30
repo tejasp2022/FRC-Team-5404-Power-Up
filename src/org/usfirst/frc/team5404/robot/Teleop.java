@@ -14,13 +14,12 @@ public class Teleop {
 	 * Drives the robot using input from the driver's joystick
 	 */
 	public static void drive(){
-		double finalMoveMultiplier = Initialization.driver.getRawButton(6) ? 1 : Initialization.driver.getRawButton(5) ? 0.5 : Initialization.moveMultiplier;
-		double finalRotateMultiplier = Initialization.driver.getRawAxis(3) > 0.8 ? 1 : Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
+		double finalMoveMultiplier = Initialization.driver.getRawButton(5) ? 1 : Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.moveMultiplier;
+		double finalRotateMultiplier = Initialization.driver.getRawButton(6) ? 1 : Initialization.driver.getRawAxis(3) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
 		Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1))* -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier * Math.pow(Initialization.driver.getRawAxis(4), 2), false);
 		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate())/12));
 	}
-	
-	
+
 	static boolean automationInProgress = false;
 	static double elevatorTargetHeight;
 
@@ -28,12 +27,12 @@ public class Teleop {
 	 * Controls the elevator using input from the operator's joystick
 	 */
 	public static void elevate() {
-		if (Initialization.topLimitSwitch.get() || Initialization.bottomLimitSwitch.get()) {
+		if (!Initialization.topLimitSwitch.get() || !Initialization.bottomLimitSwitch.get()) {
 			Initialization.elevator.set(0);
-			if (Initialization.bottomLimitSwitch.get()) {
+			if (!Initialization.bottomLimitSwitch.get()) {
 				Initialization.elevatorEncoder.reset();
 			}
-		} else {
+		}
 			boolean goSlowBottom = (Math.abs(Initialization.elevatorEncoder.getDistance()) < 12 && Math.signum(Initialization.elevator.get()) == -1);
 			boolean goSlowTop = (Math.abs(Initialization.elevatorEncoder.getDistance()) > 72 && Math.signum(Initialization.elevator.get()) == 1);
 			if (automationInProgress) {
@@ -66,7 +65,7 @@ public class Teleop {
 					Initialization.elevator.set(operatorOutput);
 				}
 			}
-		}
+		
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 	
@@ -78,19 +77,22 @@ public class Teleop {
 	}
 	
 	public static void rangeDistance() {
-		//SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getValue());
+		SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getVoltage()*1000/25.4);
 	}
 	
-	static Boolean rumbleInProgress = false;
+	static boolean rumbleInProgress = false;
 	public static double setTime;
 	public static double endTime;
-
-	public static void elevatorRumble(double duration, boolean driver, boolean operator) {
-		if (!rumbleInProgress) {
-			setTime = Timer.getFPGATimestamp();
-			endTime = setTime + duration;
-			rumbleInProgress = true;
-		} else {
+	public static boolean driver, operator;
+	public static void startElevatorRumble(double duration, boolean driver, boolean operator) {
+		setTime = Timer.getFPGATimestamp();
+		endTime = setTime + duration;
+		Teleop.driver = driver;
+		Teleop.operator = operator;
+		rumbleInProgress = true;
+	}
+	public static void elevatorRumble() {
+		if (rumbleInProgress) {
 			if (Timer.getFPGATimestamp() < endTime) {
 				if (driver) {
 					Initialization.driver.setRumble(RumbleType.kLeftRumble, 1);

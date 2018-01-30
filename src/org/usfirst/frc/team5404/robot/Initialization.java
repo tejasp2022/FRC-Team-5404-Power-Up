@@ -6,11 +6,13 @@
 package org.usfirst.frc.team5404.robot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -25,14 +27,20 @@ public class Initialization {
 	public static final double robotDepth = 32.25;      
 	public static final double robotWidth = 27.5;  
 
+	//Autonomous Switch or Scale
+	public static String autoStrat;
+	
 	// Autonomous Positioning Variables
 	public static char ourSwitchPosition;
 	public static char scalePosition;
 	public static char opposingSwitchPosition;
-	public static int robotStartingPosition;
+	public static double robotStartingPosition;
 	public static ArrayList<Function<Void,Boolean>> switchSequence = new ArrayList<Function<Void,Boolean>>();
 	public static ArrayList<Function<Void,Boolean>> scaleSequence = new ArrayList<Function<Void,Boolean>>();
 
+	// Test Sequence
+	public static ArrayList<Function<Void,Boolean>> testSequence = new ArrayList<Function<Void,Boolean>>();
+	
 	// Autonomous Moving Speeds
 	public static double autoDelayTime;
 	public static double autoMoveSpeed;
@@ -73,9 +81,12 @@ public class Initialization {
 	public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
 	public static Encoder leftDriveEncoder = new Encoder(PortIO.ldEncoder1, PortIO.ldEncoder2);
 	static final double DRIVE_TICKS_PER_REV = 213.6; 
-	static double DRIVE_INCH_PER_REV = 18.8496;
+	static double DRIVE_INCH_PER_REV = 18.8496;                                                                                  
 	static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV; //0.08824719
 
+	// Motor-encoder pairs for test sequence
+	public static List<Test.SmartController> controllerEncoderPairs;
+	
 	// Elevator Encoders
 	public static Encoder elevatorEncoder = new Encoder(PortIO.elevatorEncoder1, PortIO.elevatorEncoder2);
 	public static final double ELEVATOR_INCHES_PER_TWO_FEET = 24;
@@ -92,7 +103,13 @@ public class Initialization {
 	static final double MultiplierForGyro = 1;
 	
 	// Range Finder
-	//public static AnalogInput rangeFinder = new AnalogInput(PortIO.rangeFinder);
+	public static AnalogInput rangeFinder = new AnalogInput(PortIO.rangeFinder);
+	
+	//Other ultrasonic range finder
+	//public static AnalogInput us = new AnalogInput(PortIO.us);
+	
+	//color mark sensor
+	//public static DigitalInput colorMark = new DigitalInput(PortIO.colorMark);
 
 	// Solenoids
 

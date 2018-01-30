@@ -32,9 +32,15 @@ public class PortIO {
 			public static final int bottomLimitSwitch = 6;
 			public static final int topLimitSwitch = 7;
 			
+			//Color mark sensor (whatever that is (might not even be DIO))
+			//public static final int colorMark = 8;
+			
 	//------------------------------------------PCM Ports---------------------------------------------//
 		// Range Finder
-			//public static final int rangeFinder = 0;
+		public static final int rangeFinder = 0;
+			
+		//Ultrasonic (the other one)
+		//public static final int us = 0;//or whatever port it is
 		
 		
 	//------------------------------------------PCM Ports---------------------------------------------//
