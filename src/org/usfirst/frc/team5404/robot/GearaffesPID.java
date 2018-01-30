@@ -10,7 +10,6 @@ public class GearaffesPID extends PIDController {
 	public GearaffesPID(double Kp, double Ki, PIDSource source, GearaffesOutput output) {
 		super(Kp, Ki, 0, source, output);
 		gOutput = output;
-		
 	}
 	
 	public static class GearaffesOutput implements PIDOutput {
@@ -20,5 +19,4 @@ public class GearaffesPID extends PIDController {
 			this.output = output;
 		}
 	}
-
 }

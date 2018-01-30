@@ -6,40 +6,44 @@
 package org.usfirst.frc.team5404.robot;
 
 import java.text.DecimalFormat;
-
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Robot extends TimedRobot {
+public class Robot extends IterativeRobot {
 
 	public static int autoProcess = 0;
 	
 	public void robotInit() {
+		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		resetSensors();
 		calibrateSensors();
 	}
 	
 	public void autonomousInit() {
+		Initialization.gearaffesDrive.setSafetyEnabled(false);
+		assignPreferenceVariables();
 		Autonomous.getMatchData();
 		Autonomous.determineAutonomousSequence();
-		assignPreferenceVariables();
 		autoProcess = 0;
 		resetSensors();
 		calibrateSensors();
+		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
 	}
 
-	boolean moveCalled = false;
 	public void autonomousPeriodic() {
-		if(!moveCalled) {
-			if(Autonomous.move(120, 0.7)) {
-			moveCalled = true;
-			}
+		if(Initialization.autoStrat.trim().equalsIgnoreCase("scale")) {
+			Autonomous.placeCubeOnScale();
+		} else if (Initialization.autoStrat.trim().equalsIgnoreCase("switch")) {
+			Autonomous.placeCubeOnSwitch();
+		} else {
+			SmartDashboard.putString("Autonomous Error Alert", "A Valid Autonomous Strategy Was Not Selected");
 		}
-		
 	}
 
 	public void teleopInit() {
+		Initialization.gearaffesDrive.setSafetyEnabled(false);
+		assignPreferenceVariables();
 		resetSensors();
 		calibrateSensors();
 	}
@@ -48,6 +52,8 @@ public class Robot extends TimedRobot {
 		Teleop.drive();
 		Teleop.elevate();
 		Teleop.endGameRumble();
+		Teleop.rangeDistance();
+		Teleop.elevatorRumble();
 		//Teleop.climb();
 	}
 
@@ -70,8 +76,8 @@ public class Robot extends TimedRobot {
 		Initialization.rightDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
 		Initialization.leftDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
 		Initialization.elevatorEncoder.setSamplesToAverage(5);
-		Initialization.rightDriveEncoder.setSamplesToAverage(5);
-		Initialization.leftDriveEncoder.setSamplesToAverage(5);
+		Initialization.rightDriveEncoder.setSamplesToAverage(1);
+		Initialization.leftDriveEncoder.setSamplesToAverage(1);
 	}
 	
 	public void setAutonFalse() {
@@ -89,6 +95,8 @@ public class Robot extends TimedRobot {
 	}
 	
 	public static void assignPreferenceVariables() {
+		Initialization.autoStrat = Initialization.prefs.getString("Autonomous Strategy", "Not Found");
+		
 		// Autonomous Moving Speeds
 		Initialization.autoMoveSpeed = Initialization.prefs.getDouble("Auto Move Speed", 70)/100;
 		Initialization.autoMoveContactHigh = Initialization.prefs.getDouble("Auto Move Contact High", 55)/100;	
@@ -102,7 +110,7 @@ public class Robot extends TimedRobot {
 		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10)/100;
 		
 		// Robot Starting Position
-		Initialization.robotStartingPosition = Initialization.prefs.getInt("Robot Starting Position", 1);
+		Initialization.robotStartingPosition = Initialization.prefs.getDouble("Robot Starting Position", 1);
 		
 		// Teleop Multipliers
 		Initialization.moveMultiplier = Initialization.prefs.getDouble("Move Multiplier", 70)/100;
