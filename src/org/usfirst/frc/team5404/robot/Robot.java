@@ -57,6 +57,21 @@ public class Robot extends IterativeRobot {
 		//Teleop.climb();
 	}
 
+	public void testInit() {
+		Initialization.gearaffesDrive.setSafetyEnabled(false);
+		assignPreferenceVariables();
+		resetSensors();
+		calibrateSensors();
+		Test.testSequenceIndex = 0;
+		Test.determineTestSequence();
+	}
+	
+	public void testPeriodic() {
+		if(SmartDashboard.getBoolean("Run Test Sequence", false)) { // Two-step verification so the robot doesn't randomly drive on the ground
+			Test.runTestSequence();
+		}
+	}
+	
 	public void disabledInit() {
 		
 	}

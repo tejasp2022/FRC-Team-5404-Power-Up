@@ -6,12 +6,13 @@
 package org.usfirst.frc.team5404.robot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -37,6 +38,9 @@ public class Initialization {
 	public static ArrayList<Function<Void,Boolean>> switchSequence = new ArrayList<Function<Void,Boolean>>();
 	public static ArrayList<Function<Void,Boolean>> scaleSequence = new ArrayList<Function<Void,Boolean>>();
 
+	// Test Sequence
+	public static ArrayList<Function<Void,Boolean>> testSequence = new ArrayList<Function<Void,Boolean>>();
+	
 	// Autonomous Moving Speeds
 	public static double autoDelayTime;
 	public static double autoMoveSpeed;
@@ -80,6 +84,9 @@ public class Initialization {
 	static double DRIVE_INCH_PER_REV = 18.8496;                                                                                  
 	static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV; //0.08824719
 
+	// Motor-encoder pairs for test sequence
+	public static List<Test.SmartController> controllerEncoderPairs;
+	
 	// Elevator Encoders
 	public static Encoder elevatorEncoder = new Encoder(PortIO.elevatorEncoder1, PortIO.elevatorEncoder2);
 	public static final double ELEVATOR_INCHES_PER_TWO_FEET = 24;
