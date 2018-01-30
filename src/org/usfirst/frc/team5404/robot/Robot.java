@@ -31,12 +31,12 @@ public class Robot extends TimedRobot {
 
 	boolean moveCalled = false;
 	public void autonomousPeriodic() {
-		if(!moveCalled) {
-			if(Autonomous.move(120, 0.7)) {
-			moveCalled = true;
-			}
+		if(Initialization.prefs.getBoolean("Scale", true)) {
+			Autonomous.placeCubeOnScale();
 		}
-		
+		else {
+			Autonomous.placeCubeOnSwitch();
+		}
 	}
 
 	public void teleopInit() {
