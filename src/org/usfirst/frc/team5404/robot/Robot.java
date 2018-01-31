@@ -55,6 +55,7 @@ public class Robot extends IterativeRobot {
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();
 		//Teleop.climb();
+		Teleop.teachUltrasonic();
 	}
 
 	public void testInit() {

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -107,7 +108,7 @@ public class Initialization {
 	
 	//Other ultrasonic range finder
 	//public static AnalogInput us = new AnalogInput(PortIO.us);
-	
+	public static DigitalOutput usTeach = new DigitalOutput(PortIO.usTeach);
 	//color mark sensor
 	//public static DigitalInput colorMark = new DigitalInput(PortIO.colorMark);
 

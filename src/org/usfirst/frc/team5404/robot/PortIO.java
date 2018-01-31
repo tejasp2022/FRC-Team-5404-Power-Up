@@ -41,6 +41,7 @@ public class PortIO {
 			
 		//Ultrasonic (the other one)
 		//public static final int us = 0;//or whatever port it is
+		public static final int usTeach= 0;
 		
 		
 	//------------------------------------------PCM Ports---------------------------------------------//

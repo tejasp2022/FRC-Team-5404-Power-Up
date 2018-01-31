@@ -125,4 +125,12 @@ public class Teleop {
 			Initialization.operator.setRumble(RumbleType.kRightRumble, 0);
 		}
 	}
+	public static void teachUltrasonic() {
+		if(Initialization.operator.getRawButton(5)) {
+			Initialization.usTeach.set(true);
+		}
+		else {
+			Initialization.usTeach.set(false);
+		}
+	}
 }
