@@ -65,6 +65,8 @@ public class Robot extends IterativeRobot {
 		calibrateSensors();
 		Test.testSequenceIndex = 0;
 		Test.determineTestSequence();
+		Test.Average.reset();
+		Test.principalV = Initialization.pdp.getVoltage();
 	}
 	
 	public void testPeriodic() {

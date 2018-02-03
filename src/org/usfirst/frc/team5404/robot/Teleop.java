@@ -77,7 +77,7 @@ public class Teleop {
 	}
 	
 	public static void rangeDistance() {
-		SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getVoltage()*1000/25.4);
+		//SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getVoltage()*1000/25.4);
 	}
 	
 	static boolean rumbleInProgress = false;
@@ -127,10 +127,10 @@ public class Teleop {
 	}
 	public static void teachUltrasonic() {
 		if(Initialization.operator.getRawButton(5)) {
-			Initialization.usTeach.set(true);
+			//Initialization.usTeach.set(true);
 		}
 		else {
-			Initialization.usTeach.set(false);
+			//Initialization.usTeach.set(false);
 		}
 	}
 }

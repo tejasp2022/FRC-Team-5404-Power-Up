@@ -108,7 +108,7 @@ public class Initialization {
 	
 	//Other ultrasonic range finder
 	//public static AnalogInput us = new AnalogInput(PortIO.us);
-	public static DigitalOutput usTeach = new DigitalOutput(PortIO.usTeach);
+	//public static DigitalOutput usTeach = new DigitalOutput(PortIO.usTeach);
 	//color mark sensor
 	//public static DigitalInput colorMark = new DigitalInput(PortIO.colorMark);
 
