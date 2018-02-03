@@ -40,7 +40,8 @@ public class PortIO {
 		public static final int rangeFinder = 0;
 			
 		//Ultrasonic (the other one)
-		//public static final int us = 0;//or whatever port it is
+		public static final int us = 0;//or whatever port it is
+		public static final int usTeach= 5;
 		
 		
 	//------------------------------------------PCM Ports---------------------------------------------//

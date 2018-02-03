@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5404.robot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -12,19 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Test {
 	public static void determineTestSequence() {
 		Initialization.controllerEncoderPairs = new ArrayList<>();
-		Initialization.controllerEncoderPairs.add(new SmartController("FL", Initialization.FL, Initialization.leftDriveEncoder, false));
-		Initialization.controllerEncoderPairs.add(new SmartController("FR", Initialization.FR, Initialization.rightDriveEncoder, true));
-		Initialization.controllerEncoderPairs.add(new SmartController("BL", Initialization.BL, Initialization.leftDriveEncoder, false));
-		Initialization.controllerEncoderPairs.add(new SmartController("BR", Initialization.BR, Initialization.rightDriveEncoder, true));
+		Initialization.controllerEncoderPairs.add(new SmartController("FL", Initialization.FL, Initialization.leftDriveEncoder));
+		Initialization.controllerEncoderPairs.add(new SmartController("FR", Initialization.FR, Initialization.rightDriveEncoder));
+		Initialization.controllerEncoderPairs.add(new SmartController("BL", Initialization.BL, Initialization.leftDriveEncoder));
+		Initialization.controllerEncoderPairs.add(new SmartController("BR", Initialization.BR, Initialization.rightDriveEncoder));
+
 		
 		Initialization.testSequence = new ArrayList<>();
-		if(SmartDashboard.getBoolean("Series Test", false)) {
-			Initialization.testSequence.add((Void) -> motorSeriesTest(Initialization.controllerEncoderPairs, Initialization.prefs.getDouble("Test Power", 0.6), 5));
-			
-		} else {
-			Initialization.testSequence.add((Void) -> motorIndividualTest(Initialization.controllerEncoderPairs.get(3), 5));
-		}
-		principalV = Initialization.pdp.getVoltage();
+		Initialization.testSequence.add((Void) -> motorSeriesTest(Initialization.controllerEncoderPairs, 0.6, 5));
 	}
 	public static int testSequenceIndex;
 	public static void runTestSequence() {
@@ -35,19 +29,13 @@ public class Test {
 			}
 		} else {
 			SmartDashboard.putString("Test Sequence", "Finished test sequence.");
-			SmartDashboard.putBoolean("Run Test Sequence", false);
-			SmartDashboard.putBoolean("Series Test", false);
 		}
 	}
 	public static double startTime = -1, endTime = -1;
 	public static int lastMotorIndex;
 	public static StringBuilder diagnosticInfo;
-	public static double principalV;
 	public static boolean motorSeriesTest(List<SmartController> controllers, double speed, double timePerMotor) {
 		if(startTime == -1) {
-			Average.newAverage("current");
-			Average.newAverage("voltage");
-			
 			startTime = Timer.getFPGATimestamp();
 			endTime = startTime + controllers.size() * timePerMotor;
 			diagnosticInfo = new StringBuilder();
@@ -55,115 +43,26 @@ public class Test {
 		}
 		if(endTime <= Timer.getFPGATimestamp()) {
 			SmartController last = controllers.get(lastMotorIndex);
-			double d = last.invertFactor * last.encoder.getDistance();
-			double I = Average.get("current");
-			double V = Average.get("voltage");
 			diagnosticInfo.append(last.name);
-			diagnosticInfo.append("\r\n\tTotal encoder distance: ");
-			diagnosticInfo.append(d);
-			diagnosticInfo.append("\"\r\n\tAverage current: ");
-			diagnosticInfo.append(I);
-			diagnosticInfo.append("A\r\n\tAverage voltage drop: ");
-			diagnosticInfo.append(V);
-			diagnosticInfo.append("V\r\n\tConstant: ");
-			diagnosticInfo.append(d / I / V / timePerMotor);
-			diagnosticInfo.append("in/J");
-			Average.reset();
-			last.controller.set(0);
+			diagnosticInfo.append(": ");
+			diagnosticInfo.append(last.encoder.getDistance());
 			startTime = -1;
 			endTime = -1;
 			lastMotorIndex = 0;
 			System.out.println(diagnosticInfo.toString()); //Should output to Riolog
 			return true;
 		} else {
-			int index = (int)Math.floor((Timer.getFPGATimestamp() - startTime) / timePerMotor);
+			int index = (int)Math.floor((endTime - startTime) / timePerMotor);
 			if(index > lastMotorIndex) {
 				SmartController last = controllers.get(lastMotorIndex);
-				double d = last.invertFactor * last.encoder.getDistance();
-				double I = Average.get("current");
-				double V = Average.get("voltage");
 				diagnosticInfo.append(last.name);
-				diagnosticInfo.append("\r\n\tTotal encoder distance: ");
-				diagnosticInfo.append(d);
-				diagnosticInfo.append("\"\r\n\tAverage current: ");
-				diagnosticInfo.append(I);
-				diagnosticInfo.append("A\r\n\tAverage voltage drop: ");
-				diagnosticInfo.append(V);
-				diagnosticInfo.append("V\r\n\tConstant: ");
-				diagnosticInfo.append(d / I / V / timePerMotor);
-				diagnosticInfo.append("in/J\r\n");
-				Average.reset();
-				Average.newAverage("current");
-				Average.newAverage("voltage");
-				last.controller.set(0);
+				diagnosticInfo.append(": ");
+				diagnosticInfo.append(last.encoder.getDistance());
+				diagnosticInfo.append("\r\n");
 				controllers.get(index).encoder.reset();
 			}
 			SmartController sc = controllers.get(index);
-			sc.controller.set(sc.invertFactor * speed);
-			Average.add("current", Initialization.pdp.getTotalCurrent());
-			Average.add("voltage", principalV - Initialization.pdp.getVoltage());
-			lastMotorIndex = index;
-			return false;
-		}
-	}
-	public static boolean motorIndividualTest(SmartController controller, double timePerSpeed) {
-		// speeds: 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
-		if(startTime == -1) {
-			Average.newAverage("current");
-			Average.newAverage("voltage");
-			
-			startTime = Timer.getFPGATimestamp();
-			endTime = startTime + 11 * (timePerSpeed + 1);
-			diagnosticInfo = new StringBuilder();
-			lastMotorIndex = 0;
-		}
-		if(endTime <= Timer.getFPGATimestamp()) {
-			double d = controller.invertFactor * controller.encoder.getDistance();
-			double I = Average.get("current");
-			double V = Average.get("voltage");
-			diagnosticInfo.append(controller.name + " at " + lastMotorIndex * 0.1);
-			diagnosticInfo.append("\r\n\tTotal encoder distance: ");
-			diagnosticInfo.append(d);
-			diagnosticInfo.append("\"\r\n\tAverage current: ");
-			diagnosticInfo.append(I);
-			diagnosticInfo.append("A\r\n\tAverage voltage drop: ");
-			diagnosticInfo.append(V);
-			Average.reset();
-			controller.controller.set(0);
-			startTime = -1;
-			endTime = -1;
-			lastMotorIndex = 0;
-			System.out.println(diagnosticInfo.toString()); //Should output to Riolog
-			return true;
-		} else {
-			int index = (int)Math.floor((Timer.getFPGATimestamp() - startTime) / (timePerSpeed+1));
-			double speed = Math.min(0.1 * index, 1);
-			if(index > lastMotorIndex) {
-				double d = controller.invertFactor * controller.encoder.getDistance();
-				double I = Average.get("current");
-				double V = Average.get("voltage");
-				diagnosticInfo.append(controller.name + " at " + lastMotorIndex * 0.1);
-				diagnosticInfo.append("\r\n\tTotal encoder distance: ");
-				diagnosticInfo.append(d);
-				diagnosticInfo.append("\"\r\n\tAverage current: ");
-				diagnosticInfo.append(I);
-				diagnosticInfo.append("A\r\n\tAverage voltage drop: ");
-				diagnosticInfo.append(V);
-				diagnosticInfo.append("\r\n");
-				Average.reset();
-				Average.newAverage("current");
-				Average.newAverage("voltage");
-				controller.controller.set(0);
-				controller.encoder.reset();
-			} else {
-				if(((Timer.getFPGATimestamp() - startTime) - (index * (timePerSpeed + 1))) > timePerSpeed) {
-					controller.controller.set(0);
-				} else {
-					controller.controller.set(controller.invertFactor * speed);
-					Average.add("current", Initialization.pdp.getTotalCurrent());
-					Average.add("voltage", principalV - Initialization.pdp.getVoltage());
-				}
-			}
+			sc.controller.set(speed);
 			lastMotorIndex = index;
 			return false;
 		}
@@ -172,36 +71,10 @@ public class Test {
 		public final SpeedController controller;
 		public final Encoder encoder;
 		public final String name;
-		public final double invertFactor;
-		public SmartController(String name, SpeedController controller, Encoder encoder, boolean invert) {
+		public SmartController(String name, SpeedController controller, Encoder encoder) {
 			this.name = name;
 			this.controller = controller;
 			this.encoder = encoder;
-			if(invert) {
-				this.invertFactor = -1;
-			} else {
-				this.invertFactor = 1;
-			}
-		}
-	}
-	public static class Average {
-		public static HashMap<String, List<Double>> data;
-		public static void reset() {
-			data = new HashMap<>();
-		}
-		public static void newAverage(String name) {
-			data.put(name, new ArrayList<Double>());
-		}
-		public static void add(String name, double d) {
-			data.get(name).add(d);
-		}
-		public static double get(String name) {
-			double sum = 0;
-			List<Double> toAvg = data.get(name);
-			for(double a : toAvg) {
-				sum += a;
-			}
-			return sum / toAvg.size();
 		}
 	}
 }

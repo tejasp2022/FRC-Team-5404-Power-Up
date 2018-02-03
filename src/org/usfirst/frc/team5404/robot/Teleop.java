@@ -10,29 +10,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Teleop {
-	public static boolean isDrivingOnGyro;
 	/**
 	 * Drives the robot using input from the driver's joystick
 	 */
-	
 	public static void drive(){
 		double finalMoveMultiplier = Initialization.driver.getRawButton(5) ? 1 : Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.moveMultiplier;
 		double finalRotateMultiplier = Initialization.driver.getRawButton(6) ? 1 : Initialization.driver.getRawAxis(3) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
-		
-		if(Math.abs(Initialization.driver.getRawAxis(4)) < 0.05 && Math.abs(Initialization.driver.getRawAxis(1)) > 0.05 && !isDrivingOnGyro) {
-			Initialization.gyro.reset(); 
-			Initialization.gearaffesPID.reset();
-			Initialization.gearaffesPID.enable();
-			isDrivingOnGyro = true;
-		} else if((Math.abs(Initialization.driver.getRawAxis(4)) > 0.05  || Math.abs(Initialization.driver.getRawAxis(1)) < 0.05) && isDrivingOnGyro){
-			isDrivingOnGyro = false;
-		}
-		if(isDrivingOnGyro && Math.abs(Initialization.driver.getRawAxis(1)) > 0.05 ) {
-			Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1))* -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Initialization.gearaffesPID.get());
-		}
-		else {
-			Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1))* -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier * Math.pow(Initialization.driver.getRawAxis(4), 2), false);
-		}
+		Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1))* -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier * Math.pow(Initialization.driver.getRawAxis(4), 2), false);
 		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate())/12));
 	}
 
@@ -139,6 +123,14 @@ public class Teleop {
 			Initialization.driver.setRumble(RumbleType.kRightRumble, 0);
 			Initialization.operator.setRumble(RumbleType.kLeftRumble, 0);
 			Initialization.operator.setRumble(RumbleType.kRightRumble, 0);
+		}
+	}
+	public static void teachUltrasonic() {
+		if(Initialization.operator.getRawButton(5)) {
+			Initialization.usTeach.set(true);
+		}
+		else {
+			Initialization.usTeach.set(false);
 		}
 	}
 }

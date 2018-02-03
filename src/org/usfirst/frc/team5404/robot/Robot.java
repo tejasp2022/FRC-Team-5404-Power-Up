@@ -32,43 +32,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
-		
-		if(union.equalsIgnoreCase("RL")) {
-			if (Initialization.RLRStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.RLRStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.RLRStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			}		
-		} else if(union.equalsIgnoreCase("LL")) {
-			if (Initialization.LLLStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.LLLStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.LLLStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			}
-		} else if(union.equalsIgnoreCase("RR")) {
-			if (Initialization.RRRStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.RRRStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.RRRStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			}	
-		} else if(union.equalsIgnoreCase("LR")) {
-			if (Initialization.LRLStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.LRLStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.LRLStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			}
+		if(Initialization.autoStrat.trim().equalsIgnoreCase("scale")) {
+			Autonomous.placeCubeOnScale();
+		} else if (Initialization.autoStrat.trim().equalsIgnoreCase("switch")) {
+			Autonomous.placeCubeOnSwitch();
 		} else {
-			SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
-			System.err.println("Valid Autonomous Strategy Not Found");
+			SmartDashboard.putString("Autonomous Error Alert", "A Valid Autonomous Strategy Was Not Selected");
 		}
 	}
 
@@ -86,6 +55,7 @@ public class Robot extends IterativeRobot {
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();
 		//Teleop.climb();
+		Teleop.teachUltrasonic();
 	}
 
 	public void testInit() {
@@ -156,11 +126,7 @@ public class Robot extends IterativeRobot {
 		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10)/100;
 		
 		// Robot Starting Position
-		Initialization.robotStartingPosition = Initialization.prefs.getString("Autonomous Code", "-----").substring(0, 1);
-		Initialization.RLRStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(1, 2);
-		Initialization.LLLStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(2, 3);
-		Initialization.RRRStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(3, 4);
-		Initialization.LRLStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(4, 5);
+		Initialization.robotStartingPosition = Initialization.prefs.getDouble("Robot Starting Position", 1);
 		
 		// Teleop Multipliers
 		Initialization.moveMultiplier = Initialization.prefs.getDouble("Move Multiplier", 70)/100;

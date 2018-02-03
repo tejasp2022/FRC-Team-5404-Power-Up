@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -27,28 +28,20 @@ public class Initialization {
 	public static final double robotDepth = 32.25;      
 	public static final double robotWidth = 27.5;  
 
-	// Test Sequence
-	public static ArrayList<Function<Void,Boolean>> testSequence = new ArrayList<Function<Void,Boolean>>();
-	
 	//Autonomous Switch or Scale
 	public static String autoStrat;
-	
-	// Autonomous Selection Variables
-	public static String autoCode;
-	public static String RLRStrat;
-	public static String LLLStrat;
-	public static String RRRStrat;
-	public static String LRLStrat;
+	public static boolean twoCube;
 	
 	// Autonomous Positioning Variables
 	public static char ourSwitchPosition;
 	public static char scalePosition;
 	public static char opposingSwitchPosition;
-	public static String robotStartingPosition;
+	public static double robotStartingPosition;
 	public static ArrayList<Function<Void,Boolean>> switchSequence = new ArrayList<Function<Void,Boolean>>();
 	public static ArrayList<Function<Void,Boolean>> scaleSequence = new ArrayList<Function<Void,Boolean>>();
 
-
+	// Test Sequence
+	public static ArrayList<Function<Void,Boolean>> testSequence = new ArrayList<Function<Void,Boolean>>();
 	
 	// Autonomous Moving Speeds
 	public static double autoDelayTime;
@@ -115,8 +108,8 @@ public class Initialization {
 	public static AnalogInput rangeFinder = new AnalogInput(PortIO.rangeFinder);
 	
 	//Other ultrasonic range finder
-	//public static AnalogInput us = new AnalogInput(PortIO.us);
-	
+	public static AnalogInput us = new AnalogInput(PortIO.us);
+	public static DigitalOutput usTeach = new DigitalOutput(PortIO.usTeach);
 	//color mark sensor
 	//public static DigitalInput colorMark = new DigitalInput(PortIO.colorMark);
 
