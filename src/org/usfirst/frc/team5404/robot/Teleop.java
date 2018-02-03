@@ -92,6 +92,10 @@ public class Teleop {
 		// Climbing Code Here
 	}
 	
+	public static void ejectCube() {
+		Initialization.endEffector.set(Initialization.operator.getRawButton(5));
+	}
+	
 	public static void rangeDistance() {
 		SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getVoltage()*1000/25.4);
 	}

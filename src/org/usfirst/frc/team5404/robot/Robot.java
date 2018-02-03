@@ -87,6 +87,8 @@ public class Robot extends IterativeRobot {
 				Autonomous.placeCubeOnSwitch();
 			} else if (Initialization.LLLStrat.equals("3")) {
 				Autonomous.placeCubeOnScale();
+			} else if (Initialization.LLLStrat.equals("4")) {
+				Autonomous.twoCubeAuto();
 			}
 		} else if(union.equalsIgnoreCase("RR")) {
 			if (Initialization.RRRStrat.equals("1")) {
@@ -95,9 +97,9 @@ public class Robot extends IterativeRobot {
 				Autonomous.placeCubeOnSwitch();
 			} else if (Initialization.RRRStrat.equals("3")) {
 				Autonomous.placeCubeOnScale();
-			} //else if (Initialization.RRRStrat.equals("4")) {
-				//Autonomous.placeCubeOnScale();
-			//}	
+			} else if (Initialization.RRRStrat.equals("4")) {
+				Autonomous.twoCubeAuto();
+			}	
 		} else if(union.equalsIgnoreCase("LR")) {
 			if (Initialization.LRLStrat.equals("1")) {
 				Autonomous.crossAutoline();
@@ -122,6 +124,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Teleop.drive();
 		Teleop.elevate();
+		Teleop.ejectCube();
 		Teleop.endGameRumble();
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();

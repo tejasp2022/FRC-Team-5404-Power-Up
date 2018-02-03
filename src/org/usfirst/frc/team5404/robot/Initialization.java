@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -49,6 +50,7 @@ public class Initialization {
 	public static String robotStartingPosition;
 	public static ArrayList<Function<Void,Boolean>> switchSequence = new ArrayList<Function<Void,Boolean>>();
 	public static ArrayList<Function<Void,Boolean>> scaleSequence = new ArrayList<Function<Void,Boolean>>();
+	public static ArrayList<Function<Void,Boolean>> twoCubeSequence = new ArrayList<Function<Void,Boolean>>();
 
 	// Autonomous Moving Speeds
 	public static double autoDelayTime;
@@ -73,25 +75,25 @@ public class Initialization {
 	public static VictorSP BL = new VictorSP(PortIO.BL);
 
 	// Motor Controller Variables
-	static double moveMultiplier;
-	static double rotateMultiplier;
-	static SpeedControllerGroup leftGroup = new SpeedControllerGroup(FL, BL);
-	static SpeedControllerGroup rightGroup = new SpeedControllerGroup(FR, BR);
-	static DifferentialDrive gearaffesDrive = new DifferentialDrive(leftGroup, rightGroup);
+	public static double moveMultiplier;
+	public static double rotateMultiplier;
+	public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(FL, BL);
+	public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(FR, BR);
+	public static DifferentialDrive gearaffesDrive = new DifferentialDrive(leftGroup, rightGroup);
 	
-	static double move_KP;
-	static double move_KI;
+	public static double move_KP;
+	public static double move_KI;
 	
 	// Elevator Motor Controller
 	public static Spark elevator = new Spark(PortIO.elevator);
-	static double elevateMultiplier;
+	public static double elevateMultiplier;
 
 	// Drive Encoders
 	public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
 	public static Encoder leftDriveEncoder = new Encoder(PortIO.ldEncoder1, PortIO.ldEncoder2);
-	static final double DRIVE_TICKS_PER_REV = 213.6; 
-	static double DRIVE_INCH_PER_REV = 18.8496;                                                                                  
-	static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV; //0.08824719
+	public static final double DRIVE_TICKS_PER_REV = 213.6; 
+	public static double DRIVE_INCH_PER_REV = 18.8496;                                                                                  
+	public static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV; //0.08824719
 
 	// Motor-encoder pairs for test sequence
 	public static List<Test.SmartController> controllerEncoderPairs;
@@ -100,7 +102,7 @@ public class Initialization {
 	public static Encoder elevatorEncoder = new Encoder(PortIO.elevatorEncoder1, PortIO.elevatorEncoder2);
 	public static final double ELEVATOR_INCHES_PER_TWO_FEET = 24;
 	public static final double ELEVATOR_TICKS_PER_TWO_FEET = 10732.2526551;
-	static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_INCHES_PER_TWO_FEET/ELEVATOR_TICKS_PER_TWO_FEET; //0.00223625; 
+	public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_INCHES_PER_TWO_FEET/ELEVATOR_TICKS_PER_TWO_FEET; //0.00223625; 
 	
 	// Limit Switches
 	public static DigitalInput bottomLimitSwitch = new DigitalInput(PortIO.bottomLimitSwitch);
@@ -112,7 +114,7 @@ public class Initialization {
 	
 	// Gyros
 	public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-	static final double MultiplierForGyro = 1;
+	public static final double MultiplierForGyro = 1;
 	
 	// Range Finder
 	public static AnalogInput rangeFinder = new AnalogInput(PortIO.rangeFinder);
@@ -124,10 +126,10 @@ public class Initialization {
 	//public static DigitalInput colorMark = new DigitalInput(PortIO.colorMark);
 
 	// Solenoids
-
-	// PID
-	static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());
+	public static Solenoid endEffector = new Solenoid(0);
 	
+	// PID
+	public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());
 	
 	// Dashboard Preferences
 	public static Preferences prefs = Preferences.getInstance();
@@ -136,5 +138,5 @@ public class Initialization {
 	public static CameraServer cam = CameraServer.getInstance();
 
 	// Power Distribution Panel
-	static PowerDistributionPanel pdp = new PowerDistributionPanel();
+	public static PowerDistributionPanel pdp = new PowerDistributionPanel();
 }

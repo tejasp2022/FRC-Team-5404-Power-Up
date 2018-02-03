@@ -56,6 +56,20 @@ public class Autonomous {
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance())/12));
 	}
 	
+	public static void twoCubeAuto() {
+		Timer.delay(Initialization.autoDelayTime);
+		if(Robot.autoProcess < Initialization.twoCubeSequence.size()) {
+			if(Initialization.twoCubeSequence.get(Robot.autoProcess).apply(null)) {
+				resetSomeSensors();
+				Robot.autoProcess++;
+				successesContact = 0; 
+				Initialization.gearaffesPID.reset();
+				Initialization.gearaffesPID.enable();
+			}
+		}
+		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance())/12));
+	}
+	
 	//building blocks
 	
 	public static boolean move(double dist, double speed) {
@@ -231,15 +245,7 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> delay(1));
 			Initialization.scaleSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed) );
 			Initialization.scaleSequence.add((Void)-> delay(1));//replace with end effector deposition code
-			if(Initialization.twoCube && Initialization.ourSwitchPosition == 'L') {
-				Initialization.scaleSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed) );
-				Initialization.scaleSequence.add((Void)-> move(84.915, Initialization.autoMoveSpeed) & autoElevatorHeight(30));
-				Initialization.scaleSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed) );
-				Initialization.scaleSequence.add((Void)-> move(91.75 - (33.69 + Initialization.robotDepth/2), Initialization.autoMoveSpeed) );
-				Initialization.scaleSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed) );
-				Initialization.scaleSequence.add((Void)-> moveUntilContact(32.735, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow) );
-			}
-		
+			
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.scaleSequence.add((Void)-> move(59-Initialization.robotDepth, Initialization.autoMoveSpeed) & autoElevatorHeight(72));
 			Initialization.scaleSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed) );
@@ -278,14 +284,34 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void)-> move(323.65 - Initialization.robotDepth/2, Initialization.autoMoveSpeed) & autoElevatorHeight(72));
 			Initialization.scaleSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void)-> delay(1));//replace with end effector deposition code
-			if(Initialization.twoCube && Initialization.ourSwitchPosition == 'R') {
-				Initialization.scaleSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed) );
-				Initialization.scaleSequence.add((Void)-> move(94.915, Initialization.autoMoveSpeed) & autoElevatorHeight(30));
-				Initialization.scaleSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed) );
-				Initialization.scaleSequence.add((Void)-> move(91.75 - (33.69 + Initialization.robotDepth/2), Initialization.autoMoveSpeed) );
-				Initialization.scaleSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed) );
-				Initialization.scaleSequence.add((Void)-> moveUntilContact(32.735, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow) );
-			}
 		}
+		
+		// Two Cube Sequence
+		Initialization.twoCubeSequence.clear();
+		
+		if (Initialization.scalePosition == 'R' && Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
+			Initialization.twoCubeSequence.add((Void)-> move(323.65 - Initialization.robotDepth/2, Initialization.autoMoveSpeed) & autoElevatorHeight(72));
+			Initialization.twoCubeSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed));
+			Initialization.twoCubeSequence.add((Void)-> delay(1));//replace with end effector deposition code
+			Initialization.twoCubeSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed) );
+			Initialization.twoCubeSequence.add((Void)-> move(94.915, Initialization.autoMoveSpeed) & autoElevatorHeight(30));
+			Initialization.twoCubeSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed) );
+			Initialization.twoCubeSequence.add((Void)-> move(91.75 - (33.69 + Initialization.robotDepth/2), Initialization.autoMoveSpeed) );
+			Initialization.twoCubeSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed) );
+			Initialization.twoCubeSequence.add((Void)-> moveUntilContact(32.735, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow) );
+			
+		} else if (Initialization.scalePosition == 'L' && Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
+			Initialization.twoCubeSequence.add((Void)-> move(325.65 - Initialization.robotDepth/2, Initialization.autoMoveSpeed) & autoElevatorHeight(72));
+			Initialization.twoCubeSequence.add((Void) -> delay(1));
+			Initialization.twoCubeSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed));
+			Initialization.twoCubeSequence.add((Void)-> delay(1));//replace with end effector deposition code
+			Initialization.twoCubeSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed));
+			Initialization.twoCubeSequence.add((Void)-> move(84.915, Initialization.autoMoveSpeed) & autoElevatorHeight(30));
+			Initialization.twoCubeSequence.add((Void)-> rotate(-90, Initialization.autoRotateSpeed));
+			Initialization.twoCubeSequence.add((Void)-> move(91.75 - (33.69 + Initialization.robotDepth/2), Initialization.autoMoveSpeed));
+			Initialization.twoCubeSequence.add((Void)-> rotate(90, Initialization.autoRotateSpeed));
+			Initialization.twoCubeSequence.add((Void)-> moveUntilContact(32.735, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));	
+		}
+		
 	}
 }
