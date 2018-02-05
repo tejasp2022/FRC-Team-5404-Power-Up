@@ -10,6 +10,42 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Teleop {
+	
+// Needs to be tested
+boolean switchAutomationInProgress = false;
+boolean scaleAutomationInProgress = false;
+public static void cubeManipulation(){
+	if (Initialization.driver.getRawButtonPressed(1)){
+		if(!switchAutomationInProgress){
+			scaleAutomationInProgress = false;
+			switchAutomationInProgress = true;
+		} else if (switchAutomationInProgress){
+			scaleAutomationInProgress = false;
+			switchAutomationInProgress = false;
+		}
+	} else if (Initialization.driver.getRawButtonPressed(2)){
+		if(!scaleAutomationInProgress){
+			switchAutomationInProgress = false;
+			scaleAutomationInProgress = true;
+		} else if (scaleAutomationInProgress){
+			scaleAutomationInProgress = false;
+			switchAutomationInProgress = false;
+		}
+	}
+
+	if(switchAutomationInProgress){
+		Autonomous.placeCubeOnSwitch();
+	} else if (scaleAutomationInProgress){
+		Autonomous.placeCubeOnScale();
+	} else {
+		drive(); // We will need to take drive() out of teleopPeriodic()
+		elevate(); // We will need to take elevate() out of teleopPeriodic()
+	}
+}
+
+	
+	
+	
 	public static boolean isDrivingOnGyro;
 	/**
 	 * Drives the robot using input from the driver's joystick
