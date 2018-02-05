@@ -31,6 +31,9 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
+		} else {
+			Teleop.switchAutomationInProgress = false;
+			Teleop.scaleAutomationInProgress = false;
 		}
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance())/12));
 	}
@@ -52,6 +55,9 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
+		} else {
+			Teleop.switchAutomationInProgress = false;
+			Teleop.scaleAutomationInProgress = false;
 		}
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance())/12));
 	}
