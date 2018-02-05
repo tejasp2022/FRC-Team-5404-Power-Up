@@ -122,13 +122,10 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void teleopPeriodic() {
-		Teleop.drive();
-		Teleop.elevate();
-		Teleop.ejectCube();
+		Teleop.cubeManipulation()
 		Teleop.endGameRumble();
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();
-		//Teleop.climb();
 	}
 
 	public void testInit() {
