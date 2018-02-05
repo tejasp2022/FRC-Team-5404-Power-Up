@@ -38,8 +38,9 @@ public static void cubeManipulation(){
 	} else if (scaleAutomationInProgress){
 		Autonomous.placeCubeOnScale();
 	} else {
-		drive(); // We will need to take drive() out of teleopPeriodic()
-		elevate(); // We will need to take elevate() out of teleopPeriodic()
+		drive();
+		elevate(); 
+		ejectCube();
 	}
 }
 
