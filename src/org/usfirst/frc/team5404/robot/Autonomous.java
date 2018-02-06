@@ -197,10 +197,24 @@ public class Autonomous {
 		}
 	}
 
+	public static double endTime;
+	public static boolean delayInProgress = false;
 	public static boolean delay(double delay) {
-		Timer.delay(delay);
-		return true;
+		if (!delayInProgress) {
+			endTime = Timer.getFPGATimestamp() + delay;
+			delayInProgress = true;
+			return false;
+		} else {
+			if(Timer.getFPGATimestamp() < endTime) {
+				delayInProgress = false;
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
+		
+		
 
 	public static void determineAutonomousSequence() {
 		// Switch Sequence

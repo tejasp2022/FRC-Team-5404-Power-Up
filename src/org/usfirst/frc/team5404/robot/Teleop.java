@@ -46,10 +46,6 @@ public class Teleop {
 	}
 
 	public static boolean isDrivingOnGyro;
-
-	/**
-	 * Drives the robot using input from the driver's joystick
-	 */
 	public static void drive() {
 		double finalMoveMultiplier = Initialization.driver.getRawButton(5) ? 1: Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.moveMultiplier;
 		double finalRotateMultiplier = Initialization.driver.getRawButton(6) ? 1: Initialization.driver.getRawAxis(3) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
@@ -71,10 +67,6 @@ public class Teleop {
 
 	static boolean automationInProgress = false;
 	static double elevatorTargetHeight;
-
-	/**
-	 * Controls the elevator using input from the operator's joystick
-	 */
 	public static void elevate() {
 		if (!Initialization.topLimitSwitch.get() || !Initialization.bottomLimitSwitch.get()) {
 			Initialization.elevator.set(0);
@@ -118,11 +110,8 @@ public class Teleop {
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 
-	/**
-	 * Controls the climber using input from the operator's joystick
-	 */
 	public static void climb() {
-		// Climbing Code Here
+		
 	}
 
 	public static void ejectCube() {
