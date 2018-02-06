@@ -126,7 +126,7 @@ public class Initialization {
 	//public static DigitalInput colorMark = new DigitalInput(PortIO.colorMark);
 
 	// Solenoids
-	public static Solenoid endEffector = new Solenoid(0);
+	public static Solenoid endEffector = new Solenoid(PortIO.endEffector);
 	
 	// PID
 	public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());
