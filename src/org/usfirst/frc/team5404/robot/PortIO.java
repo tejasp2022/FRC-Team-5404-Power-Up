@@ -7,7 +7,6 @@ package org.usfirst.frc.team5404.robot;
 
 public class PortIO {
 	//----------------------------------------PWM PORTS-------------------------------------------//
-		
 		// Drive Motor Controllers
 			public static final int FR = 0;	
 			public static final int BR = 1;
@@ -18,7 +17,6 @@ public class PortIO {
 			public static final int elevator = 4;
 		
 	//----------------------------------------DIO PORTS-------------------------------------------//
-
 		// Encoders
 			public static final int rdEncoder1 = 0;
 			public static final int rdEncoder2 = 1;
@@ -32,24 +30,15 @@ public class PortIO {
 			public static final int bottomLimitSwitch = 6;
 			public static final int topLimitSwitch = 7;
 			
-			//Color mark sensor (whatever that is (might not even be DIO))
-			//public static final int colorMark = 8;
-			
 	//------------------------------------------PCM Ports---------------------------------------------//
 		// Range Finder
-		public static final int rangeFinder = 0;
-			
-		//Ultrasonic (the other one)
-		//public static final int us = 0;//or whatever port it is
-		
+			public static final int rangeFinder = 0;
 		
 	//------------------------------------------PCM Ports---------------------------------------------//
-
 		// Solenoids
 	        public static final int endEffector = 0;
 		
 	//------------------------------------------USB Ports---------------------------------------------//
-
 		// Joysticks
 			public static final int driver = 0;
 			public static final int operator = 1;
