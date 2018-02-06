@@ -17,6 +17,8 @@ boolean scaleAutomationInProgress = false;
 public static void cubeManipulation(){
 	if (Initialization.driver.getRawButtonPressed(1)){
 		if(!switchAutomationInProgress){
+			Autonomous.autoElevatorHeight(0);
+			Initialization.endEffector.set(false);
 			scaleAutomationInProgress = false;
 			switchAutomationInProgress = true;
 		} else if (switchAutomationInProgress){
@@ -25,6 +27,8 @@ public static void cubeManipulation(){
 		}
 	} else if (Initialization.driver.getRawButtonPressed(2)){
 		if(!scaleAutomationInProgress){
+			Autonomous.autoElevatorHeight(0);
+			Initialization.endEffector.set(false);
 			switchAutomationInProgress = false;
 			scaleAutomationInProgress = true;
 		} else if (scaleAutomationInProgress){
@@ -43,9 +47,6 @@ public static void cubeManipulation(){
 		ejectCube();
 	}
 }
-
-	
-	
 
 public static boolean isDrivingOnGyro;
 /**
