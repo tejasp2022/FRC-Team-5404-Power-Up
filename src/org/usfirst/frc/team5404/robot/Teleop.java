@@ -16,7 +16,7 @@ public class Teleop {
 	public static void cubeManipulation() {
 		if (Initialization.driver.getRawButtonPressed(1)) {
 			if (!switchAutomationInProgress) {
-				Initialization.endEffector.set(false);
+				//Initialization.endEffector.set(false);
 				scaleAutomationInProgress = false;
 				switchAutomationInProgress = true;
 			} else if (switchAutomationInProgress) {
@@ -25,7 +25,7 @@ public class Teleop {
 			}
 		} else if (Initialization.driver.getRawButtonPressed(2)) {
 			if (!scaleAutomationInProgress) {
-				Initialization.endEffector.set(false);
+				//Initialization.endEffector.set(false);
 				switchAutomationInProgress = false;
 				scaleAutomationInProgress = true;
 			} else if (scaleAutomationInProgress) {
@@ -41,11 +41,14 @@ public class Teleop {
 		} else {
 			drive();
 			elevate();
-			ejectCube();
+			//ejectCube();
+			//intakeOutput();
+			//grabber();
 		}
 	}
 
 	public static boolean isDrivingOnGyro;
+	
 	public static void drive() {
 		double finalMoveMultiplier = Initialization.driver.getRawButton(5) ? 1: Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.moveMultiplier;
 		double finalRotateMultiplier = Initialization.driver.getRawButton(6) ? 1: Initialization.driver.getRawAxis(3) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
@@ -67,6 +70,7 @@ public class Teleop {
 
 	static boolean automationInProgress = false;
 	static double elevatorTargetHeight;
+	
 	public static void elevate() {
 		if (!Initialization.topLimitSwitch.get() || !Initialization.bottomLimitSwitch.get()) {
 			Initialization.elevator.set(0);
@@ -78,7 +82,7 @@ public class Teleop {
 		boolean goSlowTop = (Math.abs(Initialization.elevatorEncoder.getDistance()) > 72 && Math.signum(Initialization.elevator.get()) == 1);
 		if (automationInProgress) {
 			double speed = goSlowBottom ? Initialization.automationBottomSpeed: goSlowTop ? Initialization.automationTopSpeed : Initialization.automationHighSpeed;
-			Autonomous.setElevatorHeight(elevatorTargetHeight, speed);
+			BuildingBlocks.setElevatorHeight(elevatorTargetHeight, speed);
 
 		} else if (Initialization.operator.getRawButtonPressed(1)) { // A
 			automationInProgress = true;
@@ -114,9 +118,35 @@ public class Teleop {
 		
 	}
 
-	public static void ejectCube() {
-		Initialization.endEffector.set(Initialization.operator.getRawButton(5));
+	/*public static void ejectCube() {
+		Initialization.endEffector.set(Initialization.operator.getRawButton(5)); // Left Bumper
 	}
+	
+	public static double grabberCount = 0;
+	
+	public static void grabber() {
+		if(Initialization.operator.getRawButtonPressed(6)) { // right bumper
+			grabberCount++;
+		}
+		if(grabberCount % 2 == 0) {
+			Initialization.grabber.set(true);
+		} else {
+			Initialization.grabber.set(false);
+		}
+	}
+	
+	public static void intakeOutput() {
+		if(Initialization.driver.getRawAxis(2) > 0.8){ // left axis underneath left bumper
+			Initialization.intakePiston.set(true);
+			Initialization.intakeMotor.set(-1); //
+		} else if(Initialization.driver.getRawAxis(3) > 0.8) { // right axis underneath left bumper
+			Initialization.intakePiston.set(true);
+			Initialization.intakeMotor.set(1);
+		} else {
+			Initialization.intakePiston.set(false);
+			Initialization.intakeMotor.set(0);
+		}
+	}*/
 
 	public static void rangeDistance() {
 		SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getVoltage() * 1000 / 25.4);

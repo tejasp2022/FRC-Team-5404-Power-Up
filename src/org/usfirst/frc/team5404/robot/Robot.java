@@ -28,6 +28,7 @@ public class Robot extends IterativeRobot {
 	public static String lastTime = "0";
 
 	public void robotPeriodic() {
+		Robot.displaySensors();
 		NetworkTableEntry sendEntry = Initialization.autoModeTable.getEntry("sendkey");
 		NetworkTableValue val = sendEntry.getValue();
 		if (val.getType() != NetworkTableType.kStringArray || val.getStringArray() == null || val.getStringArray().length != 2) {
@@ -53,20 +54,28 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		assignPreferenceVariables();
-		Autonomous.getMatchData();
+		BuildingBlocks.getMatchData();
 		Autonomous.determineAutonomousSequence();
 		autoProcess = 0;
 		resetSensors();
 		calibrateSensors();
 		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
-		moveCalled = false;
+		//moveCalled = false;
 	}
 
-	boolean moveCalled = false;
+	boolean rotateCalled = false;
 
 	public void autonomousPeriodic() {
-		String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
+		Autonomous.sideScale();
+		
+		/*if(!rotateCalled) {
+			if(Autonomous.bankingRotate(-90, 0.5)) {
+				rotateCalled = true;
+			}
+		}*/
+		
+	/*String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
 
 		if (union.equalsIgnoreCase("RL")) {
 			if (Initialization.RLRStrat.equals("1")) {
@@ -107,7 +116,7 @@ public class Robot extends IterativeRobot {
 		} else {
 			SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
 			System.err.println("Valid Autonomous Strategy Not Found");
-		}
+		}*/
 	}
 
 	public void teleopInit() {

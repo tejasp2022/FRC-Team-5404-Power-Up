@@ -15,6 +15,9 @@ public class PortIO {
 	
 		// Elevator Motor Controller
 			public static final int elevator = 4;
+			
+		// Intake Motor Controller
+			public static final int intakeMotor = 5;
 		
 	//----------------------------------------DIO PORTS-------------------------------------------//
 		// Encoders
@@ -37,6 +40,8 @@ public class PortIO {
 	//------------------------------------------PCM Ports---------------------------------------------//
 		// Solenoids
 	        public static final int endEffector = 0;
+	        public static final int grabber = 1;
+	        public static final int intakePiston = 2;
 		
 	//------------------------------------------USB Ports---------------------------------------------//
 		// Joysticks
