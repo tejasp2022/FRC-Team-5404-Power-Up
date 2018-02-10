@@ -4,6 +4,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
 public class BuildingBlocks {
+	
+	public static boolean eject() {
+		Initialization.endEffector.set(true);
+		if(delay(1)) {
+			Initialization.endEffector.set(false);
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean move(double dist, double speed) {
 		if (dist > 18) {
 			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) < (Math.abs(dist) - 12)) {
@@ -110,7 +120,7 @@ public class BuildingBlocks {
 				Initialization.elevator.set(speed);
 				return false;
 			} else {
-				Initialization.elevator.set(0);
+				Initialization.elevator.set(Initialization.automationHoldSpeed); // normally 0
 				Teleop.automationInProgress = false;
 				Teleop.startElevatorRumble(0.5, false, true);
 				return true;
@@ -120,7 +130,7 @@ public class BuildingBlocks {
 				Initialization.elevator.set(-speed);
 				return false;
 			} else {
-				Initialization.elevator.set(0);
+				Initialization.elevator.set(Initialization.automationHoldSpeed); //normally 0
 				Teleop.automationInProgress = false;
 				Teleop.startElevatorRumble(0.5, false, true);
 				return true;

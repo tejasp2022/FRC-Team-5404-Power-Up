@@ -20,7 +20,9 @@ public class Autonomous {
 		Timer.delay(Initialization.autoDelayTime);
 		if (Robot.autoProcess < Initialization.switchSequence.size()) {
 			if (Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
-				BuildingBlocks.resetSomeSensors();
+				//BuildingBlocks.resetSomeSensors();
+				Initialization.leftDriveEncoder.reset();
+				Initialization.rightDriveEncoder.reset();
 				Robot.autoProcess++;
 				BuildingBlocks.successesContact = 0;
 				Initialization.gearaffesPID.reset();
@@ -86,14 +88,16 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(20));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
-
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
+			
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(20));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(95 + Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(64.8, Initialization.autoMoveSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(16.2 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow) & BuildingBlocks.autoElevatorHeight(20));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(16.2 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(228 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(20));
@@ -103,6 +107,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(60, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow)); // here too
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("1")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(228 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(20));
@@ -112,15 +117,18 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(60, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(31.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(112, Initialization.autoMoveSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(28 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow) & BuildingBlocks.autoElevatorHeight(20));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(28 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(20));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 		}
 
 		// Scale Sequence

@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
@@ -64,16 +65,25 @@ public class Robot extends IterativeRobot {
 		//moveCalled = false;
 	}
 
-	boolean rotateCalled = false;
+	boolean moveCalled = false;
 
 	public void autonomousPeriodic() {
-		Autonomous.sideScale();
+		//Autonomous.sideScale();
 		
-		/*if(!rotateCalled) {
-			if(Autonomous.bankingRotate(-90, 0.5)) {
-				rotateCalled = true;
+		if(!moveCalled) {
+			if(BuildingBlocks.move(120, 0.9)) {
+				moveCalled = true;
+				Initialization.BR.set(0.4);
+				Initialization.FR.set(0.4);
+				Initialization.BL.set(-0.4);
+				Initialization.BL.set(-0.4);
+				Timer.delay(0.5);
+				Initialization.BR.set(0);
+				Initialization.FR.set(0);
+				Initialization.BL.set(0);
+				Initialization.BL.set(0);
 			}
-		}*/
+		}
 		
 	/*String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
 
@@ -93,7 +103,7 @@ public class Robot extends IterativeRobot {
 			} else if (Initialization.LLLStrat.equals("3")) {
 				Autonomous.placeCubeOnScale();
 			} else if (Initialization.LLLStrat.equals("4")) {
-				Autonomous.twoCubeAuto();
+				Autonomous.twoCubeAutoFront();
 			}
 		} else if (union.equalsIgnoreCase("RR")) {
 			if (Initialization.RRRStrat.equals("1")) {
@@ -103,7 +113,7 @@ public class Robot extends IterativeRobot {
 			} else if (Initialization.RRRStrat.equals("3")) {
 				Autonomous.placeCubeOnScale();
 			} else if (Initialization.RRRStrat.equals("4")) {
-				Autonomous.twoCubeAuto();
+				Autonomous.twoCubeAutoFront();
 			}
 		} else if (union.equalsIgnoreCase("LR")) {
 			if (Initialization.LRLStrat.equals("1")) {
@@ -184,6 +194,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Left Encoder Distance", formatValue(Math.abs(Initialization.leftDriveEncoder.getDistance())));
 		SmartDashboard.putNumber("Right Encoder Distance", formatValue(Math.abs(Initialization.rightDriveEncoder.getDistance())));
 		SmartDashboard.putNumber("Gyro Angle", formatValue(Initialization.gyro.getAngle()));
+		SmartDashboard.putNumber("Elevator Speed", Initialization.elevator.get());
+		SmartDashboard.putNumber("Gyro Angle Rate", Initialization.gyro.getRate());
 	}
 
 	public static void assignPreferenceVariables() {
@@ -200,6 +212,7 @@ public class Robot extends IterativeRobot {
 		Initialization.automationHighSpeed = Initialization.prefs.getDouble("Automation High Speed", 70) / 100;
 		Initialization.automationTopSpeed = Initialization.prefs.getDouble("Automation Top Speed", 40) / 100;
 		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10) / 100;
+		Initialization.automationHoldSpeed = Initialization.prefs.getDouble("Automation Hold Speed", 20) / 100;
 
 		// Robot Starting Position
 		Initialization.robotStartingPosition = Initialization.prefs.getString("Autonomous Code", "-----").substring(0, 1);

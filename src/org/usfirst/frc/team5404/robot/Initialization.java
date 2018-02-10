@@ -65,6 +65,7 @@ public class Initialization {
 		public static double automationHighSpeed;
 		public static double automationBottomSpeed;
 		public static double automationTopSpeed;
+		public static double automationHoldSpeed;
 
 	// Joysticks
 		public static Joystick driver = new Joystick(PortIO.driver);
@@ -96,7 +97,7 @@ public class Initialization {
 	// Drive Encoders
 		public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
 		public static Encoder leftDriveEncoder = new Encoder(PortIO.ldEncoder1, PortIO.ldEncoder2);
-		public static final double DRIVE_TICKS_PER_REV = 213.6;
+		public static final double DRIVE_TICKS_PER_REV = 213.6/1.85;
 		public static double DRIVE_INCH_PER_REV = 18.8496;
 		public static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV; // 0.08824719
 
@@ -124,7 +125,7 @@ public class Initialization {
 		public static AnalogInput rangeFinder = new AnalogInput(PortIO.rangeFinder);
 
 	// Solenoids
-		//public static Solenoid endEffector = new Solenoid(PortIO.endEffector);
+		public static Solenoid endEffector = new Solenoid(PortIO.endEffector);
 		//public static Solenoid grabber = new Solenoid(PortIO.grabber);
 		//public static Solenoid intakePiston = new Solenoid(PortIO.intakePiston);
 
