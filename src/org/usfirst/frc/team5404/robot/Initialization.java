@@ -130,7 +130,7 @@ public class Initialization {
 		//public static Solenoid intakePiston = new Solenoid(PortIO.intakePiston);
 
 	// PID
-		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());
+		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, new GearaffesPID.GearaffesGyroSource(gyro), new GearaffesPID.GearaffesOutput());
 
 	// Dashboard Preferences
 		public static Preferences prefs = Preferences.getInstance();

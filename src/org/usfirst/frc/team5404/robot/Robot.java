@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 		autoProcess = 0;
 		resetSensors();
 		calibrateSensors();
-		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
+		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, new GearaffesPID.GearaffesGyroSource(Initialization.gyro), new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
 		//moveCalled = false;
 	}
@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		//Autonomous.sideScale();
 		
-		if(!moveCalled) {
+		/*if(!moveCalled) {
 			if(BuildingBlocks.move(120, 0.9)) {
 				moveCalled = true;
 				Initialization.BR.set(0.4);
@@ -83,9 +83,9 @@ public class Robot extends IterativeRobot {
 				Initialization.BL.set(0);
 				Initialization.BL.set(0);
 			}
-		}
+		}*/
 		
-	/*String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
+	String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
 
 		if (union.equalsIgnoreCase("RL")) {
 			if (Initialization.RLRStrat.equals("1")) {
@@ -126,7 +126,7 @@ public class Robot extends IterativeRobot {
 		} else {
 			SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
 			System.err.println("Valid Autonomous Strategy Not Found");
-		}*/
+		}
 	}
 
 	public void teleopInit() {

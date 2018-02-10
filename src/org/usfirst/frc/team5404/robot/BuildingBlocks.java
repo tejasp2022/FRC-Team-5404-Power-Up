@@ -41,6 +41,7 @@ public class BuildingBlocks {
 				return false;
 			} else {
 				Initialization.gearaffesDrive.arcadeDrive(0, 0);
+				
 				return true;
 			}
 		}
@@ -64,18 +65,22 @@ public class BuildingBlocks {
 	}
 
 	public static boolean rotate(double angle, double power) {
-		if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle)) {
+		//if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle)) {
 			Robot.displaySensors();
-			if (angle > 0) {
+			if (angle > Initialization.gyro.getAngle() + 5) {
 				Initialization.gearaffesDrive.arcadeDrive(0, power);
-			} else {
+				return false;
+			} else if(angle < Initialization.gyro.getAngle() - 5) {
 				Initialization.gearaffesDrive.arcadeDrive(0, -power);
+				return false;
+			} else {
+				Initialization.gearaffesDrive.arcadeDrive(0, 0);
+				Initialization.gearaffesPID.gSource.setBaseAngle(angle);
+				return true;
 			}
-			return false;
-		} else {
-			Initialization.gearaffesDrive.arcadeDrive(0, 0);
-			return true;
-		}
+		//} else {
+			
+		//}
 	}
 	
 	public static boolean bankingRotate(double angle, double power) {
@@ -101,7 +106,7 @@ public class BuildingBlocks {
 	public static void resetSomeSensors() {
 		Initialization.leftDriveEncoder.reset();
 		Initialization.rightDriveEncoder.reset();
-		Initialization.gyro.reset();
+		//Initialization.gyro.reset();
 	}
 	
 	public static boolean autoElevatorHeight(double height) {
