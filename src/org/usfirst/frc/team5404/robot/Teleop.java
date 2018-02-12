@@ -41,7 +41,7 @@ public class Teleop {
 		} else {
 			drive();
 			elevate();
-			ejectCube();
+			//ejectCube();
 			//intakeOutput();
 			//grabber();
 		}
@@ -59,13 +59,13 @@ public class Teleop {
 			isDrivingOnGyro = true;
 		} else if ((Math.abs(Initialization.driver.getRawAxis(4)) > 0.05 || Math.abs(Initialization.driver.getRawAxis(1)) < 0.1) && isDrivingOnGyro) {
 			isDrivingOnGyro = false;
-		}*/
-		//if (isDrivingOnGyro && Math.abs(Initialization.driver.getRawAxis(1)) > 0.05) {
-		//	Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1)) * -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Initialization.gearaffesPID.get());
-		//} else {
+		}
+		if (isDrivingOnGyro && Math.abs(Initialization.driver.getRawAxis(1)) > 0.05) {
+			Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1)) * -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Initialization.gearaffesPID.get());
+		} else {*/
 			Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1)) * -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier* Math.pow(Initialization.driver.getRawAxis(4), 2), false);
 		//}
-		//SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate()) / 12));
+		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate()) / 12));
 	}
 
 	static boolean automationInProgress = false;
@@ -80,7 +80,11 @@ public class Teleop {
 		}
 		boolean goSlowBottom = (Math.abs(Initialization.elevatorEncoder.getDistance()) < 12 && Math.signum(Initialization.elevator.get()) == -1);
 		boolean goSlowTop = (Math.abs(Initialization.elevatorEncoder.getDistance()) > 72 && Math.signum(Initialization.elevator.get()) == 1);
-		if (Initialization.operator.getRawButtonPressed(1)) { // A
+		if (automationInProgress) {
+			double speed = goSlowBottom ? Initialization.automationBottomSpeed: goSlowTop ? Initialization.automationTopSpeed : Initialization.automationHighSpeed;
+			BuildingBlocks.setElevatorHeight(elevatorTargetHeight, speed);
+
+		} else if (Initialization.operator.getRawButtonPressed(1)) { // A
 			automationInProgress = true;
 			elevatorTargetHeight = 0; // 0 feet
 
@@ -96,16 +100,9 @@ public class Teleop {
 			automationInProgress = true;
 			elevatorTargetHeight = 72; // 6 feet
 
-		}
-		if (automationInProgress) {
-			double speed = goSlowBottom ? Initialization.automationBottomSpeed: goSlowTop ? Initialization.automationTopSpeed : Initialization.automationHighSpeed;
-			BuildingBlocks.setElevatorHeight(elevatorTargetHeight, speed);
-
 		} else {
 			double operatorOutput = -Math.signum(Initialization.operator.getRawAxis(1)) * Initialization.elevateMultiplier * Math.pow(Initialization.operator.getRawAxis(1), 2);
-			if(Math.abs(operatorOutput) < 0.15) {
-				Initialization.elevator.set(Initialization.automationHoldSpeed); // normally 0
-			} else if (goSlowBottom && Math.abs(operatorOutput) > Initialization.automationBottomSpeed) {
+			if (goSlowBottom && Math.abs(operatorOutput) > Initialization.automationBottomSpeed) {
 				Initialization.elevator.set(Math.signum(operatorOutput) * Initialization.automationBottomSpeed);
 			} else if (goSlowTop && Math.abs(operatorOutput) > Initialization.automationTopSpeed) {
 				Initialization.elevator.set(Math.signum(operatorOutput) * Initialization.automationTopSpeed);
@@ -121,9 +118,9 @@ public class Teleop {
 		
 	}
 
-	public static void ejectCube() {
+	/*public static void ejectCube() {
 		Initialization.endEffector.set(Initialization.operator.getRawButton(5)); // Left Bumper
-	}/*
+	}
 	
 	public static double grabberCount = 0;
 	
@@ -132,9 +129,9 @@ public class Teleop {
 			grabberCount++;
 		}
 		if(grabberCount % 2 == 0) {
-			Initialization.grabber.set(false);
-		} else {
 			Initialization.grabber.set(true);
+		} else {
+			Initialization.grabber.set(false);
 		}
 	}
 	
