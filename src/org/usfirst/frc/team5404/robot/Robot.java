@@ -155,6 +155,8 @@ public class Robot extends IterativeRobot {
 		calibrateSensors();
 		Test.testSequenceIndex = 0;
 		Test.determineTestSequence();
+		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
+		Initialization.gearaffesPID.enable();
 	}
 
 	public void testPeriodic() {
