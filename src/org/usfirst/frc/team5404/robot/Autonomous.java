@@ -13,7 +13,7 @@ public class Autonomous {
 	// Autonomous Routines
 
 	public static boolean crossAutoline() {
-		return BuildingBlocks.move(126, 0.7);
+		return BuildingBlocks.moveAndBrake(126, 0.7);
 	}
 
 	public static void placeCubeOnSwitch() {
@@ -88,37 +88,37 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 			//Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(59 - Initialization.robotDepth, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(95 + Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(95 + Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(64.8, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(64.8, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(16.2 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(228 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(238 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(264 - Initialization.robotWidth, Initialization.autoMoveSpeed)); // shaved off																							// 24"
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(270 - Initialization.robotWidth, Initialization.autoMoveSpeed)); // shaved off																							// 24"
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(60, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(60, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow)); // here too
 
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("1")) {
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(228 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(238 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(240 - Initialization.robotWidth, Initialization.autoMoveSpeed)); 																																									// too
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(270 - Initialization.robotWidth, Initialization.autoMoveSpeed)); 																																									// too
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(60, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(60, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(31.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("2")) {
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(112, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(112, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(28 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.move(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 		}
@@ -127,47 +127,49 @@ public class Autonomous {
 		Initialization.scaleSequence.clear();
 
 		if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(325.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(325.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			//Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(1));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(72));
 			//Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(1));// replace with end effector deposition code
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(173 + Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(173 + Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(264.65, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(264.65, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(4, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveSpeed));
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(228 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(242.375 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(276 - Initialization.robotWidth, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(276 - Initialization.robotWidth, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(95.65, Initialization.autoMoveSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(16, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(83.65, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			//Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(16, Initialization.autoMoveSpeed));
+			//Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(72));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("1")) {
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(227 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(242.375 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(252 - Initialization.robotWidth, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(276 - Initialization.robotWidth, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(83.65, Initialization.autoMoveSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(22, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(83.65, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			//Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(22, Initialization.autoMoveSpeed));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("2")) {
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(67 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(67 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(268.65, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(268.65, Initialization.autoMoveSpeed));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.move(323.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(323.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(1));// replace with end effector deposition code
 		}
@@ -176,38 +178,38 @@ public class Autonomous {
 		Initialization.twoCubeSequence.clear();
 
 		if (Initialization.scalePosition == 'R' && Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
-			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.move(323.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveAndBrake(323.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.delay(1));// replace with end effector deposition code
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.move(94.915, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(30));
+			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveAndBrake(94.915, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(30));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.move(91.75 - (33.69 + Initialization.robotDepth / 2), Initialization.autoMoveSpeed));
+			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveAndBrake(91.75 - (33.69 + Initialization.robotDepth / 2), Initialization.autoMoveSpeed));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveUntilContact(32.735, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
-			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.move(325.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
+			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveAndBrake(325.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(72));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.delay(1));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.delay(1));// replace with end effector deposition code
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
-			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.move(84.915, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(30));
+			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveAndBrake(84.915, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(30));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
-			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.move(91.75 - (33.69 + Initialization.robotDepth / 2), Initialization.autoMoveSpeed));
+			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveAndBrake(91.75 - (33.69 + Initialization.robotDepth / 2), Initialization.autoMoveSpeed));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.twoCubeSequence.add((Void) -> BuildingBlocks.moveUntilContact(32.735, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 		}
 		
 		// Side Scale Sequence
 		Initialization.sideScaleSequence.clear();
-		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.move(196-Initialization.robotDepth, 0.7));
-		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.bankingRotate(Math.toDegrees(Math.atan((56.5-Initialization.robotWidth/2)/105)), 0.4));
-		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.move(Math.sqrt(Math.pow(56.5-Initialization.robotWidth/2, 2) + Math.pow(105, 2)), 0.45));
-		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.bankingRotate(-Math.toDegrees(Math.atan((56.5-Initialization.robotWidth/2)/105)), 0.3));
+		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(196-Initialization.robotDepth, 0.7));
+		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.bankingRotate(Math.toDegrees(Math.atan((56.5-Initialization.robotWidth/2)/80)), 0.35));
+		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(Math.sqrt(Math.pow(56.5-Initialization.robotWidth/2, 2) + Math.pow(80, 2)), 0.45));
+		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.bankingRotate(-Math.toDegrees(Math.atan((56.5-Initialization.robotWidth/2)/80)), 0.35));
 		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(72));
 		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.delay(3));
 		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
-		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.move(-12, 0.45));
+		Initialization.sideScaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-12, 0.45));
 	}
 }

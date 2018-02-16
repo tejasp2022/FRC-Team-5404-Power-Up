@@ -65,7 +65,12 @@ public class Initialization {
 		public static double automationBottomSpeed;
 		public static double automationTopSpeed;
 		public static double automationHoldSpeed;
-
+		
+	// Braking constants
+		public static double brakeB0;
+		public static double brakeB1;
+		public static double brakeKP;
+		
 	// Joysticks
 		public static Joystick driver = new Joystick(PortIO.driver);
 		public static Joystick operator = new Joystick(PortIO.operator);

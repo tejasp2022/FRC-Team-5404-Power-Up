@@ -14,8 +14,8 @@ public class BuildingBlocks {
 	}*/
 	static boolean isBraking = false;
 	public static boolean moveAndBrake(double dist, double speed) {
-		double brakeKP = Initialization.prefs.getDouble("Brake KP", 0.006);
-		double brakeDist = Initialization.prefs.getDouble("Brake Distance", 22);
+		double brakeKP = Initialization.brakeKP;
+		//double brakeDist = Initialization.prefs.getDouble("Brake Distance", 22);
 		if(isBraking) {
 			double leftRate = Initialization.leftDriveEncoder.getRate();
 			double rightRate = Initialization.rightDriveEncoder.getRate();
@@ -23,15 +23,18 @@ public class BuildingBlocks {
 			Initialization.BL.set(-brakeKP*leftRate);
 			Initialization.FR.set(-brakeKP*rightRate);
 			Initialization.BR.set(-brakeKP*rightRate);
-			if(Math.abs(leftRate) < 2 || Math.abs(rightRate) < 2) {
+			if(Math.abs(leftRate) < 4 || Math.abs(rightRate) < 4) {
 				isBraking = false;
 				Initialization.gearaffesDrive.arcadeDrive(0, 0);
 				return true;
 			} else {
 				return false;
 			}
-		} else if (dist > brakeDist * 1.5) { // arbitrary but we can test later
-			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) < (Math.abs(dist) - brakeDist)) {
+		} else { // arbitrary but we can test later
+			if (Initialization.leftDriveEncoder.getDistance() +
+					(Initialization.brakeB0 +
+							Initialization.leftDriveEncoder.getRate() * Initialization.brakeB1)
+						< dist) {
 				if (dist > 0) {
 					Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gearaffesPID.get(), false);																					
 				} else {
@@ -41,10 +44,11 @@ public class BuildingBlocks {
 				return false;
 			} else {
 				Initialization.gearaffesDrive.arcadeDrive(0, 0);
+				postRotate();
 				isBraking = true;
 				return false;
 			}
-		} else {
+		} /*else {
 			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) < (Math.abs(dist))) {
 				if (dist > 0) {
 					Initialization.gearaffesDrive.arcadeDrive(Initialization.autoMoveContactLow,
@@ -59,7 +63,7 @@ public class BuildingBlocks {
 				Initialization.gearaffesDrive.arcadeDrive(0, 0);
 				return true;
 			}
-		}
+		}*/
 	}
 	public static boolean move(double dist, double speed) {
 		if (dist > 18) {
@@ -121,6 +125,7 @@ public class BuildingBlocks {
 			return false;
 		} else {
 			Initialization.gearaffesDrive.arcadeDrive(0, 0);
+			postRotate();
 			return true;
 		}
 	}
@@ -137,6 +142,7 @@ public class BuildingBlocks {
 			}
 			return false;
 		} else {
+			postRotate();
 			Initialization.FR.set(0);
 			Initialization.BR.set(0);
 			Initialization.FL.set(0);
@@ -148,6 +154,9 @@ public class BuildingBlocks {
 	public static void resetSomeSensors() {
 		Initialization.leftDriveEncoder.reset();
 		Initialization.rightDriveEncoder.reset();
+		//Initialization.gyro.reset();
+	}
+	public static void postRotate() {
 		Initialization.gyro.reset();
 	}
 	

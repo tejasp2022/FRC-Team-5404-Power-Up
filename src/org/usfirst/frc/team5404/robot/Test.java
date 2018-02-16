@@ -75,9 +75,12 @@ public class Test {
 			Initialization.FR.set(-Kp*rightRate);
 			Initialization.BR.set(-Kp*rightRate);
 			if(Math.abs(leftRate) < 2 || Math.abs(rightRate) < 2) {
-				System.out.println("Left Brake Distance: " + Math.abs(Initialization.leftDriveEncoder.getDistance() - leftStartedBrake));
-				System.out.println("Right Brake Distance: " + Math.abs(Initialization.rightDriveEncoder.getDistance() - rightStartedBrake));
-				
+				double lbd = Math.abs(Initialization.leftDriveEncoder.getDistance() - leftStartedBrake);
+				double rbd = Math.abs(Initialization.rightDriveEncoder.getDistance() - rightStartedBrake);
+				System.out.println("Left Brake Distance: " + lbd);
+				System.out.println("Right Brake Distance: " + rbd);
+				System.out.println("AVG DIST: " + ((lbd + rbd) / 2));
+				//System
 				isBraking = false;
 				drive.arcadeDrive(0, 0);
 				return true;
@@ -96,8 +99,11 @@ public class Test {
 			} else {
 				leftStartedBrake = Initialization.leftDriveEncoder.getDistance();
 				rightStartedBrake = Initialization.rightDriveEncoder.getDistance();
-				System.out.println("Left Rate: " + Initialization.leftDriveEncoder.getRate());
-				System.out.println("Right Rate: " + Initialization.rightDriveEncoder.getRate());
+				double lRate = Math.abs(Initialization.leftDriveEncoder.getRate());
+				double rRate = Math.abs(Initialization.rightDriveEncoder.getRate());
+				System.out.println("Left Rate: " + lRate);
+				System.out.println("Right Rate: " + rRate);
+				System.out.println("AVG RATE: " + ((lRate + rRate) / 2));
 				drive.arcadeDrive(0, 0);
 				isBraking = true;
 				return false;
