@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Initialization {
+		public static double maxSpeed = 144;//subject to change
 	// Robot Dimensions
 		public static final double robotDepth = 39;
 		public static final double robotWidth = 35;

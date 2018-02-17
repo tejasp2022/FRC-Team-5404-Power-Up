@@ -1,5 +1,5 @@
 /***************************************************************************************
-*    Title: Gearaffes Robotics Team FIRST Robotics Competition 2018 Code
+ 	*    Title: Gearaffes Robotics Team FIRST Robotics Competition 2018 Code
 *    Authors: Tejas Priyadarshi, Christopher Seiler, Anoop Bhat
 *    Contact: http://www.frc5404.org/
 ***************************************************************************************/
@@ -11,8 +11,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
-
-
+	private static double encoderValL = 0;
+	private static double encoderValR = 0;
+	
 	public static ArrayList<Double> timeList = new ArrayList<Double>();
 	public static ArrayList<Double> BRList = new ArrayList<Double>();
 	public static ArrayList<Double> FRList = new ArrayList<Double>();
@@ -39,12 +40,17 @@ public class Autonomous {
 	public static ArrayList<Double> differenceInEncoderList = new ArrayList<Double>();
 	
 	public static void playback(int i) {
-		//for(int i = 0; i<timeList.size(); i++) {
 		if(i<timeList.size()) {
-		Initialization.BR.set(BRList.get(i));
-			Initialization.FR.set(FRList.get(i));
-			Initialization.BL.set(BLList.get(i));
-			Initialization.FL.set(FLList.get(i));
+			double dLEncoder = Initialization.leftDriveEncoder.getDistance() - encoderValL;
+			double dREncoder = Initialization.rightDriveEncoder.getDistance() - encoderValR;
+			encoderValL = Initialization.leftDriveEncoder.getDistance();
+			encoderValR = Initialization.rightDriveEncoder.getDistance();
+			double additionL = playbackErrorCompensation(FLList.get(i-1),FRList.get(i-1),dLEncoder,dREncoder)[0];
+			double additionR = playbackErrorCompensation(FLList.get(i-1),FRList.get(i-1),dLEncoder,dREncoder)[1];
+			Initialization.BR.set(BRList.get(i)+additionR);
+			Initialization.FR.set(FRList.get(i)+additionR);
+			Initialization.BL.set(BLList.get(i)+additionL);
+			Initialization.FL.set(FLList.get(i)+additionL);
 			Initialization.elevator.set(elvList.get(i));
 			//Initialization.endEffector.set(endEffectorList.get(i)); 
 			differenceInGyroList.add(Math.abs(Math.abs(gyroList.get(i)) - Math.abs(Initialization.gyro.getAngle()))); // Theoretically, the difference should be 0
@@ -68,6 +74,19 @@ public class Autonomous {
 		} else {
 			SmartDashboard.putBoolean("Reverse Playback Robot", false);
 		}
+	}
+	
+	private static double[] playbackErrorCompensation(double FLval, double FRval, double dLEncoder, double dREncoder) {
+		double dLExpected = FLval*Initialization.maxSpeed*0.02;
+		double dRExpected = FRval*Initialization.maxSpeed*0.02;
+		
+		double errorL = dLEncoder - dLExpected;
+		double errorR = dREncoder - dRExpected;
+		
+		double speedAdditionL = errorL/(0.02*Initialization.maxSpeed);
+		double speedAdditionR = errorR/(0.02*Initialization.maxSpeed);
+		
+		return new double[] {speedAdditionL,speedAdditionR};
 	}
 	
 	public static char currentAction = 'M'; 
