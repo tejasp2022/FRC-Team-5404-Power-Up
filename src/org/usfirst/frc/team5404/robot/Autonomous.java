@@ -5,11 +5,104 @@
 ***************************************************************************************/
 package org.usfirst.frc.team5404.robot;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
 
+
+	public static ArrayList<Double> timeList = new ArrayList<Double>();
+	public static ArrayList<Double> BRList = new ArrayList<Double>();
+	public static ArrayList<Double> FRList = new ArrayList<Double>();
+	public static ArrayList<Double> BLList = new ArrayList<Double>();
+	public static ArrayList<Double> FLList = new ArrayList<Double>();
+	public static ArrayList<Double> elvList = new ArrayList<Double>();
+	public static ArrayList<Boolean> endEffectorList = new ArrayList<Boolean>();
+	public static ArrayList<Double> gyroList = new ArrayList<Double>();
+	public static ArrayList<Double> encoderList = new ArrayList<Double>();
+	
+	public static void record() {
+		timeList.add(Timer.getFPGATimestamp());
+		BRList.add(Initialization.BR.get());
+		FRList.add(Initialization.FR.get());
+		BLList.add(Initialization.BL.get());
+		FLList.add(Initialization.FL.get());
+		elvList.add(Initialization.elevator.get());
+		//endEffectorList.add(Initialization.endEffector.get());
+		gyroList.add(Initialization.gyro.getAngle());
+		encoderList.add(Initialization.rightDriveEncoder.getDistance());
+	}
+
+	public static ArrayList<Double> differenceInGyroList = new ArrayList<Double>();
+	public static ArrayList<Double> differenceInEncoderList = new ArrayList<Double>();
+	
+	public static void playback(int i) {
+		//for(int i = 0; i<timeList.size(); i++) {
+		if(i<timeList.size()) {
+		Initialization.BR.set(BRList.get(i));
+			Initialization.FR.set(FRList.get(i));
+			Initialization.BL.set(BLList.get(i));
+			Initialization.FL.set(FLList.get(i));
+			Initialization.elevator.set(elvList.get(i));
+			//Initialization.endEffector.set(endEffectorList.get(i)); 
+			differenceInGyroList.add(Math.abs(Math.abs(gyroList.get(i)) - Math.abs(Initialization.gyro.getAngle()))); // Theoretically, the difference should be 0
+			differenceInEncoderList.add(Math.abs(encoderList.get(i) - Initialization.rightDriveEncoder.getDistance()));
+			SmartDashboard.putNumber("Gyro Difference", Math.abs(Math.abs(gyroList.get(i)) - Math.abs(Initialization.gyro.getAngle())));
+			SmartDashboard.putNumber("Encoder Difference", Math.abs(encoderList.get(i) - Initialization.rightDriveEncoder.getDistance()));
+		} else {
+			SmartDashboard.putBoolean("Playback Robot", false);
+		}
+	}
+	
+	public static void playbackReverse(int i ) {
+		if(i>=0) { 
+			Initialization.BR.set(-BRList.get(i));
+			Initialization.FR.set(-FRList.get(i));
+			Initialization.BL.set(-BLList.get(i));
+			Initialization.FL.set(-FLList.get(i));
+			Initialization.elevator.set(-elvList.get(i));
+			//Initialization.endEffector.set(endEffectorList.get(i)); 
+
+		} else {
+			SmartDashboard.putBoolean("Reverse Playback Robot", false);
+		}
+	}
+	
+	public static char currentAction = 'M'; 
+	public static int startingIndex = 0;
+ 	public static ArrayList<String> stepList = new ArrayList<String>();
+ 	public static ArrayList<String> summaryList = new ArrayList<String>();
+ 	
+	/*public static void sendActionSummary() {
+		for (int i = 0; i<timeList.size(); i++) {
+			if (FLList.get(i) == 0){
+				stepList.add("Stationary at t=" + timeList.get(i) + " seconds");
+			} else if(Math.signum(FLList.get(i)) == Math.signum(FRList.get(i))) { 
+				stepList.add("Rotating at t=" + timeList.get(i) + " seconds");
+			} else {
+				stepList.add("Moving Forward at t=" + timeList.get(i) + " seconds");
+			}
+		}
+		for(int i=0; i<stepList.size(); i++){
+			if (stepList.get(i).charAt(0) != currentAction){
+				if(currentAction == 'M'){
+					double distance = encoderList.get(i-1) - encoderList.get(startingIndex);
+					summaryList.add("Moved " +  distance + " inches");
+				} else if (currentAction == 'R'){
+					double angle = gyroList.get(i-1) - gyroList.get(startingIndex);
+					summaryList.add("Rotated " +  angle + " degrees");
+				}
+				startingIndex = i;
+				currentAction = stepList.get(i).charAt(0);
+			}
+		}
+		SmartDashboard.putStringArray("Action Summary", summaryList.toArray(new String[summaryList.size()]));
+	}*/
+	
+	
+	
 	// Autonomous Routines
 
 	public static boolean crossAutoline() {
@@ -86,7 +179,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
-			//Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
@@ -94,7 +187,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(64.8, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(16.2 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
-
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(238 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
@@ -103,7 +196,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(60, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow)); // here too
-
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("1")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(238 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
@@ -112,15 +205,17 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(60, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
-
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(112, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(28 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
-
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
+			
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotate(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 		}
 
 		// Scale Sequence

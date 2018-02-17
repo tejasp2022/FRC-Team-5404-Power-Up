@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
 public class BuildingBlocks {
-	/*public static boolean eject() {
-		Initialization.endEffector.set(true);
+	public static boolean eject() {
+		Initialization.endEffectorPiston.set(true);
 		if(delay(1)) {
-			Initialization.endEffector.set(false);
+			Initialization.endEffectorPiston.set(false);
 			return true;
 		}
 		return false;
-	}*/
+	}
 	static boolean isBraking = false;
 	public static boolean moveAndBrake(double dist, double speed) {
 		double brakeKP = Initialization.brakeKP;
@@ -176,7 +176,7 @@ public class BuildingBlocks {
 				Initialization.elevator.set(speed);
 				return false;
 			} else {
-				Initialization.elevator.set(0);
+				Initialization.elevator.set(Initialization.automationHoldSpeed);
 				Teleop.automationInProgress = false;
 				Teleop.startElevatorRumble(0.5, false, true);
 				return true;
@@ -186,7 +186,7 @@ public class BuildingBlocks {
 				Initialization.elevator.set(-speed);
 				return false;
 			} else {
-				Initialization.elevator.set(0);
+				Initialization.elevator.set(Initialization.automationHoldSpeed);
 				Teleop.automationInProgress = false;
 				Teleop.startElevatorRumble(0.5, false, true);
 				return true;

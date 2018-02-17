@@ -16,7 +16,7 @@ public class Teleop {
 	public static void cubeManipulation() {
 		if (Initialization.driver.getRawButtonPressed(1)) {
 			if (!switchAutomationInProgress) {
-				//Initialization.endEffector.set(false);
+				Initialization.endEffectorPiston.set(false);
 				scaleAutomationInProgress = false;
 				switchAutomationInProgress = true;
 			} else if (switchAutomationInProgress) {
@@ -25,7 +25,7 @@ public class Teleop {
 			}
 		} else if (Initialization.driver.getRawButtonPressed(2)) {
 			if (!scaleAutomationInProgress) {
-				//Initialization.endEffector.set(false);
+				Initialization.endEffectorPiston.set(false);
 				switchAutomationInProgress = false;
 				scaleAutomationInProgress = true;
 			} else if (scaleAutomationInProgress) {
@@ -41,9 +41,9 @@ public class Teleop {
 		} else {
 			drive();
 			elevate();
-			//ejectCube();
+			ejectCube();
 			//intakeOutput();
-			//grabber();
+			grabber();
 		}
 	}
 
@@ -101,25 +101,32 @@ public class Teleop {
 			elevatorTargetHeight = 72; // 6 feet
 
 		} else {
-			double operatorOutput = -Math.signum(Initialization.operator.getRawAxis(1)) * Initialization.elevateMultiplier * Math.pow(Initialization.operator.getRawAxis(1), 2);
+			double operatorOutput = /*-Math.signum(Initialization.operator.getRawAxis(1)) */ -Initialization.elevateMultiplier * Math.pow(Initialization.operator.getRawAxis(1), 1);
 			if (goSlowBottom && Math.abs(operatorOutput) > Initialization.automationBottomSpeed) {
-				Initialization.elevator.set(Math.signum(operatorOutput) * Initialization.automationBottomSpeed);
+				Initialization.elevator.set(calculateElevatorOutput(Math.signum(operatorOutput) * Initialization.automationBottomSpeed));
 			} else if (goSlowTop && Math.abs(operatorOutput) > Initialization.automationTopSpeed) {
-				Initialization.elevator.set(Math.signum(operatorOutput) * Initialization.automationTopSpeed);
+				Initialization.elevator.set(calculateElevatorOutput(Math.signum(operatorOutput) * Initialization.automationTopSpeed));
 			} else {
-				Initialization.elevator.set(operatorOutput);
+				Initialization.elevator.set(calculateElevatorOutput(operatorOutput));
 			}
 		}
 
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+	}
+	public static double calculateElevatorOutput(double operatorOutput) {
+		if(operatorOutput >= 0) {
+			return Initialization.automationHoldSpeed + (1 - Initialization.automationHoldSpeed) * operatorOutput;
+		} else {
+			return Initialization.automationHoldSpeed + (1 + Initialization.automationHoldSpeed) * operatorOutput;
+		}
 	}
 
 	public static void climb() {
 		
 	}
 
-	/*public static void ejectCube() {
-		Initialization.endEffector.set(Initialization.operator.getRawButton(5)); // Left Bumper
+	public static void ejectCube() {
+		Initialization.endEffectorPiston.set(Initialization.operator.getRawButton(5)); // Left Bumper
 	}
 	
 	public static double grabberCount = 0;
@@ -129,13 +136,14 @@ public class Teleop {
 			grabberCount++;
 		}
 		if(grabberCount % 2 == 0) {
-			Initialization.grabber.set(true);
+			Initialization.grabberPiston.set(false);
 		} else {
-			Initialization.grabber.set(false);
+			Initialization.grabberPiston.set(true);
 		}
+		Initialization.grabberMotorController.set(-Initialization.operator.getRawAxis(5));
 	}
 	
-	public static void intakeOutput() {
+	/*public static void intakeOutput() {
 		if(Initialization.driver.getRawAxis(2) > 0.8){ // left axis underneath left bumper
 			Initialization.intakePiston.set(true);
 			Initialization.intakeMotor.set(-1); //
