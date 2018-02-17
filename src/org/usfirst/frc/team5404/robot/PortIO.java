@@ -17,7 +17,7 @@ public class PortIO {
 			public static final int elevator = 4;
 			
 		// Intake Motor Controller
-			public static final int intakeMotor = 5;
+			public static final int grabberMotor = 5;
 		
 	//----------------------------------------DIO PORTS-------------------------------------------//
 		// Encoders

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -25,8 +26,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Initialization {
 	// Robot Dimensions
-		public static final double robotDepth = 32.25;
-		public static final double robotWidth = 27.5;
+		public static final double robotDepth = 39;
+		public static final double robotWidth = 35;
 
 	// Test Sequence
 		public static ArrayList<Function<Void, Boolean>> testSequence = new ArrayList<Function<Void, Boolean>>();
@@ -95,8 +96,8 @@ public class Initialization {
 		public static double elevateMultiplier;
 	
 	
-	// Intake Motor Controller 
-		//public static VictorSP intakeMotor = new VictorSP(PortIO.intakeMotor);
+	 //Intake Motor Controller 
+		public static Spark grabberMotorController = new Spark(PortIO.grabberMotor);
 
 	// Drive Encoders
 		public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
@@ -129,9 +130,9 @@ public class Initialization {
 		public static AnalogInput rangeFinder = new AnalogInput(PortIO.rangeFinder);
 
 	// Solenoids
-		//public static Solenoid endEffector = new Solenoid(PortIO.endEffector);
-		//public static Solenoid grabber = new Solenoid(PortIO.grabber);
-		//public static Solenoid intakePiston = new Solenoid(PortIO.intakePiston);
+		public static Solenoid endEffectorPiston = new Solenoid(PortIO.endEffector);
+		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
+		//public static Solenoid squeezePiston = new Solenoid(PortIO.intakePiston);
 
 	// PID
 		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());

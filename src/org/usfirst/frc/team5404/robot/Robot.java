@@ -11,19 +11,22 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 
 	public static int autoProcess = 0;
 
 	public void robotInit() {
-		//Initialization.cam.startAutomaticCapture();
+		Initialization.cam.startAutomaticCapture();
 		Initialization.autoModeTable = NetworkTableInstance.getDefault().getTable("Automode");
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		resetSensors();
 		calibrateSensors();
+		SmartDashboard.putBoolean("Record Robot", false);
+		SmartDashboard.putBoolean("Playback Robot", false);
+		SmartDashboard.putBoolean("Reverse Playback Robot", false);
 	}
 
 	public static String lastTime = "0";
@@ -63,11 +66,24 @@ public class Robot extends IterativeRobot {
 		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
 		rotateCalled = false;
+		//Autonomous.sendActionSummary();
+		playbackI = 0;
+		playbackReverseI = Autonomous.timeList.size()-1;
 	}
 
 	boolean rotateCalled = false;
 
+	int playbackI = 0;
+	int playbackReverseI = Autonomous.timeList.size()-1;
 	public void autonomousPeriodic() {
+		if (SmartDashboard.getBoolean("Playback Robot", false)) {
+			Autonomous.playback(playbackI++);
+			//SmartDashboard.putBoolean("Playback Robot", false);
+		
+		} else if (SmartDashboard.getBoolean("Reverse Playback Robot", false)) {
+			Autonomous.playbackReverse(playbackReverseI--);
+			//SmartDashboard.putBoolean("Reverse Playback Robot", false);
+		}
 		//Autonomous.sideScale();
 		
 		/*if(!rotateCalled) {
@@ -90,7 +106,7 @@ public class Robot extends IterativeRobot {
 			}
 		}/**/
 		
-	String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
+	/*String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
 
 		if (union.equalsIgnoreCase("RL")) {
 			if (Initialization.RLRStrat.equals("1")) {
@@ -139,6 +155,21 @@ public class Robot extends IterativeRobot {
 		assignPreferenceVariables();
 		resetSensors();
 		calibrateSensors();
+		if (SmartDashboard.getBoolean("Record Robot", false)) {
+			Autonomous.timeList.clear();
+			Autonomous.BRList.clear();
+			Autonomous.FRList.clear();
+			Autonomous.BLList.clear();
+			Autonomous.FLList.clear();
+			Autonomous.elvList.clear();
+			Autonomous.endEffectorList.clear();
+			Autonomous.gyroList.clear();
+			Autonomous.encoderList.clear();
+			Autonomous.differenceInGyroList.clear();
+			Autonomous.differenceInEncoderList.clear();
+			Autonomous.stepList.clear();
+			Autonomous.summaryList.clear();
+		}
 	}
 
 	public void teleopPeriodic() {
@@ -146,6 +177,9 @@ public class Robot extends IterativeRobot {
 		Teleop.endGameRumble();
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();
+		if (SmartDashboard.getBoolean("Record Robot", false)) {
+			Autonomous.record();
+		}
 	}
 
 	public void testInit() {
@@ -167,6 +201,7 @@ public class Robot extends IterativeRobot {
 
 	public void disabledInit() {
 		Initialization.gearaffesPID.reset();
+		SmartDashboard.putBoolean("Record Robot", false);
 	}
 
 	public void disabledPeriodic() {
@@ -219,6 +254,7 @@ public class Robot extends IterativeRobot {
 		Initialization.automationHighSpeed = Initialization.prefs.getDouble("Automation High Speed", 70) / 100;
 		Initialization.automationTopSpeed = Initialization.prefs.getDouble("Automation Top Speed", 40) / 100;
 		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10) / 100;
+		Initialization.automationHoldSpeed = Initialization.prefs.getDouble("Automation Hold Speed", 30) / 100;
 
 		// Robot Starting Position
 		Initialization.robotStartingPosition = Initialization.prefs.getString("Autonomous Code", "-----").substring(0, 1);
