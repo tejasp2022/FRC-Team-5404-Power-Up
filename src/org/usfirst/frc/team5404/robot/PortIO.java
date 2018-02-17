@@ -33,6 +33,9 @@ public class PortIO {
 			public static final int bottomLimitSwitch = 6;
 			public static final int topLimitSwitch = 7;
 			
+			public static final int grabberEncoder1 = 8;
+			public static final int grabberEncoder2 = 9;
+			
 	//------------------------------------------PCM Ports---------------------------------------------//
 		// Range Finder
 			public static final int rangeFinder = 0;
@@ -41,7 +44,8 @@ public class PortIO {
 		// Solenoids
 	        public static final int endEffector = 0;
 	        public static final int grabber = 1;
-	        public static final int intakePiston = 2;
+	        public static final int brake1 = 2;
+	        public static final int brake2 = 3;
 		
 	//------------------------------------------USB Ports---------------------------------------------//
 		// Joysticks

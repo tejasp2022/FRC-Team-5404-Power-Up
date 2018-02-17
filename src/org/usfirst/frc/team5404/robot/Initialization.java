@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Initialization {
-		public static double maxSpeed = 144;//subject to change
 	// Robot Dimensions
 		public static final double robotDepth = 39;
 		public static final double robotWidth = 35;
@@ -62,11 +61,15 @@ public class Initialization {
 		public static double autoMoveContactLow;
 		public static double autoRotateSpeed;
 
-	// Automation Moving Speeds
+	// Automation Elevator Moving Speeds
 		public static double automationHighSpeed;
 		public static double automationBottomSpeed;
 		public static double automationTopSpeed;
-		public static double automationHoldSpeed;
+		public static double automationElevatorHoldSpeed;
+		
+	// Automation Grabber Moving Speeds
+		public static double automationGrabberHoldSpeed;
+		public static double automationGrabberCubeHoldSpeed;
 		
 	// Braking constants
 		public static double brakeB0;
@@ -115,6 +118,11 @@ public class Initialization {
 		public static final double ELEVATOR_INCHES_PER_TWO_FEET = 24;
 		public static final double ELEVATOR_TICKS_PER_TWO_FEET = 10732.2526551;
 		public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_INCHES_PER_TWO_FEET / ELEVATOR_TICKS_PER_TWO_FEET; // 0.00223625;
+		
+	// Grabber Encoder
+		public static Encoder grabberEncoder = new Encoder(PortIO.grabberEncoder1, PortIO.grabberEncoder2);
+		public static final double GRABBER_TICKS_PER_HALF_REVOLUTION = -39443.25;
+		public static final double GRABBER_DEGREES_PER_TICK = 180 / GRABBER_TICKS_PER_HALF_REVOLUTION; // 0.00456352
 
 	// Limit Switches
 		public static DigitalInput bottomLimitSwitch = new DigitalInput(PortIO.bottomLimitSwitch);
@@ -133,7 +141,8 @@ public class Initialization {
 	// Solenoids
 		public static Solenoid endEffectorPiston = new Solenoid(PortIO.endEffector);
 		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
-		//public static Solenoid squeezePiston = new Solenoid(PortIO.intakePiston);
+		public static Solenoid brakePiston1 = new Solenoid(PortIO.brake1);
+		public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
 
 	// PID
 		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());

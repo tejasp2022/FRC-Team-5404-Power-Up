@@ -12,6 +12,10 @@ public class BuildingBlocks {
 		}
 		return false;
 	}
+	public static void setBraking(boolean braking) {
+		Initialization.brakePiston1.set(!braking);
+		Initialization.brakePiston2.set(braking);
+	}
 	static boolean isBraking = false;
 	public static boolean moveAndBrake(double dist, double speed) {
 		double brakeKP = Initialization.brakeKP;
@@ -19,13 +23,17 @@ public class BuildingBlocks {
 		if(isBraking) {
 			double leftRate = Initialization.leftDriveEncoder.getRate();
 			double rightRate = Initialization.rightDriveEncoder.getRate();
-			Initialization.FL.set(-brakeKP*leftRate);
+			
+			Initialization.gearaffesDrive.arcadeDrive(0, 0);
+			/*Initialization.FL.set(-brakeKP*leftRate);
 			Initialization.BL.set(-brakeKP*leftRate);
 			Initialization.FR.set(-brakeKP*rightRate);
-			Initialization.BR.set(-brakeKP*rightRate);
-			if(Math.abs(leftRate) < 4 || Math.abs(rightRate) < 4) {
+			Initialization.BR.set(-brakeKP*rightRate);*/
+			setBraking(true);
+			if(Math.abs(leftRate) < 15 || Math.abs(rightRate) < 15) {
 				isBraking = false;
 				Initialization.gearaffesDrive.arcadeDrive(0, 0);
+				setBraking(false);
 				return true;
 			} else {
 				return false;
@@ -98,24 +106,48 @@ public class BuildingBlocks {
 	}
 
 	public static int successesContact = 0;
+	public static double contactBegin = -1;
 	
 	public static boolean moveUntilContact(double dist, double highSpeed, double lowSpeed) {
 		Robot.displaySensors();
+		if(contactBegin == -1) {
+			contactBegin = Timer.getFPGATimestamp();
+		}
 		if (successesContact < 5) {
 			double speed = Math.abs(Initialization.leftDriveEncoder.getDistance()) < 0.8 * dist ? highSpeed : lowSpeed;
 			Initialization.gearaffesDrive.arcadeDrive(speed, -Initialization.gyro.getAngle() * Initialization.move_KP, false);
-			if (Math.abs(Initialization.leftDriveEncoder.getRate()) <= 0.5) {
+			if (Math.abs(Initialization.leftDriveEncoder.getRate()) <= 5 && Timer.getFPGATimestamp() > contactBegin + 0.4) {
 				successesContact++;
 			}
 			return false;
 		} else {
 			Initialization.gearaffesDrive.arcadeDrive(0, 0);
+			contactBegin = -1;
 			return true;
 		}
 	}
 
 	public static boolean rotate(double angle, double power) {
-		if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle)) {
+		if(isBraking) {
+			double leftRate = Initialization.leftDriveEncoder.getRate();
+			double rightRate = Initialization.rightDriveEncoder.getRate();
+			
+			Initialization.gearaffesDrive.arcadeDrive(0, 0);
+			/*Initialization.FL.set(-brakeKP*leftRate);
+			Initialization.BL.set(-brakeKP*leftRate);
+			Initialization.FR.set(-brakeKP*rightRate);
+			Initialization.BR.set(-brakeKP*rightRate);*/
+			setBraking(true);
+			if(Math.abs(Initialization.gyro.getAngle()) >= angle) {
+				isBraking = false;
+				Initialization.gearaffesDrive.arcadeDrive(0, 0);
+				setBraking(false);
+				postRotate();
+				return true;
+			} else {
+				return false;
+			}
+		} else if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle) - 8) {
 			Robot.displaySensors();
 			if (angle > 0) {
 				Initialization.gearaffesDrive.arcadeDrive(0, power, false);
@@ -125,8 +157,10 @@ public class BuildingBlocks {
 			return false;
 		} else {
 			Initialization.gearaffesDrive.arcadeDrive(0, 0);
-			postRotate();
-			return true;
+			//postRotate();
+			setBraking(true);
+			isBraking = true;
+			return false;
 		}
 	}
 	
@@ -176,8 +210,8 @@ public class BuildingBlocks {
 				Initialization.elevator.set(speed);
 				return false;
 			} else {
-				Initialization.elevator.set(Initialization.automationHoldSpeed);
-				Teleop.automationInProgress = false;
+				Initialization.elevator.set(Initialization.automationElevatorHoldSpeed);
+				Teleop.elevatorAutomationInProgress = false;
 				Teleop.startElevatorRumble(0.5, false, true);
 				return true;
 			}
@@ -186,16 +220,54 @@ public class BuildingBlocks {
 				Initialization.elevator.set(-speed);
 				return false;
 			} else {
-				Initialization.elevator.set(Initialization.automationHoldSpeed);
-				Teleop.automationInProgress = false;
+				Initialization.elevator.set(Initialization.automationElevatorHoldSpeed);
+				Teleop.elevatorAutomationInProgress = false;
 				Teleop.startElevatorRumble(0.5, false, true);
 				return true;
 			}
 		} else {
-			Teleop.automationInProgress = false;
+			Teleop.elevatorAutomationInProgress = false;
 			Teleop.startElevatorRumble(0.5, false, true);
 			return true;
 		}
+	}
+	
+
+	
+	public static boolean setGrabberPosition(double position, double speed) {
+		double dist = position - Math.abs(Initialization.grabberEncoder.getDistance());
+		if (dist > 0) {
+			if (Math.abs(Initialization.grabberEncoder.getDistance()) < position - 5) {
+				Initialization.grabberMotorController.set(Teleop.calculateGrabberOutput(speed));
+				return false;
+			} else {
+				Initialization.grabberMotorController.set(calculateGrabberHoldSpeed());
+				Teleop.grabberAutomationInProgress = false;
+				if(Initialization.grabberPiston.get()) {
+					Initialization.grabberPiston.set(false);
+					Teleop.grabberCount++;
+					Teleop.grabberAutomationInProgress = true;
+					Teleop.grabberTargetHeight = 0;
+				}
+				return true;
+			}
+		} else if (dist < 0) {
+			if (Math.abs(Initialization.grabberEncoder.getDistance()) > position + 5) {
+				Initialization.grabberMotorController.set(Teleop.calculateGrabberOutput(-speed));
+				return false;
+			} else {
+				Initialization.grabberMotorController.set(calculateGrabberHoldSpeed());
+				Teleop.grabberAutomationInProgress = false;
+				return true;
+			}
+		} else {
+			Teleop.grabberAutomationInProgress = false;
+			return true;
+		}
+	}
+	public static double calculateGrabberHoldSpeed() {
+		double hold = Initialization.grabberPiston.get() ? Initialization.automationGrabberCubeHoldSpeed : Initialization.automationGrabberHoldSpeed;
+		return hold * Math.sin(Math.toRadians(Initialization.grabberEncoder.getDistance()));
 	}
 	
 	public static double endTime;
@@ -219,12 +291,12 @@ public class BuildingBlocks {
 	public static boolean elevatorToBase(double speed) {
 		if (!Initialization.bottomLimitSwitch.get()) {
 			Initialization.elevator.set(0);
-			Teleop.automationInProgress = false;
+			Teleop.elevatorAutomationInProgress = false;
 			Teleop.startElevatorRumble(0.5, false, true);
 			return true;
 		} else {
 			Initialization.elevator.set(-speed);
-			Teleop.automationInProgress = true;
+			Teleop.elevatorAutomationInProgress = true;
 			return false;
 		}
 	}

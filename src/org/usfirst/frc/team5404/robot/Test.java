@@ -31,7 +31,7 @@ public class Test {
 			double distance = Initialization.prefs.getDouble("Test Drive Distance", 0);
 			double speed = Initialization.prefs.getDouble("Test Drive Speed", 0.5);
 			double Kp = Initialization.prefs.getDouble("Brake KP", 0.006);
-			Initialization.testSequence.add((Void) -> brakeTest(Initialization.gearaffesDrive, distance, speed, Kp));
+			Initialization.testSequence.add((Void) -> brakeTest(Initialization.gearaffesDrive, distance, speed));
 		}
 		principalV = Initialization.pdp.getVoltage();
 	}
@@ -66,15 +66,17 @@ public class Test {
 	public static boolean isBraking = false;
 	public static double leftStartedBrake, rightStartedBrake;
 	
-	public static boolean brakeTest(DifferentialDrive drive, double dist, double speed, double Kp) {
+	public static boolean brakeTest(DifferentialDrive drive, double dist, double speed) {
 		if(isBraking) {
 			double leftRate = Initialization.leftDriveEncoder.getRate();
 			double rightRate = Initialization.rightDriveEncoder.getRate();
-			Initialization.FL.set(-Kp*leftRate);
+			drive.arcadeDrive(0, 0);
+			BuildingBlocks.setBraking(true);
+			/*Initialization.FL.set(-Kp*leftRate);
 			Initialization.BL.set(-Kp*leftRate);
 			Initialization.FR.set(-Kp*rightRate);
-			Initialization.BR.set(-Kp*rightRate);
-			if(Math.abs(leftRate) < 2 || Math.abs(rightRate) < 2) {
+			Initialization.BR.set(-Kp*rightRate);*/
+			if(Math.abs(leftRate) < 0.8 && Math.abs(rightRate) < 0.8) {
 				double lbd = Math.abs(Initialization.leftDriveEncoder.getDistance() - leftStartedBrake);
 				double rbd = Math.abs(Initialization.rightDriveEncoder.getDistance() - rightStartedBrake);
 				System.out.println("Left Brake Distance: " + lbd);

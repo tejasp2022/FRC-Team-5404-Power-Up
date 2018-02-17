@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
 	public static int autoProcess = 0;
 
 	public void robotInit() {
-		Initialization.cam.startAutomaticCapture();
+		//Initialization.cam.startAutomaticCapture();
 		Initialization.autoModeTable = NetworkTableInstance.getDefault().getTable("Automode");
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		resetSensors();
@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
 
 	public void robotPeriodic() {
 		Robot.displaySensors();
+		/*
 		NetworkTableEntry sendEntry = Initialization.autoModeTable.getEntry("sendkey");
 		NetworkTableValue val = sendEntry.getValue();
 		if (val.getType() != NetworkTableType.kStringArray || val.getStringArray() == null || val.getStringArray().length != 2) {
@@ -52,7 +53,7 @@ public class Robot extends TimedRobot {
 		try {
 			lastTime = sArray[0];
 		} catch (Exception e) {
-		}
+		}*/
 	}
 
 	public void autonomousInit() {
@@ -66,6 +67,8 @@ public class Robot extends TimedRobot {
 		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
 		rotateCalled = false;
+		BuildingBlocks.successesContact = 0;
+		BuildingBlocks.setBraking(false);
 		//Autonomous.sendActionSummary();
 		playbackI = 0;
 		playbackReverseI = Autonomous.timeList.size()-1;
@@ -76,77 +79,60 @@ public class Robot extends TimedRobot {
 	int playbackI = 0;
 	int playbackReverseI = Autonomous.timeList.size()-1;
 	public void autonomousPeriodic() {
-		if (SmartDashboard.getBoolean("Playback Robot", false)) {
-			Autonomous.playback(playbackI++);
-			//SmartDashboard.putBoolean("Playback Robot", false);
-		
-		} else if (SmartDashboard.getBoolean("Reverse Playback Robot", false)) {
-			Autonomous.playbackReverse(playbackReverseI--);
-			//SmartDashboard.putBoolean("Reverse Playback Robot", false);
-		}
-		//Autonomous.sideScale();
-		
 		/*if(!rotateCalled) {
-			if(BuildingBlocks.moveAndBrake(240, 0.9)) {
-				//double k = Initialization.prefs.getDouble("Brake KP", 0.006);
+			if(BuildingBlocks.moveAndBrake(120, 0.9)) {
 				rotateCalled = true;
-				/*while(!BuildingBlocks.delay(1)) {
-					double leftRate = Initialization.leftDriveEncoder.getRate();
-					double rightRate = Initialization.rightDriveEncoder.getRate();
-					Initialization.FL.set(-k*leftRate);
-					Initialization.BL.set(-k*leftRate);
-					Initialization.FR.set(-k*rightRate);
-					Initialization.BR.set(-k*rightRate);
-				}
-				Initialization.FL.set(0);
-				Initialization.FR.set(0);
-				Initialization.BL.set(0);
-				Initialization.BR.set(0)
-				
 			}
 		}/**/
 		
-	/*String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
-
-		if (union.equalsIgnoreCase("RL")) {
-			if (Initialization.RLRStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.RLRStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.RLRStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			}
-		} else if (union.equalsIgnoreCase("LL")) {
-			if (Initialization.LLLStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.LLLStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.LLLStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			} else if (Initialization.LLLStrat.equals("4")) {
-				Autonomous.twoCubeAutoFront();
-			}
-		} else if (union.equalsIgnoreCase("RR")) {
-			if (Initialization.RRRStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.RRRStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.RRRStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			} else if (Initialization.RRRStrat.equals("4")) {
-				Autonomous.twoCubeAutoFront();
-			}
-		} else if (union.equalsIgnoreCase("LR")) {
-			if (Initialization.LRLStrat.equals("1")) {
-				Autonomous.crossAutoline();
-			} else if (Initialization.LRLStrat.equals("2")) {
-				Autonomous.placeCubeOnSwitch();
-			} else if (Initialization.LRLStrat.equals("3")) {
-				Autonomous.placeCubeOnScale();
-			}
+		if (SmartDashboard.getBoolean("Playback Robot", false)) {
+			Autonomous.playback(playbackI++);
+		
+		} else if (SmartDashboard.getBoolean("Reverse Playback Robot", false)) {
+			Autonomous.playbackReverse(playbackReverseI--);
 		} else {
-			SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
-			System.err.println("Valid Autonomous Strategy Not Found");
+			String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
+
+			if (union.equalsIgnoreCase("RL")) {
+				if (Initialization.RLRStrat.equals("1")) {
+					Autonomous.crossAutoline();
+				} else if (Initialization.RLRStrat.equals("2")) {
+					Autonomous.placeCubeOnSwitch();
+				} else if (Initialization.RLRStrat.equals("3")) {
+					Autonomous.placeCubeOnScale();
+				}
+			} else if (union.equalsIgnoreCase("LL")) {
+				if (Initialization.LLLStrat.equals("1")) {
+					Autonomous.crossAutoline();
+				} else if (Initialization.LLLStrat.equals("2")) {
+					Autonomous.placeCubeOnSwitch();
+				} else if (Initialization.LLLStrat.equals("3")) {
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.LLLStrat.equals("4")) {
+					Autonomous.twoCubeAuto();
+				}
+			} else if (union.equalsIgnoreCase("RR")) {
+				if (Initialization.RRRStrat.equals("1")) {
+					Autonomous.crossAutoline();
+				} else if (Initialization.RRRStrat.equals("2")) {
+					Autonomous.placeCubeOnSwitch();
+				} else if (Initialization.RRRStrat.equals("3")) {
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.RRRStrat.equals("4")) {
+					Autonomous.twoCubeAuto();
+				}
+			} else if (union.equalsIgnoreCase("LR")) {
+				if (Initialization.LRLStrat.equals("1")) {
+					Autonomous.crossAutoline();
+				} else if (Initialization.LRLStrat.equals("2")) {
+					Autonomous.placeCubeOnSwitch();
+				} else if (Initialization.LRLStrat.equals("3")) {
+					Autonomous.placeCubeOnScale();
+				}
+			} else {
+				SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
+				System.err.println("Valid Autonomous Strategy Not Found");
+			} 
 		}/**/
 	}
 
@@ -155,6 +141,7 @@ public class Robot extends TimedRobot {
 		assignPreferenceVariables();
 		resetSensors();
 		calibrateSensors();
+		BuildingBlocks.setBraking(false);
 		if (SmartDashboard.getBoolean("Record Robot", false)) {
 			Autonomous.timeList.clear();
 			Autonomous.BRList.clear();
@@ -173,6 +160,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public void teleopPeriodic() {
+		SmartDashboard.putNumber("grabber value", Initialization.grabberMotorController.get());
 		Teleop.cubeManipulation();
 		Teleop.endGameRumble();
 		Teleop.rangeDistance();
@@ -180,6 +168,7 @@ public class Robot extends TimedRobot {
 		if (SmartDashboard.getBoolean("Record Robot", false)) {
 			Autonomous.record();
 		}
+		SmartDashboard.putNumber("Grabber Encoder Ticks", Initialization.grabberEncoder.getDistance());
 	}
 
 	public void testInit() {
@@ -213,12 +202,14 @@ public class Robot extends TimedRobot {
 		Initialization.leftDriveEncoder.reset();
 		Initialization.elevatorEncoder.reset();
 		Initialization.gyro.reset();
+		Initialization.grabberEncoder.reset();
 	}
 
 	public void calibrateSensors() {
 		Initialization.elevatorEncoder.setDistancePerPulse(Initialization.ELEVATOR_INCHES_PER_TICK);
 		Initialization.rightDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
 		Initialization.leftDriveEncoder.setDistancePerPulse(Initialization.DRIVE_INCHES_PER_TICK);
+		Initialization.grabberEncoder.setDistancePerPulse(Initialization.GRABBER_DEGREES_PER_TICK);
 		Initialization.elevatorEncoder.setSamplesToAverage(5);
 		Initialization.rightDriveEncoder.setSamplesToAverage(4);
 		Initialization.leftDriveEncoder.setSamplesToAverage(4);
@@ -254,7 +245,9 @@ public class Robot extends TimedRobot {
 		Initialization.automationHighSpeed = Initialization.prefs.getDouble("Automation High Speed", 70) / 100;
 		Initialization.automationTopSpeed = Initialization.prefs.getDouble("Automation Top Speed", 40) / 100;
 		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10) / 100;
-		Initialization.automationHoldSpeed = Initialization.prefs.getDouble("Automation Hold Speed", 30) / 100;
+		Initialization.automationElevatorHoldSpeed = Initialization.prefs.getDouble("Automation Hold Speed", 30) / 100;
+		Initialization.automationGrabberHoldSpeed = Initialization.prefs.getDouble("Grabber Hold Speed", 20) / 100;
+		Initialization.automationGrabberCubeHoldSpeed = Initialization.prefs.getDouble("Grabber Cube Hold Speed", 40) / 100;
 
 		// Robot Starting Position
 		Initialization.robotStartingPosition = Initialization.prefs.getString("Autonomous Code", "-----").substring(0, 1);

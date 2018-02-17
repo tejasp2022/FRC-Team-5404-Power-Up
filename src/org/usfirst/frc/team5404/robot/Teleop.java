@@ -50,25 +50,18 @@ public class Teleop {
 	public static boolean isDrivingOnGyro;
 	
 	public static void drive() {
+		if(Initialization.driver.getRawButton(3)) {
+			BuildingBlocks.setBraking(true);
+		} else {
+			BuildingBlocks.setBraking(false);
+		}
 		double finalMoveMultiplier = Initialization.driver.getRawButton(5) ? 1: Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.moveMultiplier;
 		double finalRotateMultiplier = Initialization.driver.getRawButton(6) ? 1: Initialization.driver.getRawAxis(3) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
-		/*if (Math.abs(Initialization.driver.getRawAxis(4)) < 0.05 && Math.abs(Initialization.driver.getRawAxis(1)) > 0.1 && !isDrivingOnGyro) {
-			Initialization.gyro.reset();
-			Initialization.gearaffesPID.reset();
-			Initialization.gearaffesPID.enable();
-			isDrivingOnGyro = true;
-		} else if ((Math.abs(Initialization.driver.getRawAxis(4)) > 0.05 || Math.abs(Initialization.driver.getRawAxis(1)) < 0.1) && isDrivingOnGyro) {
-			isDrivingOnGyro = false;
-		}
-		if (isDrivingOnGyro && Math.abs(Initialization.driver.getRawAxis(1)) > 0.05) {
-			Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1)) * -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Initialization.gearaffesPID.get());
-		} else {*/
-			Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1)) * -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier* Math.pow(Initialization.driver.getRawAxis(4), 2), false);
-		//}
+		Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1)) * -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier* Math.pow(Initialization.driver.getRawAxis(4), 2), false);
 		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate()) / 12));
 	}
 
-	static boolean automationInProgress = false;
+	static boolean elevatorAutomationInProgress = false;
 	static double elevatorTargetHeight;
 	
 	public static void elevate() {
@@ -80,28 +73,28 @@ public class Teleop {
 		}
 		boolean goSlowBottom = (Math.abs(Initialization.elevatorEncoder.getDistance()) < 12 && Math.signum(Initialization.elevator.get()) == -1);
 		boolean goSlowTop = (Math.abs(Initialization.elevatorEncoder.getDistance()) > 72 && Math.signum(Initialization.elevator.get()) == 1);
-		if (automationInProgress) {
+		if (elevatorAutomationInProgress) {
 			double speed = goSlowBottom ? Initialization.automationBottomSpeed: goSlowTop ? Initialization.automationTopSpeed : Initialization.automationHighSpeed;
 			BuildingBlocks.setElevatorHeight(elevatorTargetHeight, speed);
 
 		} else if (Initialization.operator.getRawButtonPressed(1)) { // A
-			automationInProgress = true;
+			elevatorAutomationInProgress = true;
 			elevatorTargetHeight = 0; // 0 feet
 
 		} else if (Initialization.operator.getRawButtonPressed(2)) { // B
-			automationInProgress = true;
+			elevatorAutomationInProgress = true;
 			elevatorTargetHeight = 24; // 2 feet
 
 		} else if (Initialization.operator.getRawButtonPressed(4)) { // X
-			automationInProgress = true;
+			elevatorAutomationInProgress = true;
 			elevatorTargetHeight = 48; // 4 feet
 
 		} else if (Initialization.operator.getRawButtonPressed(3)) { // Y
-			automationInProgress = true;
+			elevatorAutomationInProgress = true;
 			elevatorTargetHeight = 72; // 6 feet
 
 		} else {
-			double operatorOutput = /*-Math.signum(Initialization.operator.getRawAxis(1)) */ -Initialization.elevateMultiplier * Math.pow(Initialization.operator.getRawAxis(1), 1);
+			double operatorOutput = -Initialization.elevateMultiplier * Initialization.operator.getRawAxis(1);
 			if (goSlowBottom && Math.abs(operatorOutput) > Initialization.automationBottomSpeed) {
 				Initialization.elevator.set(calculateElevatorOutput(Math.signum(operatorOutput) * Initialization.automationBottomSpeed));
 			} else if (goSlowTop && Math.abs(operatorOutput) > Initialization.automationTopSpeed) {
@@ -115,9 +108,9 @@ public class Teleop {
 	}
 	public static double calculateElevatorOutput(double operatorOutput) {
 		if(operatorOutput >= 0) {
-			return Initialization.automationHoldSpeed + (1 - Initialization.automationHoldSpeed) * operatorOutput;
+			return Initialization.automationElevatorHoldSpeed + (1 - Initialization.automationElevatorHoldSpeed) * operatorOutput;
 		} else {
-			return Initialization.automationHoldSpeed + (1 + Initialization.automationHoldSpeed) * operatorOutput;
+			return Initialization.automationElevatorHoldSpeed + (1 + Initialization.automationElevatorHoldSpeed) * operatorOutput;
 		}
 	}
 
@@ -130,17 +123,54 @@ public class Teleop {
 	}
 	
 	public static double grabberCount = 0;
+	public static boolean grabberAutomationInProgress = false;
+	public static double grabberTargetHeight;
 	
 	public static void grabber() {
-		if(Initialization.operator.getRawButtonPressed(6)) { // right bumper
-			grabberCount++;
-		}
-		if(grabberCount % 2 == 0) {
-			Initialization.grabberPiston.set(false);
+		if (grabberAutomationInProgress) {
+			double speed = 0.6;
+			BuildingBlocks.setGrabberPosition(grabberTargetHeight, speed);
+
+		} else if( Initialization.operator.getPOV()!= -1) {
+			System.out.println(Initialization.operator.getPOV());
+			if(Initialization.operator.getPOV() == 0) {
+				grabberAutomationInProgress = true;
+				grabberTargetHeight = 150; //-40123.25; 
+				
+			} else if (Initialization.operator.getPOV() == 90) {
+				grabberAutomationInProgress = true;
+				grabberTargetHeight = 90; //-27728.75; 
+	
+			} else if (Initialization.operator.getPOV() == 180) {
+				grabberAutomationInProgress = true;
+				grabberTargetHeight = 0;
+				
+			} else if (Initialization.operator.getPOV() == 270) {
+				
+			}
 		} else {
-			Initialization.grabberPiston.set(true);
+			if(Initialization.operator.getRawButtonPressed(6)) { // right bumper
+				grabberCount++;
+			}
+			if(grabberCount % 2 == 0) {
+				Initialization.grabberPiston.set(false);
+			} else {
+				Initialization.grabberPiston.set(true);
+			}
+			double operatorOutput = -Math.signum(Initialization.operator.getRawAxis(5)) * Math.pow(Initialization.operator.getRawAxis(5), 2);
+			Initialization.grabberMotorController.set(calculateGrabberOutput(operatorOutput));
 		}
-		Initialization.grabberMotorController.set(-Initialization.operator.getRawAxis(5));
+		
+		
+
+	}
+	public static double calculateGrabberOutput(double operatorOutput) {
+		double holdSpeed = BuildingBlocks.calculateGrabberHoldSpeed();
+		if(operatorOutput >= 0) {
+			return holdSpeed + (1 - holdSpeed) * operatorOutput;
+		} else {
+			return holdSpeed + (1 + holdSpeed) * operatorOutput;
+		}
 	}
 	
 	/*public static void intakeOutput() {
