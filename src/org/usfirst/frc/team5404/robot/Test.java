@@ -19,7 +19,7 @@ public class Test {
 		Initialization.controllerEncoderPairs.add(new SmartController("BR", Initialization.BR, Initialization.rightDriveEncoder, true));
 		Initialization.testSequence = new ArrayList<>();
 		if (SmartDashboard.getBoolean("Motor Series Test", false)) {
-			Initialization.testSequence.add((Void) -> motorSeriesTest(Initialization.controllerEncoderPairs, Initialization.prefs.getDouble("Test Power", 0.6), 5));
+			Initialization.testSequence.add((Void) -> motorSeriesTest(Initialization.controllerEncoderPairs, Prefs.getDouble("Test Power", 0.6), 5));
 		} else if (SmartDashboard.getBoolean("Motor Individual Test", false)) {
 			Initialization.testSequence.add((Void) -> motorIndividualTest(Initialization.controllerEncoderPairs.get(3), 5));
 		} else if (SmartDashboard.getBoolean("Elevator Speed Range Test", false)) {
@@ -28,10 +28,14 @@ public class Test {
 			Initialization.testSequence.add((Void) -> bringElevatorToTop(elevator));
 			Initialization.testSequence.add((Void) -> elevatorSpeedRangeTest(elevator, false));
 		} else if(SmartDashboard.getBoolean("Motor Brake Test", false)) {
-			double distance = Initialization.prefs.getDouble("Test Drive Distance", 0);
-			double speed = Initialization.prefs.getDouble("Test Drive Speed", 0.5);
-			double Kp = Initialization.prefs.getDouble("Brake KP", 0.006);
+			double distance = Prefs.getDouble("Test Drive Distance", 0);
+			double speed = Prefs.getDouble("Test Drive Speed", 0.5);
+			//double Kp = Prefs.getDouble("Brake KP", 0.006);
 			Initialization.testSequence.add((Void) -> brakeTest(Initialization.gearaffesDrive, distance, speed));
+		} else if(SmartDashboard.getBoolean("Rotate Brake Test", false)) {
+			double angle = Prefs.getDouble("Test Drive Angle", 90);
+			double speed = Prefs.getDouble("Test Drive Speed", 0.5);
+			Initialization.testSequence.add((Void)-> rotateBrakeTest(Initialization.gearaffesDrive, angle, speed));
 		}
 		principalV = Initialization.pdp.getVoltage();
 	}
@@ -51,7 +55,7 @@ public class Test {
 			SmartDashboard.putBoolean("Motor Individual Test", false);
 			SmartDashboard.putBoolean("Elevator Speed Range Test", false);
 			SmartDashboard.putBoolean("Motor Brake Test", false);
-			SmartDashboard.putNumber("Test Drive Speed", SmartDashboard.getNumber("Test Drive Speed", 0.5));
+			SmartDashboard.putBoolean("Rotate Brake Test", false);
 		}
 	}
 
@@ -64,7 +68,7 @@ public class Test {
 	public static boolean hasFallen = false;
 	public static int successes = 0;
 	public static boolean isBraking = false;
-	public static double leftStartedBrake, rightStartedBrake;
+	public static double leftStartedBrake, rightStartedBrake, gyroStartedBrake;
 	
 	public static boolean brakeTest(DifferentialDrive drive, double dist, double speed) {
 		if(isBraking) {
@@ -106,6 +110,49 @@ public class Test {
 				System.out.println("Left Rate: " + lRate);
 				System.out.println("Right Rate: " + rRate);
 				System.out.println("AVG RATE: " + ((lRate + rRate) / 2));
+				drive.arcadeDrive(0, 0);
+				isBraking = true;
+				return false;
+			}
+		}
+	}
+	public static boolean rotateBrakeTest(DifferentialDrive drive, double angle, double speed) {
+		if(isBraking) {
+			double rate = Initialization.gyro.getRate();
+			drive.arcadeDrive(0, 0);
+			BuildingBlocks.setBraking(true);
+			/*Initialization.FL.set(-Kp*leftRate);
+			Initialization.BL.set(-Kp*leftRate);
+			Initialization.FR.set(-Kp*rightRate);
+			Initialization.BR.set(-Kp*rightRate);*/
+			if(Math.abs(rate) < 0.8) {
+				double gAngle = Initialization.gyro.getAngle();
+				double lbd = Math.abs(gAngle - gyroStartedBrake);
+				//double rbd = Math.abs(Initialization.rightDriveEncoder.getDistance() - rightStartedBrake);
+				System.out.println("Input Angle: " + angle);
+				System.out.println("Braked At: " + gyroStartedBrake);
+				System.out.println("Stopped At: " + gAngle);
+				System.out.println("Gyro Brake Angle: " + lbd);
+				//System
+				isBraking = false;
+				drive.arcadeDrive(0, 0);
+				return true;
+			} else {
+				return false;
+			}
+		} else { // arbitrary but we can test later
+			if (Math.abs(Initialization.gyro.getAngle()) < (Math.abs(angle))) {
+				if (angle > 0) {
+					drive.arcadeDrive(0, speed, false);																					
+				} else {
+					drive.arcadeDrive(0, -speed, false);
+				}
+				Robot.displaySensors();
+				return false;
+			} else {
+				gyroStartedBrake = Initialization.gyro.getAngle();
+				double gRate = Math.abs(Initialization.gyro.getRate());
+				System.out.println("Spin Rate: " + gRate);
 				drive.arcadeDrive(0, 0);
 				isBraking = true;
 				return false;
