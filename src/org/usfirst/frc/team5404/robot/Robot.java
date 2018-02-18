@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
 	public static int autoProcess = 0;
 
 	public void robotInit() {
-		//Initialization.cam.startAutomaticCapture();
+		Initialization.cam.startAutomaticCapture();
 		Initialization.autoModeTable = NetworkTableInstance.getDefault().getTable("Automode");
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		resetSensors();
@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
 
 	public void robotPeriodic() {
 		Robot.displaySensors();
-		/*
+		
 		NetworkTableEntry sendEntry = Initialization.autoModeTable.getEntry("sendkey");
 		NetworkTableValue val = sendEntry.getValue();
 		if (val.getType() != NetworkTableType.kStringArray || val.getStringArray() == null || val.getStringArray().length != 2) {
@@ -53,9 +53,12 @@ public class Robot extends TimedRobot {
 		try {
 			lastTime = sArray[0];
 		} catch (Exception e) {
-		}*/
+		}
 	}
 
+	public static int robotValuesI = 0;
+	public static boolean needToPopulateTwoCube = true;
+	public static boolean needToPopulateThreeCube = true;
 	public void autonomousInit() {
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		assignPreferenceVariables();
@@ -72,6 +75,9 @@ public class Robot extends TimedRobot {
 		//Autonomous.sendActionSummary();
 		playbackI = 0;
 		playbackReverseI = Autonomous.timeList.size()-1;
+		needToPopulateTwoCube = true;
+		needToPopulateThreeCube = true;
+		robotValuesI = 0;
 	}
 
 	boolean rotateCalled = false;
@@ -92,7 +98,6 @@ public class Robot extends TimedRobot {
 			Autonomous.playbackReverse(playbackReverseI--);
 		} else {
 			String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
-
 			if (union.equalsIgnoreCase("RL")) {
 				if (Initialization.RLRStrat.equals("1")) {
 					Autonomous.crossAutoline();
@@ -108,8 +113,10 @@ public class Robot extends TimedRobot {
 					Autonomous.placeCubeOnSwitch();
 				} else if (Initialization.LLLStrat.equals("3")) {
 					Autonomous.placeCubeOnScale();
-				} else if (Initialization.LLLStrat.equals("4")) {
-					Autonomous.twoCubeAuto();
+				} else if (Initialization.LLLStrat.equals("4")) { // two cube
+					
+				} else if (Initialization.LLLStrat.equals("5")) { // three cube
+					
 				}
 			} else if (union.equalsIgnoreCase("RR")) {
 				if (Initialization.RRRStrat.equals("1")) {
@@ -118,8 +125,18 @@ public class Robot extends TimedRobot {
 					Autonomous.placeCubeOnSwitch();
 				} else if (Initialization.RRRStrat.equals("3")) {
 					Autonomous.placeCubeOnScale();
-				} else if (Initialization.RRRStrat.equals("4")) {
-					Autonomous.twoCubeAuto();
+				} else if (Initialization.RRRStrat.equals("4")) { // two cube
+					if(needToPopulateTwoCube) {
+						RecordingList.populateTwoCube();	
+						needToPopulateTwoCube = false;
+					}
+					RecordingList.setRobotValues(robotValuesI++);
+				} else if (Initialization.RRRStrat.equals("5")) { // three cube
+					if(needToPopulateThreeCube) {
+						RecordingList.populateThreeCube();	
+						needToPopulateThreeCube = false;
+					}
+					RecordingList.setRobotValues(robotValuesI++);
 				}
 			} else if (union.equalsIgnoreCase("LR")) {
 				if (Initialization.LRLStrat.equals("1")) {
@@ -149,7 +166,7 @@ public class Robot extends TimedRobot {
 			Autonomous.BLList.clear();
 			Autonomous.FLList.clear();
 			Autonomous.elvList.clear();
-			Autonomous.endEffectorList.clear();
+			Autonomous.ejectPistonList.clear();
 			Autonomous.gyroList.clear();
 			Autonomous.encoderList.clear();
 			Autonomous.differenceInGyroList.clear();
@@ -191,6 +208,11 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 		Initialization.gearaffesPID.reset();
 		SmartDashboard.putBoolean("Record Robot", false);
+		try {
+		Autonomous.printer();
+		} catch (IndexOutOfBoundsException ex ) {
+			
+		}
 	}
 
 	public void disabledPeriodic() {

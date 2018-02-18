@@ -19,9 +19,11 @@ public class Autonomous {
 	public static ArrayList<Double> BLList = new ArrayList<Double>();
 	public static ArrayList<Double> FLList = new ArrayList<Double>();
 	public static ArrayList<Double> elvList = new ArrayList<Double>();
-	public static ArrayList<Boolean> endEffectorList = new ArrayList<Boolean>();
+	public static ArrayList<Boolean> ejectPistonList = new ArrayList<Boolean>();
+	public static ArrayList<Boolean> grabberPistonList = new ArrayList<Boolean>();
 	public static ArrayList<Double> gyroList = new ArrayList<Double>();
 	public static ArrayList<Double> encoderList = new ArrayList<Double>();
+	public static ArrayList<Double> grabberList = new ArrayList<Double>();
 	
 	public static void record() {
 		timeList.add(Timer.getFPGATimestamp());
@@ -30,9 +32,53 @@ public class Autonomous {
 		BLList.add(Initialization.BL.get());
 		FLList.add(Initialization.FL.get());
 		elvList.add(Initialization.elevator.get());
-		//endEffectorList.add(Initialization.endEffector.get());
+		grabberList.add(Initialization.grabberMotorController.get());
+		ejectPistonList.add(Initialization.endEffectorPiston.get());
+		grabberPistonList.add(Initialization.grabberPiston.get());
 		gyroList.add(Initialization.gyro.getAngle());
 		encoderList.add(Initialization.rightDriveEncoder.getDistance());
+	}
+	
+	public static void printer() {
+		System.out.println("FRList");
+		for(double i: FRList) {
+			System.out.println("FRList.add(" + i + ");");
+		}
+		
+		System.out.println("\nBRList");
+		for(double i: BRList) {
+			System.out.println("BRList.add(" + i + ");");
+		}
+		
+		System.out.println("\nFLList");
+		for(double i: FLList) {
+			System.out.println("FLList.add(" + i + ");");
+		}
+		
+		System.out.println("\nBLList");
+		for(double i: BLList) {
+			System.out.println("BLList.add(" + i + ");");
+		}
+		
+		System.out.println("\nelvList");
+		for(double i: elvList) {
+			System.out.println("elvList.add(" + i + ");");
+		}
+		
+		System.out.println("\ngrabberList");
+		for(double i: grabberList) {
+			System.out.println("grabberList.add(" + i + ");");
+		}
+		
+		System.out.println("\nejectPistonList");
+		for(boolean i: ejectPistonList) {
+			System.out.println("ejectPistonList.add(" + i + ");");
+		}
+		
+		System.out.println("\ngrabberPistonList");
+		for(boolean i: grabberPistonList) {
+			System.out.println("grabberPistonList.add(" + i + ");");
+		}
 	}
 
 	public static ArrayList<Double> differenceInGyroList = new ArrayList<Double>();
@@ -142,11 +188,6 @@ public class Autonomous {
 			Teleop.scaleAutomationInProgress = false;
 		}
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-	}
-
-	public static void twoCubeAuto() {
-		Timer.delay(Initialization.autoDelayTime);
-		
 	}
 	
 	public static void sideScale() {
