@@ -42,8 +42,8 @@ public class Teleop {
 			drive();
 			elevate();
 			ejectCube();
-			//intakeOutput();
 			grabber();
+			//toeSucker();
 		}
 	}
 
@@ -83,18 +83,18 @@ public class Teleop {
 
 		} else if (Initialization.operator.getRawButtonPressed(2)) { // B
 			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 24; // 2 feet
+			elevatorTargetHeight = 32; // 4 feet
 
-		} else if (Initialization.operator.getRawButtonPressed(4)) { // X
+		} else if (Initialization.operator.getRawButtonPressed(4)) { // y
 			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 48; // 4 feet
+			elevatorTargetHeight = 47; // 5 feet
 
-		} else if (Initialization.operator.getRawButtonPressed(3)) { // Y
+		} else if (Initialization.operator.getRawButtonPressed(3)) { // x
 			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 72; // 6 feet
+			elevatorTargetHeight = 60; // 6 feet
 
 		} else {
-			double operatorOutput = -Initialization.elevateMultiplier * Initialization.operator.getRawAxis(1);
+			double operatorOutput = -Initialization.elevateMultiplier * Initialization.operator.getRawAxis(5);
 			if (goSlowBottom && Math.abs(operatorOutput) > Initialization.automationBottomSpeed) {
 				Initialization.elevator.set(calculateElevatorOutput(Math.signum(operatorOutput) * Initialization.automationBottomSpeed));
 			} else if (goSlowTop && Math.abs(operatorOutput) > Initialization.automationTopSpeed) {
@@ -107,57 +107,88 @@ public class Teleop {
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 	public static double calculateElevatorOutput(double operatorOutput) {
+		double effectiveHoldSpeed = Initialization.elevatorEncoder.getDistance() > 6 ? Initialization.automationElevatorHoldSpeed : 0;
 		if(operatorOutput >= 0) {
-			return Initialization.automationElevatorHoldSpeed + (1 - Initialization.automationElevatorHoldSpeed) * operatorOutput;
+			return effectiveHoldSpeed + (1 - effectiveHoldSpeed) * operatorOutput;
 		} else {
-			return Initialization.automationElevatorHoldSpeed + (1 + Initialization.automationElevatorHoldSpeed) * operatorOutput;
+			return effectiveHoldSpeed + (1 + effectiveHoldSpeed) * operatorOutput;
 		}
 	}
 
+
+	/*public static void toeSucker() {
+		Initialization.intakePiston1.set(false);
+		Initialization.intakePiston2.set(true);
+		if(Initialization.operator.getRawAxis(2) >= 0.8) {
+			//Initialization.intakePiston1.set(false);
+			//Initialization.intakePiston2.set(true);
+			if(Initialization.operator.getRawButton(8)) {
+				Initialization.intakeMotorControllerRight.set(-1);
+				Initialization.intakeMotorControllerLeft.set(1);
+			} else {
+				Initialization.intakeMotorControllerRight.set(-1);
+				Initialization.intakeMotorControllerLeft.set(-1);
+			}
+		} else {
+			//Initialization.intakePiston1.set(true);
+			//Initialization.intakePiston2.set(false);
+			Initialization.intakeMotorControllerRight.set(0);
+			Initialization.intakeMotorControllerLeft.set(0);
+		}
+	}*/
+	// right on 6 left on 7
 	public static void climb() {
 		
 	}
 
 	public static void ejectCube() {
-		Initialization.endEffectorPiston.set(Initialization.operator.getRawButton(5)); // Left Bumper
+		Initialization.endEffectorPiston.set(Initialization.operator.getRawButton(6)); // right Bumper
 	}
 	
 	public static double grabberCount = 0;
 	public static boolean grabberAutomationInProgress = false;
-	public static double grabberTargetHeight;
+	public static double grabberTargetAngle;
 	
 	public static void grabber() {
 		if (grabberAutomationInProgress) {
-			double speed = 0.6;
-			BuildingBlocks.setGrabberPosition(grabberTargetHeight, speed);
+			double upSpeed = 0.8;
+			double downSpeed = 0.6;
+			if(Initialization.operator.getPOV() == 270) {
+				grabberAutomationInProgress = false;
+			} else {
+				BuildingBlocks.setGrabberPosition(grabberTargetAngle, upSpeed, downSpeed);
+			}
 
 		} else if( Initialization.operator.getPOV()!= -1) {
-			System.out.println(Initialization.operator.getPOV());
 			if(Initialization.operator.getPOV() == 0) {
 				grabberAutomationInProgress = true;
-				grabberTargetHeight = 150; //-40123.25; 
+				grabberTargetAngle = Prefs.getDouble("Grabber Preset High", 150); 
+				BuildingBlocks.doGrabberRelease = true;
 				
 			} else if (Initialization.operator.getPOV() == 90) {
 				grabberAutomationInProgress = true;
-				grabberTargetHeight = 90; //-27728.75; 
+				grabberTargetAngle = Prefs.getDouble("Grabber Preset Medium", 90); 
+				BuildingBlocks.doGrabberRelease = false;
 	
 			} else if (Initialization.operator.getPOV() == 180) {
 				grabberAutomationInProgress = true;
-				grabberTargetHeight = 0;
+				grabberTargetAngle = Prefs.getDouble("Grabber Preset Low", 0);
+				BuildingBlocks.doGrabberRelease = false;
 				
 			} else if (Initialization.operator.getPOV() == 270) {
-				
+				grabberAutomationInProgress = false;
 			}
 		} else {
-			if(Initialization.operator.getRawButtonPressed(6)) { // right bumper
+			if(Initialization.operator.getRawButtonPressed(5)) { // left bumper
 				grabberCount++;
+				System.out.println(grabberCount);
 			}
 			if(grabberCount % 2 == 0) {
 				Initialization.grabberPiston.set(false);
 			} else {
 				Initialization.grabberPiston.set(true);
 			}
-			double operatorOutput = -Math.signum(Initialization.operator.getRawAxis(5)) * Math.pow(Initialization.operator.getRawAxis(5), 2);
+			double operatorOutput = -Math.signum(Initialization.operator.getRawAxis(1)) * Math.pow(Initialization.operator.getRawAxis(1), 2);
 			Initialization.grabberMotorController.set(calculateGrabberOutput(operatorOutput));
 		}
 		
@@ -172,19 +203,6 @@ public class Teleop {
 			return holdSpeed + (1 + holdSpeed) * operatorOutput;
 		}
 	}
-	
-	/*public static void intakeOutput() {
-		if(Initialization.driver.getRawAxis(2) > 0.8){ // left axis underneath left bumper
-			Initialization.intakePiston.set(true);
-			Initialization.intakeMotor.set(-1); //
-		} else if(Initialization.driver.getRawAxis(3) > 0.8) { // right axis underneath left bumper
-			Initialization.intakePiston.set(true);
-			Initialization.intakeMotor.set(1);
-		} else {
-			Initialization.intakePiston.set(false);
-			Initialization.intakeMotor.set(0);
-		}
-	}*/
 
 	public static void rangeDistance() {
 		SmartDashboard.putNumber("Range Finder Value", Initialization.rangeFinder.getVoltage() * 1000 / 25.4);

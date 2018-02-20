@@ -1,5 +1,7 @@
 package org.usfirst.frc.team5404.robot;
 
+import java.util.function.Function;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -18,7 +20,7 @@ public class BuildingBlocks {
 	}
 	static boolean isBraking = false;
 	public static boolean moveAndBrake(double dist, double speed) {
-		double brakeKP = Initialization.brakeKP;
+		//double brakeKP = Initialization.brakeKP;
 		//double brakeDist = Initialization.prefs.getDouble("Brake Distance", 22);
 		if(isBraking) {
 			double leftRate = Initialization.leftDriveEncoder.getRate();
@@ -39,10 +41,10 @@ public class BuildingBlocks {
 				return false;
 			}
 		} else { // arbitrary but we can test later
-			if (Initialization.leftDriveEncoder.getDistance() +
+			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) +
 					(Initialization.brakeB0 +
-							Initialization.leftDriveEncoder.getRate() * Initialization.brakeB1)
-						< dist) {
+							Math.abs(Initialization.leftDriveEncoder.getRate()) * Initialization.brakeB1)
+						< Math.abs(dist)) {
 				if (dist > 0) {
 					Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gearaffesPID.get(), false);																					
 				} else {
@@ -127,8 +129,57 @@ public class BuildingBlocks {
 		}
 	}
 
-	public static boolean rotate(double angle, double power) {
+	/**
+	 * Braking power for rotation follows a PARABOLIC model: Predicted Overshoot = B0 + B1(Instantaneous Rate)^2
+	 * @param angle
+	 * @param power
+	 * @return
+	 */
+	public static boolean rotateAndBrake(double angle, double power) {
 		if(isBraking) {
+			//double leftRate = Initialization.leftDriveEncoder.getRate();
+			//double rightRate = Initialization.rightDriveEncoder.getRate();
+			double gRate = Math.abs(Initialization.gyro.getRate());
+			Initialization.gearaffesDrive.arcadeDrive(0, 0);
+			/*Initialization.FL.set(-brakeKP*leftRate);
+			Initialization.BL.set(-brakeKP*leftRate);
+			Initialization.FR.set(-brakeKP*rightRate);
+			Initialization.BR.set(-brakeKP*rightRate);*/
+			setBraking(true);
+			if(Math.abs(Initialization.gyro.getAngle()) >= Math.abs(angle) || gRate < 0.3) {
+				isBraking = false;
+				Initialization.gearaffesDrive.arcadeDrive(0, 0);
+				setBraking(false);
+				postRotate();
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			double B0 = Prefs.getDouble("Brake Rotation B0", 6.12944);
+			double B1 = Prefs.getDouble("Brake Rotation B1", 0.000534458);
+			double gRate = Math.abs(Initialization.gyro.getRate());
+			double predictedError = B0 + B1 * gRate * gRate;
+			if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) + predictedError < Math.abs(angle)) {
+				Robot.displaySensors();
+				if (angle > 0) {
+					Initialization.gearaffesDrive.arcadeDrive(0, power, false);
+				} else {
+					Initialization.gearaffesDrive.arcadeDrive(0, -power, false);
+				}
+				return false;
+			} else {
+				Initialization.gearaffesDrive.arcadeDrive(0, 0);
+				//postRotate();
+				setBraking(true);
+				isBraking = true;
+				return false;
+			}
+		}
+	}
+	
+	public static boolean rotate(double angle, double power) {
+		/*if(isBraking) {
 			double leftRate = Initialization.leftDriveEncoder.getRate();
 			double rightRate = Initialization.rightDriveEncoder.getRate();
 			
@@ -136,7 +187,7 @@ public class BuildingBlocks {
 			/*Initialization.FL.set(-brakeKP*leftRate);
 			Initialization.BL.set(-brakeKP*leftRate);
 			Initialization.FR.set(-brakeKP*rightRate);
-			Initialization.BR.set(-brakeKP*rightRate);*/
+			Initialization.BR.set(-brakeKP*rightRate);*//*
 			setBraking(true);
 			if(Math.abs(Initialization.gyro.getAngle()) >= angle) {
 				isBraking = false;
@@ -147,7 +198,7 @@ public class BuildingBlocks {
 			} else {
 				return false;
 			}
-		} else if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle) - 8) {
+		} else */if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) < Math.abs(angle) - 8) {
 			Robot.displaySensors();
 			if (angle > 0) {
 				Initialization.gearaffesDrive.arcadeDrive(0, power, false);
@@ -203,11 +254,13 @@ public class BuildingBlocks {
 	
 	public static boolean setElevatorHeight(double height, double speed) {
 		double dist = height - Math.abs(Initialization.elevatorEncoder.getDistance());
+		double effSpeed = Teleop.calculateElevatorOutput(speed);
+		double nEffSpeed = Teleop.calculateElevatorOutput(-speed);
 		if (height == 0) {
-			return elevatorToBase(speed);
+			return elevatorToBase(effSpeed);
 		} else if (dist > 0) {
 			if (Math.abs(Initialization.elevatorEncoder.getDistance()) < height - 1) {
-				Initialization.elevator.set(speed);
+				Initialization.elevator.set(effSpeed);
 				return false;
 			} else {
 				Initialization.elevator.set(Initialization.automationElevatorHoldSpeed);
@@ -217,7 +270,7 @@ public class BuildingBlocks {
 			}
 		} else if (dist < 0) {
 			if (Math.abs(Initialization.elevatorEncoder.getDistance()) > height + 1) {
-				Initialization.elevator.set(-speed);
+				Initialization.elevator.set(nEffSpeed);
 				return false;
 			} else {
 				Initialization.elevator.set(Initialization.automationElevatorHoldSpeed);
@@ -232,32 +285,44 @@ public class BuildingBlocks {
 		}
 	}
 	
-
+	public static boolean doGrabberRelease = false;
 	
-	public static boolean setGrabberPosition(double position, double speed) {
+	public static boolean setGrabberPosition(double position, double upSpeed, double downSpeed) {
 		double dist = position - Math.abs(Initialization.grabberEncoder.getDistance());
 		if (dist > 0) {
 			if (Math.abs(Initialization.grabberEncoder.getDistance()) < position - 5) {
-				Initialization.grabberMotorController.set(Teleop.calculateGrabberOutput(speed));
+				Initialization.grabberMotorController.set(Teleop.calculateGrabberOutput(upSpeed));
 				return false;
 			} else {
 				Initialization.grabberMotorController.set(calculateGrabberHoldSpeed());
 				Teleop.grabberAutomationInProgress = false;
-				if(Initialization.grabberPiston.get()) {
-					Initialization.grabberPiston.set(false);
-					Teleop.grabberCount++;
-					Teleop.grabberAutomationInProgress = true;
-					Teleop.grabberTargetHeight = 0;
+				if(doGrabberRelease) {
+					if(Initialization.grabberPiston.get()) {
+						Initialization.grabberPiston.set(false);
+						Teleop.grabberCount++;
+						Teleop.grabberAutomationInProgress = true;
+						Teleop.grabberTargetAngle = 0;
+					}
 				}
+				doGrabberRelease = false;
 				return true;
 			}
 		} else if (dist < 0) {
 			if (Math.abs(Initialization.grabberEncoder.getDistance()) > position + 5) {
-				Initialization.grabberMotorController.set(Teleop.calculateGrabberOutput(-speed));
+				Initialization.grabberMotorController.set(Teleop.calculateGrabberOutput(-downSpeed));
 				return false;
 			} else {
 				Initialization.grabberMotorController.set(calculateGrabberHoldSpeed());
 				Teleop.grabberAutomationInProgress = false;
+				if(doGrabberRelease) {
+					if(Initialization.grabberPiston.get()) {
+						Initialization.grabberPiston.set(false);
+						Teleop.grabberCount++;
+						Teleop.grabberAutomationInProgress = true;
+						Teleop.grabberTargetAngle = 0;
+					}
+				}
+				doGrabberRelease = false;
 				return true;
 			}
 		} else {
@@ -289,7 +354,7 @@ public class BuildingBlocks {
 	}
 
 	public static boolean elevatorToBase(double speed) {
-		if (!Initialization.bottomLimitSwitch.get()) {
+		if (Math.abs(Initialization.elevatorEncoder.getDistance()) <= 0.5 || !Initialization.bottomLimitSwitch.get()) {
 			Initialization.elevator.set(0);
 			Teleop.elevatorAutomationInProgress = false;
 			Teleop.startElevatorRumble(0.5, false, true);
@@ -299,6 +364,25 @@ public class BuildingBlocks {
 			Teleop.elevatorAutomationInProgress = true;
 			return false;
 		}
+	}
+	public static boolean doFuncA = true, doFuncB = true;
+	public static boolean concurrent(Function<Void, Boolean> funcA, Function<Void, Boolean> funcB) {
+		if(doFuncA) {
+			if(funcA.apply(null)) {
+				doFuncA = false;
+			}
+		}
+		if(doFuncB) {
+			if(funcB.apply(null)) {
+				doFuncB = false;
+			}
+		}
+		if(!doFuncA && !doFuncB) {
+			doFuncA = true;
+			doFuncB = true;
+			return true;
+		}
+		return false;
 	}
 
 	public static void getMatchData() {

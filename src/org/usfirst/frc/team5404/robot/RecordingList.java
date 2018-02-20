@@ -1,28 +1,17 @@
 package org.usfirst.frc.team5404.robot;
 
-import java.util.ArrayList;
-
 public class RecordingList {
-	public static ArrayList<Double> FRList = new ArrayList<Double>();
-	public static ArrayList<Double> BRList = new ArrayList<Double>();
-	public static ArrayList<Double> FLList = new ArrayList<Double>();
-	public static ArrayList<Double> BLList = new ArrayList<Double>();
-	public static ArrayList<Double> elvList = new ArrayList<Double>();
-	public static ArrayList<Double> grabberList = new ArrayList<Double>();
-	public static ArrayList<Boolean> ejectPistonList = new ArrayList<Boolean>();
-	public static ArrayList<Boolean> grabberPistonList = new ArrayList<Boolean>();
-		
 	
 	public static void setRobotValues(int i) {
-		if(i<FRList.size()) {
-			Initialization.FR.set(FRList.get(i));
-			Initialization.BR.set(BRList.get(i));
-			Initialization.FL.set(FLList.get(i));
-			Initialization.BL.set(BLList.get(i));
-			Initialization.elevator.set(elvList.get(i));
-			Initialization.grabberMotorController.set(grabberList.get(i));
-			Initialization.endEffectorPiston.set(ejectPistonList.get(i));
-			Initialization.grabberPiston.set(grabberPistonList.get(i));
+		if(i<Initialization.FRList.size()) {
+			Initialization.FR.set(Initialization.FRList.get(i));
+			Initialization.BR.set(Initialization.BRList.get(i));
+			Initialization.FL.set(Initialization.FLList.get(i));
+			Initialization.BL.set(Initialization.BLList.get(i));
+			Initialization.elevator.set(Initialization.elvList.get(i));
+			Initialization.grabberMotorController.set(Initialization.grabberList.get(i));
+			Initialization.endEffectorPiston.set(Initialization.ejectPistonList.get(i));
+			Initialization.grabberPiston.set(Initialization.grabberPistonList.get(i));
 		}
 		Initialization.FR.set(0);
 		Initialization.BR.set(0);
@@ -36,85 +25,85 @@ public class RecordingList {
 	
 	
 	public static void populateTwoCube() {
-		FRList.clear();
-		BRList.clear();
-		FLList.clear();
-		BLList.clear();
-		elvList.clear();
-		grabberList.clear();
-		ejectPistonList.clear();
-		grabberPistonList.clear();
+		Initialization.FRList.clear();
+		Initialization.BRList.clear();
+		Initialization.FLList.clear();
+		Initialization.BLList.clear();
+		Initialization.elvList.clear();
+		Initialization.grabberList.clear();
+		Initialization.ejectPistonList.clear();
+		Initialization.grabberPistonList.clear();
 		
-		FRList.add(0.0);
-		
-		
-		
-		BRList.add(0.0);
+		Initialization.FRList.add(0.0);
 		
 		
 		
-		FLList.add(0.0);
+		Initialization.BRList.add(0.0);
 		
 		
 		
-		BLList.add(0.0);
+		Initialization.FLList.add(0.0);
 		
 		
 		
-		elvList.add(0.0);
+		Initialization.BLList.add(0.0);
 		
 		
 		
-		grabberList.add(0.0);
+		Initialization.elvList.add(0.0);
 		
 		
 		
-		ejectPistonList.add(false);
+		Initialization.grabberList.add(0.0);
 		
 		
 		
-		grabberPistonList.add(false);
+		Initialization.ejectPistonList.add(false);
+		
+		
+		
+		Initialization.grabberPistonList.add(false);
 	}
 	
 	public static void populateThreeCube() {
-		FRList.clear();
-		BRList.clear();
-		FLList.clear();
-		BLList.clear();
-		elvList.clear();
-		grabberList.clear();
-		ejectPistonList.clear();
-		grabberPistonList.clear();
+		Initialization.FRList.clear();
+		Initialization.BRList.clear();
+		Initialization.FLList.clear();
+		Initialization.BLList.clear();
+		Initialization.elvList.clear();
+		Initialization.grabberList.clear();
+		Initialization.ejectPistonList.clear();
+		Initialization.grabberPistonList.clear();
 		
-		FRList.add(0.0);
-		
-		
-		
-		BRList.add(0.0);
+		Initialization.FRList.add(0.0);
 		
 		
 		
-		FLList.add(0.0);
+		Initialization.BRList.add(0.0);
 		
 		
 		
-		BLList.add(0.0);
+		Initialization.FLList.add(0.0);
 		
 		
 		
-		elvList.add(0.0);
+		Initialization.BLList.add(0.0);
 		
 		
 		
-		grabberList.add(0.0);
+		Initialization.elvList.add(0.0);
 		
 		
 		
-		ejectPistonList.add(false);
+		Initialization.grabberList.add(0.0);
 		
 		
 		
-		grabberPistonList.add(false);
+		Initialization.ejectPistonList.add(false);
+		
+		
+		
+		Initialization.grabberPistonList.add(false);
 	}
 	
 

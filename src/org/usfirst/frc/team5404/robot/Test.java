@@ -220,6 +220,7 @@ public class Test {
 
 	public static boolean motorSeriesTest(List<SmartController> controllers, double speed, double timePerMotor) {
 		if (startTime == -1) {
+			Average.reset();
 			Average.newAverage("current");
 			Average.newAverage("voltage");
 			startTime = Timer.getFPGATimestamp();

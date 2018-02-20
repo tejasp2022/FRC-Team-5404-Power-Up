@@ -63,6 +63,7 @@ public class Initialization {
 
 	// Automation Elevator Moving Speeds
 		public static double automationHighSpeed;
+		public static double automationLowSpeed;
 		public static double automationBottomSpeed;
 		public static double automationTopSpeed;
 		public static double automationElevatorHoldSpeed;
@@ -70,6 +71,16 @@ public class Initialization {
 	// Automation Grabber Moving Speeds
 		public static double automationGrabberHoldSpeed;
 		public static double automationGrabberCubeHoldSpeed;
+		
+	// Autonomous Recording Lists
+		public static ArrayList<Double> FRList = new ArrayList<Double>();
+		public static ArrayList<Double> BRList = new ArrayList<Double>();
+		public static ArrayList<Double> FLList = new ArrayList<Double>();
+		public static ArrayList<Double> BLList = new ArrayList<Double>();
+		public static ArrayList<Double> elvList = new ArrayList<Double>();
+		public static ArrayList<Double> grabberList = new ArrayList<Double>();
+		public static ArrayList<Boolean> ejectPistonList = new ArrayList<Boolean>();
+		public static ArrayList<Boolean> grabberPistonList = new ArrayList<Boolean>();
 		
 	// Braking constants
 		public static double brakeB0;
@@ -98,10 +109,13 @@ public class Initialization {
 	// Elevator Motor Controller
 		public static Spark elevator = new Spark(PortIO.elevator);
 		public static double elevateMultiplier;
-	
-	
-	 //Intake Motor Controller 
+		
+	 //Grabber Motor Controller 
 		public static Spark grabberMotorController = new Spark(PortIO.grabberMotor);
+		
+	// Intake Motor Controller
+	//public static VictorSP intakeMotorControllerRight = new VictorSP(PortIO.intakeMotorRight);
+		//public static VictorSP intakeMotorControllerLeft = new VictorSP(PortIO.intakeMotorLeft);
 
 	// Drive Encoders
 		public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
@@ -143,6 +157,8 @@ public class Initialization {
 		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
 		public static Solenoid brakePiston1 = new Solenoid(PortIO.brake1);
 		public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
+		//public static Solenoid intakePiston1 = new Solenoid (PortIO.intake1);
+		//public static Solenoid intakePiston2 = new Solenoid (PortIO.intake2);
 
 	// PID
 		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());

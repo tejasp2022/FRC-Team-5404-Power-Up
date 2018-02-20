@@ -19,7 +19,8 @@ public class Robot extends TimedRobot {
 	public static int autoProcess = 0;
 
 	public void robotInit() {
-		Initialization.cam.startAutomaticCapture();
+		Initialization.cam.startAutomaticCapture(0);
+		Initialization.cam.startAutomaticCapture(1);
 		Initialization.autoModeTable = NetworkTableInstance.getDefault().getTable("Automode");
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		resetSensors();
@@ -265,6 +266,7 @@ public class Robot extends TimedRobot {
 		// Automation Moving Speeds
 		Initialization.autoDelayTime = Initialization.prefs.getDouble("Autonomous Delay", 0);
 		Initialization.automationHighSpeed = Initialization.prefs.getDouble("Automation High Speed", 70) / 100;
+		Initialization.automationLowSpeed = Prefs.getDouble("Automation Low Speed", 30) / 100;
 		Initialization.automationTopSpeed = Initialization.prefs.getDouble("Automation Top Speed", 40) / 100;
 		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10) / 100;
 		Initialization.automationElevatorHoldSpeed = Initialization.prefs.getDouble("Automation Hold Speed", 30) / 100;
