@@ -113,6 +113,9 @@ public class Initialization {
 	 //Grabber Motor Controller 
 		public static Spark grabberMotorController = new Spark(PortIO.grabberMotor);
 		
+	// Climber Motor Controller
+		public static Spark climberMotorController = new Spark(PortIO.climberMotor);
+		
 	// Intake Motor Controller
 	//public static VictorSP intakeMotorControllerRight = new VictorSP(PortIO.intakeMotorRight);
 		//public static VictorSP intakeMotorControllerLeft = new VictorSP(PortIO.intakeMotorLeft);
@@ -157,8 +160,10 @@ public class Initialization {
 		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
 		public static Solenoid brakePiston1 = new Solenoid(PortIO.brake1);
 		public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
-		//public static Solenoid intakePiston1 = new Solenoid (PortIO.intake1);
-		//public static Solenoid intakePiston2 = new Solenoid (PortIO.intake2);
+		public static Solenoid climberPiston1 = new Solenoid (PortIO.climber1);
+		public static Solenoid climberPiston2 = new Solenoid (PortIO.climber2);
+		public static Solenoid detacherPiston1 = new Solenoid(PortIO.detacher1);
+		public static Solenoid detacherPiston2 = new Solenoid(PortIO.detacher2);
 
 	// PID
 		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());

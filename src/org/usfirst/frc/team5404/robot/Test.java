@@ -254,6 +254,7 @@ public class Test {
 			int index = (int) Math.floor((Timer.getFPGATimestamp() - startTime) / timePerMotor);
 			if (index > lastMotorIndex) {
 				SmartController last = controllers.get(lastMotorIndex);
+				System.out.println("INPERSEC: " + last.encoder.getRate());
 				double d = last.invertFactor * last.encoder.getDistance();
 				double I = Average.get("current");
 				double V = Average.get("voltage");
