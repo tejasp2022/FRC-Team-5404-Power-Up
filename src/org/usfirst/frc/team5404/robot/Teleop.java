@@ -44,7 +44,6 @@ public class Teleop {
 			ejectCube();
 			grabber();
 			climb();
-			//toeSucker();
 		}
 	}
 
@@ -80,19 +79,19 @@ public class Teleop {
 
 		} else if (Initialization.operator.getRawButtonPressed(1)) { // A
 			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 0; // 0 feet
+			elevatorTargetHeight = 0; // 0 feet - Portal or Switch
 
 		} else if (Initialization.operator.getRawButtonPressed(2)) { // B
 			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 32; // 4 feet
+			elevatorTargetHeight = 32; // Scale is at 4 feet
 
-		} else if (Initialization.operator.getRawButtonPressed(4)) { // y
+		} else if (Initialization.operator.getRawButtonPressed(4)) { // Y
 			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 47; // 5 feet
+			elevatorTargetHeight = 47; // Scale is at 5 feet
 
-		} else if (Initialization.operator.getRawButtonPressed(3)) { // x
+		} else if (Initialization.operator.getRawButtonPressed(3)) { // X
 			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 60; // 6 feet
+			elevatorTargetHeight = 60; // Scale is at 6 feet
 
 		} else {
 			double operatorOutput = -Initialization.elevateMultiplier * Initialization.operator.getRawAxis(5);
@@ -116,27 +115,6 @@ public class Teleop {
 		}
 	}
 
-
-	/*public static void toeSucker() {
-		Initialization.intakePiston1.set(false);
-		Initialization.intakePiston2.set(true);
-		if(Initialization.operator.getRawAxis(2) >= 0.8) {
-			//Initialization.intakePiston1.set(false);
-			//Initialization.intakePiston2.set(true);
-			if(Initialization.operator.getRawButton(8)) {
-				Initialization.intakeMotorControllerRight.set(-1);
-				Initialization.intakeMotorControllerLeft.set(1);
-			} else {
-				Initialization.intakeMotorControllerRight.set(-1);
-				Initialization.intakeMotorControllerLeft.set(-1);
-			}
-		} else {
-			//Initialization.intakePiston1.set(true);
-			//Initialization.intakePiston2.set(false);
-			Initialization.intakeMotorControllerRight.set(0);
-			Initialization.intakeMotorControllerLeft.set(0);
-		}
-	}*/
 	
 	public static double lastAxisValueClimber = 0;
 	public static double lastAxisValueDetacher = 0;
@@ -147,24 +125,26 @@ public class Teleop {
 	public static void climb() {
 		if (Math.abs(Initialization.operator.getRawAxis(2)) >= 0.8 && lastAxisValueClimber < 0.8) {
 			climberCount++;
-			if (climberCount % 2 == 0) {
+			if (climberCount % 2 == 0) { // Climber is Closed
 				Initialization.climberPiston1.set(false);
 				Initialization.climberPiston2.set(true);
-			} else {
-				Initialization.climberPiston1.set(true);
+			} else {  // Climber is Open
 				Initialization.climberPiston2.set(false);
+				Initialization.climberPiston1.set(true);
 				climberOpen = true;
 			}
 		}
-		if (climberOpen) {
-			if(Math.abs(Initialization.operator.getRawAxis(3)) >= 0.8 && lastAxisValueDetacher < 0.8 ) {
+		if (climberOpen) { 
+			if(Math.abs(Initialization.operator.getRawAxis(3)) >= 0.8 && lastAxisValueDetacher < 0.8 ) { // Detacher is Open, Climber is Closed
 				Initialization.detacherPiston1.set(false);
 				Initialization.detacherPiston2.set(true);
 				detacherOpen = true;
+				Initialization.climberPiston1.set(false);
+				Initialization.climberPiston2.set(true);
 			}
-		} else {
-			Initialization.detacherPiston1.set(true);
+		} else { // Detacher is closed 
 			Initialization.detacherPiston2.set(false);
+			Initialization.detacherPiston1.set(true);
 		}
 		lastAxisValueClimber = Math.abs(Initialization.operator.getRawAxis(2));
 		lastAxisValueDetacher = Math.abs(Initialization.operator.getRawAxis(3));

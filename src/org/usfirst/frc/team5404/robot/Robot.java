@@ -180,7 +180,11 @@ public class Robot extends TimedRobot {
 
 	public void teleopPeriodic() {
 		SmartDashboard.putNumber("grabber value", Initialization.grabberMotorController.get());
-		Teleop.cubeManipulation();
+		Teleop.drive();
+		Teleop.elevate();
+		Teleop.ejectCube();
+		Teleop.grabber();
+		Teleop.climb();
 		Teleop.endGameRumble();
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();
@@ -202,7 +206,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public void testPeriodic() {
-		if (SmartDashboard.getBoolean("Run Test Sequence", false)) { // Two-step verification so the robot doesn't														// randomly drive on the ground
+		if (SmartDashboard.getBoolean("Run Test Sequence", false)) {
 			Test.runTestSequence();
 		}
 	}
