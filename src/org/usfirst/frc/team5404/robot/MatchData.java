@@ -213,6 +213,9 @@ public class MatchData {
 			data.put(id, d);
 		}
 		public double getData(String id) {
+			if(id.equals("time")) {
+				return time;
+			}
 			return data.get(id);
 		}
 		@Override @Deprecated public String toString() {
