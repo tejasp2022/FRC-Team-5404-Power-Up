@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
 		needToPopulateTwoCube = true;
 		needToPopulateThreeCube = true;
 		robotValuesI = 0;
+		MatchData.beginLogging(Mode.AUTO);
 	}
 
 	boolean rotateCalled = false;
@@ -152,7 +153,9 @@ public class Robot extends TimedRobot {
 				SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
 				System.err.println("Valid Autonomous Strategy Not Found");
 			} 
-		}/**/
+		}
+		MatchData.log();
+		/**/
 	}
 
 	public void teleopInit() {
@@ -176,6 +179,7 @@ public class Robot extends TimedRobot {
 			Autonomous.stepList.clear();
 			Autonomous.summaryList.clear();
 		}
+		MatchData.beginLogging(Mode.TELEOP);
 	}
 
 	public void teleopPeriodic() {
@@ -192,6 +196,7 @@ public class Robot extends TimedRobot {
 			Autonomous.record();
 		}
 		SmartDashboard.putNumber("Grabber Encoder Ticks", Initialization.grabberEncoder.getDistance());
+		MatchData.log();
 	}
 
 	public void testInit() {
@@ -203,15 +208,19 @@ public class Robot extends TimedRobot {
 		Test.determineTestSequence();
 		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
+		MatchData.beginLogging(Mode.TEST);
 	}
 
 	public void testPeriodic() {
 		if (SmartDashboard.getBoolean("Run Test Sequence", false)) {
 			Test.runTestSequence();
 		}
+		MatchData.log();
 	}
 
 	public void disabledInit() {
+		MatchData.saveBulkLog();
+		MatchData.saveLog();
 		Initialization.gearaffesPID.reset();
 		SmartDashboard.putBoolean("Record Robot", false);
 		try {
