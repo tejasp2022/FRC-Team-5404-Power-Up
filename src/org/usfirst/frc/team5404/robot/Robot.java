@@ -162,7 +162,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		assignPreferenceVariables();
-		resetSensors();
+		//resetSensors();
 		calibrateSensors();
 		BuildingBlocks.setBraking(false);
 		if (SmartDashboard.getBoolean("Record Robot", false)) {
