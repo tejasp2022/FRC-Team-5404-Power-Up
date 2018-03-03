@@ -6,6 +6,7 @@
 package org.usfirst.frc.team5404.robot;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -196,6 +197,9 @@ public class Robot extends TimedRobot {
 			Autonomous.record();
 		}
 		SmartDashboard.putNumber("Grabber Encoder Ticks", Initialization.grabberEncoder.getDistance());
+		SmartDashboard.putNumber("GRABBO", Initialization.grabberMotorController.get());
+		//NumberFormat.getNumberInstance().
+		SmartDashboard.putNumber("Battery Consumed", formatValue(ChargeAccumulator.get()));
 		MatchData.log();
 	}
 
@@ -284,8 +288,8 @@ public class Robot extends TimedRobot {
 		Initialization.automationTopSpeed = Initialization.prefs.getDouble("Automation Top Speed", 40) / 100;
 		Initialization.automationBottomSpeed = Initialization.prefs.getDouble("Automation Bottom Speed", 10) / 100;
 		Initialization.automationElevatorHoldSpeed = Initialization.prefs.getDouble("Automation Hold Speed", 30) / 100;
-		Initialization.automationGrabberHoldSpeed = Initialization.prefs.getDouble("Grabber Hold Speed", 20) / 100;
-		Initialization.automationGrabberCubeHoldSpeed = Initialization.prefs.getDouble("Grabber Cube Hold Speed", 40) / 100;
+		Initialization.automationGrabberHoldSpeed = Initialization.prefs.getDouble("Grabber Hold Speed", 0) / 100;
+		Initialization.automationGrabberCubeHoldSpeed = Initialization.prefs.getDouble("Grabber Cube Hold Speed", 0) / 100;
 
 		// Robot Starting Position
 		Initialization.robotStartingPosition = Initialization.prefs.getString("Autonomous Code", "-----").substring(0, 1);
@@ -298,6 +302,7 @@ public class Robot extends TimedRobot {
 		Initialization.moveMultiplier = Initialization.prefs.getDouble("Move Multiplier", 70) / 100;
 		Initialization.rotateMultiplier = Initialization.prefs.getDouble("Rotate Multiplier", 50) / 100;
 		Initialization.elevateMultiplier = Initialization.prefs.getDouble("Elevate Multiplier", 70) / 100;
+		Initialization.grabberMultiplier = Prefs.getDouble("Grabber Multiplier", 60) / 100;
 
 		// PID Multipliers
 		Initialization.move_KP = Initialization.prefs.getDouble("Move KP", 0.06);

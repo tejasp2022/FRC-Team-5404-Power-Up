@@ -205,7 +205,7 @@ public class Teleop {
 			} else {
 				Initialization.grabberPiston.set(true);
 			}
-			double operatorOutput = -Math.signum(Initialization.operator.getRawAxis(1)) * Math.pow(Initialization.operator.getRawAxis(1), 2);
+			double operatorOutput = Initialization.grabberMultiplier * -Math.signum(Initialization.operator.getRawAxis(1)) * Math.pow(Initialization.operator.getRawAxis(1), 2);
 			Initialization.grabberMotorController.set(calculateGrabberOutput(operatorOutput));
 		}
 		

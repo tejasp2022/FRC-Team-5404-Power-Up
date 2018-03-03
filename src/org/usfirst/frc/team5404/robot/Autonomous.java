@@ -267,12 +267,12 @@ public class Autonomous {
 		if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(325.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(62));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow) & BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(12, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(0.5));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(0, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(62));
@@ -284,9 +284,9 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow) & BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(12, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(0.5));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(0, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(242.375 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
@@ -295,14 +295,14 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(92.65, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(62));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(1));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(12, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(0.5));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(0, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("1")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(242.375 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
@@ -311,14 +311,14 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(83.65, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(62));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(1));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(12, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(0.5));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(0, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed));
@@ -327,19 +327,19 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow) & BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(12, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(0.5));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(0, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(323.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(62));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow) & BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(12, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(0.5));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.setElevatorHeight(0, Initialization.automationLowSpeed));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 		}
 
 		// Two Cube Sequence

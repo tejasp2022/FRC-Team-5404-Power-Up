@@ -237,7 +237,7 @@ public class MatchData {
 			StringBuilder builder = new StringBuilder();
 			for(int i = 0; i < indices.size(); i++) {
 				String key = indices.get(i);
-				String val = String.valueOf(data.get(key));
+				String val = String.valueOf(getData(key));
 				builder.append(val);
 				builder.append(',');
 			}

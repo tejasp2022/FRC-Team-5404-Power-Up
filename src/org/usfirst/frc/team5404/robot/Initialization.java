@@ -100,6 +100,7 @@ public class Initialization {
 	// Motor Controller Variables
 		public static double moveMultiplier;
 		public static double rotateMultiplier;
+		public static double grabberMultiplier;
 		public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(FL, BL);
 		public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(FR, BR);
 		public static DifferentialDrive gearaffesDrive = new DifferentialDrive(leftGroup, rightGroup);
@@ -155,7 +156,7 @@ public class Initialization {
 	// Range Finder
 		public static AnalogInput rangeFinder = new AnalogInput(PortIO.rangeFinder);
 
-	// Solenoids
+	// GSolenoids
 		public static Solenoid endEffectorPiston = new Solenoid(PortIO.endEffector);
 		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
 		public static Solenoid brakePiston1 = new Solenoid(PortIO.brake1);
@@ -164,8 +165,7 @@ public class Initialization {
 		public static Solenoid climberPiston2 = new Solenoid (PortIO.climber2);
 		public static Solenoid detacherPiston1 = new Solenoid(PortIO.detacher1);
 		public static Solenoid detacherPiston2 = new Solenoid(PortIO.detacher2);
-
-	// PID
+		// PID
 		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());
 
 	// Dashboard Preferences
