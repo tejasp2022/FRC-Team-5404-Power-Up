@@ -6,7 +6,6 @@
 package org.usfirst.frc.team5404.robot;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -270,6 +269,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Gyro Angle", formatValue(Initialization.gyro.getAngle()));
 		SmartDashboard.putNumber("Left Spedometer", Initialization.leftDriveEncoder.getRate());
 		SmartDashboard.putNumber("Right Spedometer", Initialization.rightDriveEncoder.getRate());
+		SmartDashboard.putNumber("Grabber Value", Initialization.grabberEncoder.getDistance());
 	}
 
 	public static void assignPreferenceVariables() {
@@ -292,11 +292,7 @@ public class Robot extends TimedRobot {
 		Initialization.automationGrabberCubeHoldSpeed = Initialization.prefs.getDouble("Grabber Cube Hold Speed", 0) / 100;
 
 		// Robot Starting Position
-		Initialization.robotStartingPosition = Initialization.prefs.getString("Autonomous Code", "-----").substring(0, 1);
-		Initialization.RLRStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(1, 2);
-		Initialization.LLLStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(2, 3);
-		Initialization.RRRStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(3, 4);
-		Initialization.LRLStrat = Initialization.prefs.getString("Autonomous Code", "-----").substring(4, 5);
+		determineAutoCode();
 
 		// Teleop Multipliers
 		Initialization.moveMultiplier = Initialization.prefs.getDouble("Move Multiplier", 70) / 100;
@@ -313,4 +309,19 @@ public class Robot extends TimedRobot {
 		Initialization.brakeB1 = Initialization.prefs.getDouble("Brake B1", 0);
 		Initialization.brakeKP = Initialization.prefs.getDouble("Brake KP", 0);
 	}
+	
+	public static void determineAutoCode() {
+		String[] autoCode = Initialization.prefs.getString("Autonomous Code", "!!!!!!").split("-");
+		Initialization.robotStartingPosition = autoCode[0];
+		Initialization.RLRStrat = autoCode[1];
+		Initialization.RLRDelay = autoCode[2];
+		Initialization.LLLStrat = autoCode[3];
+		Initialization.LLLDelay = autoCode[4];
+		Initialization.RRRStrat = autoCode[5];
+		Initialization.RRRDelay = autoCode[6];
+		Initialization.LRLStrat = autoCode[7];
+		Initialization.LRLDelay = autoCode[8];
+		
+	}
+	
 }

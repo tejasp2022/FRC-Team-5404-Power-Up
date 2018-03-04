@@ -223,7 +223,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(64.8, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(16.2 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			//Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 		
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(238 - Initialization.robotDepth / 3, Initialization.autoMoveSpeed));
@@ -251,7 +251,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(112, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(28 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
-			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
+			//Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 			
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));

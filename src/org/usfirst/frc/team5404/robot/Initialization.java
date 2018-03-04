@@ -38,10 +38,18 @@ public class Initialization {
 
 	// Autonomous Selection Variables
 		public static String autoCode;
+		
 		public static String RLRStrat;
+		public static String RLRDelay;
+		
 		public static String LLLStrat;
+		public static String LLLDelay;
+		
 		public static String RRRStrat;
+		public static String RRRDelay;
+		
 		public static String LRLStrat;
+		public static String LRLDelay;
 
 	// Autonomous Positioning Variables
 		public static char ourSwitchPosition;
@@ -139,7 +147,7 @@ public class Initialization {
 		
 	// Grabber Encoder
 		public static Encoder grabberEncoder = new Encoder(PortIO.grabberEncoder1, PortIO.grabberEncoder2);
-		public static final double GRABBER_TICKS_PER_HALF_REVOLUTION = -39443.25;
+		public static final double GRABBER_TICKS_PER_HALF_REVOLUTION = -956;//-39443.25;
 		public static final double GRABBER_DEGREES_PER_TICK = 180 / GRABBER_TICKS_PER_HALF_REVOLUTION; // 0.00456352
 
 	// Limit Switches
