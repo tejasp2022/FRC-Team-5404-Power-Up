@@ -101,7 +101,9 @@ public class Robot extends TimedRobot {
 			Autonomous.playbackReverse(playbackReverseI--);
 		} else {
 			String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
+			double delay = 0;
 			if (union.equalsIgnoreCase("RL")) {
+				delay = Double.valueOf(Initialization.RLRDelay);
 				if (Initialization.RLRStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.RLRStrat.equals("2")) {
@@ -110,6 +112,7 @@ public class Robot extends TimedRobot {
 					Autonomous.placeCubeOnScale();
 				}
 			} else if (union.equalsIgnoreCase("LL")) {
+				delay = Double.valueOf(Initialization.LLLDelay);
 				if (Initialization.LLLStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.LLLStrat.equals("2")) {
@@ -122,6 +125,7 @@ public class Robot extends TimedRobot {
 					
 				}
 			} else if (union.equalsIgnoreCase("RR")) {
+				delay = Double.valueOf(Initialization.RRRDelay);
 				if (Initialization.RRRStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.RRRStrat.equals("2")) {
@@ -142,6 +146,7 @@ public class Robot extends TimedRobot {
 					RecordingList.setRobotValues(robotValuesI++);
 				}
 			} else if (union.equalsIgnoreCase("LR")) {
+				delay = Double.valueOf(Initialization.LRLDelay);
 				if (Initialization.LRLStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.LRLStrat.equals("2")) {
