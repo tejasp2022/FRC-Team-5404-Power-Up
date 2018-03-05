@@ -155,37 +155,51 @@ public class Autonomous {
 		return BuildingBlocks.moveAndBrake(126, 0.7);
 	}
 
-	public static void placeCubeOnSwitch() {
-		Timer.delay(Initialization.autoDelayTime);
-		if (Robot.autoProcess < Initialization.switchSequence.size()) {
-			if (Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
-				BuildingBlocks.resetSomeSensors();
-				Robot.autoProcess++;
-				BuildingBlocks.successesContact = 0;
-				Initialization.gearaffesPID.reset();
-				Initialization.gearaffesPID.enable();
-				BuildingBlocks.setBraking(false);
-			}
+	boolean delaySwitch = false;
+	public static void placeCubeOnSwitch(double delay) {
+		if(!delaySwitch){
+			if(BuildingBlocks.delay(delay)){
+				delaySwitch = true;
+			}	
 		} else {
-			Teleop.switchAutomationInProgress = false;
-			Teleop.scaleAutomationInProgress = false;
+		
+			if (Robot.autoProcess < Initialization.switchSequence.size()) {
+				if (Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
+					BuildingBlocks.resetSomeSensors();
+					Robot.autoProcess++;
+					BuildingBlocks.successesContact = 0;
+					Initialization.gearaffesPID.reset();
+					Initialization.gearaffesPID.enable();
+					BuildingBlocks.setBraking(false);
+				}
+			} else {
+				Teleop.switchAutomationInProgress = false;
+				Teleop.scaleAutomationInProgress = false;
+			}
 		}
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 
-	public static void placeCubeOnScale() {
-		Timer.delay(Initialization.autoDelayTime);
-		if (Robot.autoProcess < Initialization.scaleSequence.size()) {
-			if (Initialization.scaleSequence.get(Robot.autoProcess).apply(null)) {
-				BuildingBlocks.resetSomeSensors();
-				Robot.autoProcess++;
-				BuildingBlocks.successesContact = 0;
-				Initialization.gearaffesPID.reset();
-				Initialization.gearaffesPID.enable();
-			}
+	boolean delayScale = false;
+	public static void placeCubeOnScale(double delay) {
+		if(!delayScale){
+			if(BuildingBlocks.delay(delay)){
+				delayScale = true;
+			}	
 		} else {
-			Teleop.switchAutomationInProgress = false;
-			Teleop.scaleAutomationInProgress = false;
+			Timer.delay(Initialization.autoDelayTime);
+			if (Robot.autoProcess < Initialization.scaleSequence.size()) {
+				if (Initialization.scaleSequence.get(Robot.autoProcess).apply(null)) {
+					BuildingBlocks.resetSomeSensors();
+					Robot.autoProcess++;
+					BuildingBlocks.successesContact = 0;
+					Initialization.gearaffesPID.reset();
+					Initialization.gearaffesPID.enable();
+				}
+			} else {
+				Teleop.switchAutomationInProgress = false;
+				Teleop.scaleAutomationInProgress = false;
+			}
 		}
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
