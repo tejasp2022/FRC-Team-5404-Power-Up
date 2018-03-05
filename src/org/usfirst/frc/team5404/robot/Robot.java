@@ -107,18 +107,18 @@ public class Robot extends TimedRobot {
 				if (Initialization.RLRStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.RLRStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch();
+					Autonomous.placeCubeOnSwitch(delay);
 				} else if (Initialization.RLRStrat.equals("3")) {
-					Autonomous.placeCubeOnScale();
+					Autonomous.placeCubeOnScale(delay);
 				}
 			} else if (union.equalsIgnoreCase("LL")) {
 				delay = Double.valueOf(Initialization.LLLDelay);
 				if (Initialization.LLLStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.LLLStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch();
+					Autonomous.placeCubeOnSwitch(delay);
 				} else if (Initialization.LLLStrat.equals("3")) {
-					Autonomous.placeCubeOnScale();
+					Autonomous.placeCubeOnScale(delay);
 				} else if (Initialization.LLLStrat.equals("4")) { // two cube
 					
 				} else if (Initialization.LLLStrat.equals("5")) { // three cube
@@ -129,9 +129,9 @@ public class Robot extends TimedRobot {
 				if (Initialization.RRRStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.RRRStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch();
+					Autonomous.placeCubeOnSwitch(delay);
 				} else if (Initialization.RRRStrat.equals("3")) {
-					Autonomous.placeCubeOnScale();
+					Autonomous.placeCubeOnScale(delay);
 				} else if (Initialization.RRRStrat.equals("4")) { // two cube
 					if(needToPopulateTwoCube) {
 						RecordingList.populateTwoCube();	
@@ -150,9 +150,9 @@ public class Robot extends TimedRobot {
 				if (Initialization.LRLStrat.equals("1")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.LRLStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch();
+					Autonomous.placeCubeOnSwitch(delay);
 				} else if (Initialization.LRLStrat.equals("3")) {
-					Autonomous.placeCubeOnScale();
+					Autonomous.placeCubeOnScale(delay);
 				}
 			} else {
 				SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
