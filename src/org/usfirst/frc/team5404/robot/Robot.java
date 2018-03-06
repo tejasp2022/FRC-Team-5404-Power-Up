@@ -88,12 +88,6 @@ public class Robot extends TimedRobot {
 	int playbackI = 0;
 	int playbackReverseI = Autonomous.timeList.size()-1;
 	public void autonomousPeriodic() {
-		/*if(!rotateCalled) {
-			if(BuildingBlocks.moveAndBrake(120, 0.9)) {
-				rotateCalled = true;
-			}
-		}/**/
-		
 		if (SmartDashboard.getBoolean("Playback Robot", false)) {
 			Autonomous.playback(playbackI++);
 		
@@ -101,66 +95,76 @@ public class Robot extends TimedRobot {
 			Autonomous.playbackReverse(playbackReverseI--);
 		} else {
 			String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
-			double delay = 0;
 			if (union.equalsIgnoreCase("RL")) {
-				delay = Double.valueOf(Initialization.RLRDelay);
-				if (Initialization.RLRStrat.equals("1")) {
+				Initialization.finalDelay = Double.valueOf(Initialization.RLRDelay);
+				if (Initialization.RLRStrat.equals("0")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.RLRStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch(delay);
+					Autonomous.placeCubeOnSwitch();
 				} else if (Initialization.RLRStrat.equals("3")) {
-					Autonomous.placeCubeOnScale(delay);
-				}
+					Initialization.autoScaleHeight = 56;
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.RLRStrat.equals("4")) { 
+					Initialization.autoScaleHeight = 44;
+					Autonomous.placeCubeOnScale();
+				} 
 			} else if (union.equalsIgnoreCase("LL")) {
-				delay = Double.valueOf(Initialization.LLLDelay);
-				if (Initialization.LLLStrat.equals("1")) {
+				Initialization.finalDelay = Double.valueOf(Initialization.LLLDelay);
+				if (Initialization.LLLStrat.equals("0")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.LLLStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch(delay);
+					Autonomous.placeCubeOnSwitch();
 				} else if (Initialization.LLLStrat.equals("3")) {
-					Autonomous.placeCubeOnScale(delay);
-				} else if (Initialization.LLLStrat.equals("4")) { // two cube
-					
-				} else if (Initialization.LLLStrat.equals("5")) { // three cube
-					
+					Initialization.autoScaleHeight = 56;
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.LLLStrat.equals("4")) { 
+					Initialization.autoScaleHeight = 44;
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.LLLStrat.equals("5")) { 
+					Initialization.autoScaleHeight = 56;
+					// Call Two Cube Method
+				} else if (Initialization.LLLStrat.equals("6")) { 
+					Initialization.autoScaleHeight = 44;
+					// Call Two Cube Method
 				}
 			} else if (union.equalsIgnoreCase("RR")) {
-				delay = Double.valueOf(Initialization.RRRDelay);
-				if (Initialization.RRRStrat.equals("1")) {
+				Initialization.finalDelay = Double.valueOf(Initialization.RRRDelay);
+				if (Initialization.RRRStrat.equals("0")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.RRRStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch(delay);
+					Autonomous.placeCubeOnSwitch();
 				} else if (Initialization.RRRStrat.equals("3")) {
-					Autonomous.placeCubeOnScale(delay);
-				} else if (Initialization.RRRStrat.equals("4")) { // two cube
-					if(needToPopulateTwoCube) {
-						RecordingList.populateTwoCube();	
-						needToPopulateTwoCube = false;
-					}
-					RecordingList.setRobotValues(robotValuesI++);
-				} else if (Initialization.RRRStrat.equals("5")) { // three cube
-					if(needToPopulateThreeCube) {
-						RecordingList.populateThreeCube();	
-						needToPopulateThreeCube = false;
-					}
-					RecordingList.setRobotValues(robotValuesI++);
+					Initialization.autoScaleHeight = 56;
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.RRRStrat.equals("4")) { 
+					Initialization.autoScaleHeight = 44;
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.RRRStrat.equals("5")) { 
+					Initialization.autoScaleHeight = 56;
+					// Call Two Cube Method
+				} else if (Initialization.RRRStrat.equals("6")) { 
+					Initialization.autoScaleHeight = 44;
+					// Call Two Cube Method
 				}
 			} else if (union.equalsIgnoreCase("LR")) {
-				delay = Double.valueOf(Initialization.LRLDelay);
-				if (Initialization.LRLStrat.equals("1")) {
+				Initialization.finalDelay = Double.valueOf(Initialization.LRLDelay);
+				if (Initialization.LRLStrat.equals("0")) {
 					Autonomous.crossAutoline();
 				} else if (Initialization.LRLStrat.equals("2")) {
-					Autonomous.placeCubeOnSwitch(delay);
+					Autonomous.placeCubeOnSwitch();
 				} else if (Initialization.LRLStrat.equals("3")) {
-					Autonomous.placeCubeOnScale(delay);
-				}
+					Initialization.autoScaleHeight = 56;
+					Autonomous.placeCubeOnScale();
+				} else if (Initialization.LRLStrat.equals("4")) { 
+					Initialization.autoScaleHeight = 44;
+					Autonomous.placeCubeOnScale();
+				} 
 			} else {
 				SmartDashboard.putString("Autonomous Alert", "Valid Autonomous Strategy Not Found");
 				System.err.println("Valid Autonomous Strategy Not Found");
 			} 
 		}
 		MatchData.log();
-		/**/
 	}
 
 	public void teleopInit() {
@@ -202,7 +206,6 @@ public class Robot extends TimedRobot {
 		}
 		SmartDashboard.putNumber("Grabber Encoder Ticks", Initialization.grabberEncoder.getDistance());
 		SmartDashboard.putNumber("GRABBO", Initialization.grabberMotorController.get());
-		//NumberFormat.getNumberInstance().
 		SmartDashboard.putNumber("Battery Consumed", formatValue(ChargeAccumulator.get()));
 		MatchData.log();
 	}

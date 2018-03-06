@@ -32,6 +32,10 @@ public class Initialization {
 	// Test Sequence
 		public static ArrayList<Function<Void, Boolean>> testSequence = new ArrayList<Function<Void, Boolean>>();
 
+	
+	// Autonomous Scale Height
+		public static double autoScaleHeight; 
+		
 	// Autonomous Switch or Scale
 		public static String autoStrat;
 		public static boolean twoCube = true;
@@ -50,6 +54,8 @@ public class Initialization {
 		
 		public static String LRLStrat;
 		public static String LRLDelay;
+		
+		public static double finalDelay;
 
 	// Autonomous Positioning Variables
 		public static char ourSwitchPosition;

@@ -155,14 +155,7 @@ public class Autonomous {
 		return BuildingBlocks.moveAndBrake(126, 0.7);
 	}
 
-	boolean delaySwitch = false;
-	public static void placeCubeOnSwitch(double delay) {
-		if(!delaySwitch){
-			if(BuildingBlocks.delay(delay)){
-				delaySwitch = true;
-			}	
-		} else {
-		
+	public static void placeCubeOnSwitch() {	
 			if (Robot.autoProcess < Initialization.switchSequence.size()) {
 				if (Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
 					BuildingBlocks.resetSomeSensors();
@@ -176,30 +169,22 @@ public class Autonomous {
 				Teleop.switchAutomationInProgress = false;
 				Teleop.scaleAutomationInProgress = false;
 			}
-		}
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 
-	boolean delayScale = false;
-	public static void placeCubeOnScale(double delay) {
-		if(!delayScale){
-			if(BuildingBlocks.delay(delay)){
-				delayScale = true;
-			}	
-		} else {
-			Timer.delay(Initialization.autoDelayTime);
-			if (Robot.autoProcess < Initialization.scaleSequence.size()) {
-				if (Initialization.scaleSequence.get(Robot.autoProcess).apply(null)) {
-					BuildingBlocks.resetSomeSensors();
-					Robot.autoProcess++;
-					BuildingBlocks.successesContact = 0;
-					Initialization.gearaffesPID.reset();
-					Initialization.gearaffesPID.enable();
-				}
-			} else {
-				Teleop.switchAutomationInProgress = false;
-				Teleop.scaleAutomationInProgress = false;
+
+	public static void placeCubeOnScale() {
+		if (Robot.autoProcess < Initialization.scaleSequence.size()) {
+			if (Initialization.scaleSequence.get(Robot.autoProcess).apply(null)) {
+				BuildingBlocks.resetSomeSensors();
+				Robot.autoProcess++;
+				BuildingBlocks.successesContact = 0;
+				Initialization.gearaffesPID.reset();
+				Initialization.gearaffesPID.enable();
 			}
+		} else {
+			Teleop.switchAutomationInProgress = false;
+			Teleop.scaleAutomationInProgress = false;
 		}
 		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
@@ -223,6 +208,7 @@ public class Autonomous {
 		Initialization.switchSequence.clear();
 
 		if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
@@ -230,6 +216,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 		
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(113 + Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
@@ -240,6 +227,7 @@ public class Autonomous {
 			//Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 		
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(238 - Initialization.robotDepth / 3, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(282 - Initialization.robotWidth, Initialization.autoMoveSpeed)); 
@@ -251,6 +239,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 	
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("1")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(238 - Initialization.robotDepth / 3, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(264 - Initialization.robotWidth, Initialization.autoMoveSpeed)); 																																									// too
@@ -262,12 +251,14 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 		
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("2")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(112, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(28 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.eject());
 			//Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(-(84 - Initialization.robotDepth)/2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 			
 		} else if (Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveAndBrake(168 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.moveUntilContact(55.56 - Initialization.robotWidth / 2, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
@@ -279,9 +270,10 @@ public class Autonomous {
 		Initialization.scaleSequence.clear();
 
 		if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(325.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(Initialization.autoScaleHeight));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow) & BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));
@@ -289,6 +281,7 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & BuildingBlocks.autoElevatorHeight(62));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(173 + Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
@@ -303,13 +296,14 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(242.375 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(276 - Initialization.robotWidth, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(92.65, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(Initialization.autoScaleHeight));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(1));
@@ -319,13 +313,14 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("1")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(242.375 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(264 - Initialization.robotWidth, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(83.65, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(Initialization.autoScaleHeight));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(1));
@@ -335,6 +330,7 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("2")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(67 - Initialization.robotWidth / 2, Initialization.autoMoveSpeed));
@@ -346,9 +342,10 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(0));
 
 		} else if (Initialization.scalePosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
+			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(323.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.rotateAndBrake(-90, Initialization.autoRotateSpeed));
-			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(56));
+			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(Initialization.autoScaleHeight));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(4, Initialization.autoMoveContactLow) & BuildingBlocks.eject());
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.moveAndBrake(-4, Initialization.autoMoveContactLow));
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.autoElevatorHeight(12));

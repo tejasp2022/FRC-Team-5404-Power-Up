@@ -3,6 +3,7 @@ package org.usfirst.frc.team5404.robot;
 import java.util.function.Function;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 
 public class BuildingBlocks {
@@ -385,13 +386,20 @@ public class BuildingBlocks {
 		return false;
 	}
 
+	public static int tries = 0;
 	public static void getMatchData() {
-		try {
-			Initialization.ourSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
-			Initialization.scalePosition = DriverStation.getInstance().getGameSpecificMessage().charAt(1);
-			Initialization.opposingSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(2);
-		} catch (NullPointerException e) {
-			System.err.println("One or more of the field element positions could not be determined");
+		while(DriverStation.getInstance().getGameSpecificMessage().length()<3){
+			if(tries>=700) {
+				break;
+			}
+			try {
+				Initialization.ourSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
+				Initialization.scalePosition = DriverStation.getInstance().getGameSpecificMessage().charAt(1);
+				Initialization.opposingSwitchPosition = DriverStation.getInstance().getGameSpecificMessage().charAt(2);
+			} catch (NullPointerException e) {
+				System.err.println("One or more of the field element positions could not be determined");
+			}
+			tries++;
 		}
 	}
 }
