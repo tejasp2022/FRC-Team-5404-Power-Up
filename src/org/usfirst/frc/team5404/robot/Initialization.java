@@ -132,8 +132,9 @@ public class Initialization {
 		public static Spark climberMotorController = new Spark(PortIO.climberMotor);
 		
 	// Intake Motor Controller
-	//public static VictorSP intakeMotorControllerRight = new VictorSP(PortIO.intakeMotorRight);
+		//public static VictorSP intakeMotorControllerRight = new VictorSP(PortIO.intakeMotorRight);
 		//public static VictorSP intakeMotorControllerLeft = new VictorSP(PortIO.intakeMotorLeft);
+		public static double intakeSpeed;
 
 	// Drive Encoders
 		public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
@@ -174,11 +175,11 @@ public class Initialization {
 		public static Solenoid endEffectorPiston = new Solenoid(PortIO.endEffector);
 		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
 		public static Solenoid brakePiston1 = new Solenoid(PortIO.brake1);
-		public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
-		public static Solenoid climberPiston1 = new Solenoid (PortIO.climber1);
-		public static Solenoid climberPiston2 = new Solenoid (PortIO.climber2);
-		public static Solenoid detacherPiston1 = new Solenoid(PortIO.detacher1);
-		public static Solenoid detacherPiston2 = new Solenoid(PortIO.detacher2);
+		//public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
+		public static Solenoid climberPiston = new Solenoid (PortIO.climber);
+		public static Solenoid detacherPiston = new Solenoid(PortIO.detacher);
+		public static Solenoid intakePiston = new Solenoid(PortIO.intake);
+		
 		// PID
 		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());
 

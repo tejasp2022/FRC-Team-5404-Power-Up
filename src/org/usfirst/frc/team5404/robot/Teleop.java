@@ -126,25 +126,20 @@ public class Teleop {
 		if (Math.abs(Initialization.operator.getRawAxis(2)) >= 0.8 && lastAxisValueClimber < 0.8) {
 			climberCount++;
 			if (climberCount % 2 == 0) { // Climber is Closed
-				Initialization.climberPiston1.set(false);
-				Initialization.climberPiston2.set(true);
+				Initialization.climberPiston.set(false);
 			} else {  // Climber is Open
-				Initialization.climberPiston2.set(false);
-				Initialization.climberPiston1.set(true);
+				Initialization.climberPiston.set(true);
 				climberOpen = true;
 			}
 		}
 		if (climberOpen) { 
 			if(Math.abs(Initialization.operator.getRawAxis(3)) >= 0.8 && lastAxisValueDetacher < 0.8 ) { // Detacher is Open, Climber is Closed
-				Initialization.detacherPiston1.set(false);
-				Initialization.detacherPiston2.set(true);
+				Initialization.detacherPiston.set(true);
 				detacherOpen = true;
-				Initialization.climberPiston1.set(false);
-				Initialization.climberPiston2.set(true);
+				Initialization.climberPiston.set(false);
 			}
 		} else { // Detacher is closed 
-			Initialization.detacherPiston2.set(false);
-			Initialization.detacherPiston1.set(true);
+			Initialization.detacherPiston.set(false);
 		}
 		lastAxisValueClimber = Math.abs(Initialization.operator.getRawAxis(2));
 		lastAxisValueDetacher = Math.abs(Initialization.operator.getRawAxis(3));
@@ -158,6 +153,19 @@ public class Teleop {
 		}
 	}
 
+	
+	public static void intake() {
+		/*if(Initialization.operator.getRawButton(7)){
+			Initialization.intakeMotorControllerLeft.set(Initialization.intakeSpeed);
+			Initialization.intakeMotorControllerRight.set(Initialization.intakeSpeed);
+		} else if (Initialization.operator.getRawButton(8)) {
+			Initialization.intakeMotorControllerLeft.set(-Initialization.intakeSpeed);
+			Initialization.intakeMotorControllerRight.set(-Initialization.intakeSpeed);
+		}*/
+		
+		Initialization.intakePiston.set(Initialization.operator.getRawButton(8));
+	}
+	
 	public static void ejectCube() {
 		Initialization.endEffectorPiston.set(Initialization.operator.getRawButton(6)); // right Bumper
 	}
@@ -208,9 +216,6 @@ public class Teleop {
 			double operatorOutput = Initialization.grabberMultiplier * -Math.signum(Initialization.operator.getRawAxis(1)) * Math.pow(Initialization.operator.getRawAxis(1), 2);
 			Initialization.grabberMotorController.set(calculateGrabberOutput(operatorOutput));
 		}
-		
-		
-
 	}
 	public static double calculateGrabberOutput(double operatorOutput) {
 		double holdSpeed = BuildingBlocks.calculateGrabberHoldSpeed();

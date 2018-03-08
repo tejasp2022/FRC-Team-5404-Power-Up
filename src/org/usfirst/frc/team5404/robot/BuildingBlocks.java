@@ -16,8 +16,8 @@ public class BuildingBlocks {
 		return false;
 	}
 	public static void setBraking(boolean braking) {
-		Initialization.brakePiston1.set(!braking);
-		Initialization.brakePiston2.set(braking);
+		Initialization.brakePiston1.set(braking);
+		//Initialization.brakePiston2.set(braking);
 	}
 	static boolean isBraking = false;
 	public static boolean moveAndBrake(double dist, double speed) {
@@ -315,7 +315,7 @@ public class BuildingBlocks {
 			} else {
 				Initialization.grabberMotorController.set(calculateGrabberHoldSpeed());
 				Teleop.grabberAutomationInProgress = false;
-				if(doGrabberRelease) {
+				if(doGrabberRelease) { 
 					if(Initialization.grabberPiston.get()) {
 						Initialization.grabberPiston.set(false);
 						Teleop.grabberCount++;
