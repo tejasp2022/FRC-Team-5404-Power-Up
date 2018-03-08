@@ -66,6 +66,7 @@ public class Initialization {
 		public static ArrayList<Function<Void, Boolean>> scaleSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> twoCubeSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> sideScaleSequence = new ArrayList<Function<Void, Boolean>>();
+		
 	
 
 	// Autonomous Moving Speeds

@@ -336,6 +336,24 @@ public class BuildingBlocks {
 		return hold * Math.sin(Math.toRadians(Initialization.grabberEncoder.getDistance()));
 	}
 	
+	public static boolean loadCube() {//gets cube from ground onto end effector
+		Initialization.grabberPiston.set(true);
+		setGrabberPosition(150,0.8,0.6);
+		if(Initialization.grabberPiston.get() && Initialization.grabberEncoder.getDistance() == 150) {
+			Initialization.grabberPiston.set(false);
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean resetGrabber() {//brings grabber back down
+		setGrabberPosition(0,0.8,0.6);
+		if(Initialization.grabberEncoder.getDistance() == 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static double endTime;
 	public static boolean delayInProgress = false;
 	
