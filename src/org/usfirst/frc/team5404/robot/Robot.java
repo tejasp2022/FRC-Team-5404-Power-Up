@@ -198,6 +198,7 @@ public class Robot extends TimedRobot {
 		Teleop.ejectCube();
 		Teleop.grabber();
 		Teleop.climb();
+		Teleop.intake();
 		Teleop.endGameRumble();
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();
@@ -307,6 +308,7 @@ public class Robot extends TimedRobot {
 		Initialization.rotateMultiplier = Initialization.prefs.getDouble("Rotate Multiplier", 50) / 100;
 		Initialization.elevateMultiplier = Initialization.prefs.getDouble("Elevate Multiplier", 70) / 100;
 		Initialization.grabberMultiplier = Prefs.getDouble("Grabber Multiplier", 60) / 100;
+		Initialization.intakeSpeed = Prefs.getDouble("Intake Speed", 100) / 100;
 
 		// PID Multipliers
 		Initialization.move_KP = Initialization.prefs.getDouble("Move KP", 0.06);
@@ -331,5 +333,4 @@ public class Robot extends TimedRobot {
 		Initialization.LRLDelay = autoCode[8];
 		
 	}
-	
 }

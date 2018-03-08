@@ -20,8 +20,8 @@ public class PortIO {
 			public static final int grabberMotor = 5;
 			
 		// Intake Motor Controller
-			//public static final int intakeMotorRight = 6;
-			//public static final int intakeMotorLeft = 7;
+			public static final int intakeMotorRight = 6;
+			public static final int intakeMotorLeft = 7;
 		
 		// Climber Motor Controller 
 			public static final int climberMotor = 6;
@@ -52,13 +52,11 @@ public class PortIO {
 	        public static final int endEffector = 0;
 	        public static final int grabber = 1;
 	        public static final int brake1 = 2;
-	        public static final int brake2 = 3;
-	        public static final int climber1 = 6;
-	        public static final int climber2 = 7;
-	        public static final int detacher1 = 4;
-	        public static final int detacher2 = 5;
+	        //public static final int brake2 = 3;
+	        public static final int detacher = 4;
+	        public static final int climber = 5;
+	        public static final int intake = 6;
 	        
-		
 	//------------------------------------------USB Ports---------------------------------------------//
 		// Joysticks
 			public static final int driver = 0;
