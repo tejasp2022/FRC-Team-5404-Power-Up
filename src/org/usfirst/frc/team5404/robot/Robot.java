@@ -13,7 +13,6 @@ import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTable;
 
 public class Robot extends TimedRobot {
 
@@ -72,13 +71,8 @@ public class Robot extends TimedRobot {
 		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
 		rotateCalled = false;
-		BuildingBlocks.successesContact = 0;
-		BuildingBlocks.setBraking(false);
-		//Autonomous.sendActionSummary();
-		playbackI = 0;
-		playbackReverseI = Autonomous.timeList.size()-1;
-		needToPopulateTwoCube = true;
-		needToPopulateThreeCube = true;
+		DriveBase.successesContact = 0;
+		DriveBase.setBraking(false);
 		robotValuesI = 0;
 		MatchData.beginLogging(Mode.AUTO);
 	}
@@ -86,13 +80,9 @@ public class Robot extends TimedRobot {
 	boolean rotateCalled = false;
 
 	int playbackI = 0;
-	int playbackReverseI = Autonomous.timeList.size()-1;
 	public void autonomousPeriodic() {
 		if (SmartDashboard.getBoolean("Playback Robot", false)) {
-			Autonomous.playback(playbackI++);
 		
-		} else if (SmartDashboard.getBoolean("Reverse Playback Robot", false)) {
-			Autonomous.playbackReverse(playbackReverseI--);
 		} else {
 			String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
 			if (union.equalsIgnoreCase("RL")) {
@@ -107,7 +97,9 @@ public class Robot extends TimedRobot {
 				} else if (Initialization.RLRStrat.equals("4")) { 
 					Initialization.autoScaleHeight = 44;
 					Autonomous.placeCubeOnScale();
-				} 
+				} else if (Initialization.RLRStrat.equals("5")) {
+					Autonomous.placeCubeOnSwitchThenSwitch();
+				}
 			} else if (union.equalsIgnoreCase("LL")) {
 				Initialization.finalDelay = Double.valueOf(Initialization.LLLDelay);
 				if (Initialization.LLLStrat.equals("0")) {
@@ -122,10 +114,10 @@ public class Robot extends TimedRobot {
 					Autonomous.placeCubeOnScale();
 				} else if (Initialization.LLLStrat.equals("5")) { 
 					Initialization.autoScaleHeight = 56;
-					// Call Two Cube Method
+					Autonomous.placeCubeOnScaleThenSwitch();
 				} else if (Initialization.LLLStrat.equals("6")) { 
 					Initialization.autoScaleHeight = 44;
-					// Call Two Cube Method
+					Autonomous.placeCubeOnScaleThenSwitch();
 				}
 			} else if (union.equalsIgnoreCase("RR")) {
 				Initialization.finalDelay = Double.valueOf(Initialization.RRRDelay);
@@ -141,10 +133,12 @@ public class Robot extends TimedRobot {
 					Autonomous.placeCubeOnScale();
 				} else if (Initialization.RRRStrat.equals("5")) { 
 					Initialization.autoScaleHeight = 56;
-					// Call Two Cube Method
+					Autonomous.placeCubeOnScaleThenSwitch();
 				} else if (Initialization.RRRStrat.equals("6")) { 
 					Initialization.autoScaleHeight = 44;
-					// Call Two Cube Method
+					Autonomous.placeCubeOnScaleThenSwitch();
+				} else if (Initialization.RRRStrat.equals("7")) {
+					Autonomous.placeCubeOnSwitchThenSwitch();
 				}
 			} else if (union.equalsIgnoreCase("LR")) {
 				Initialization.finalDelay = Double.valueOf(Initialization.LRLDelay);
@@ -172,22 +166,7 @@ public class Robot extends TimedRobot {
 		assignPreferenceVariables();
 		//resetSensors();
 		calibrateSensors();
-		BuildingBlocks.setBraking(false);
-		if (SmartDashboard.getBoolean("Record Robot", false)) {
-			Autonomous.timeList.clear();
-			Autonomous.BRList.clear();
-			Autonomous.FRList.clear();
-			Autonomous.BLList.clear();
-			Autonomous.FLList.clear();
-			Autonomous.elvList.clear();
-			Autonomous.ejectPistonList.clear();
-			Autonomous.gyroList.clear();
-			Autonomous.encoderList.clear();
-			Autonomous.differenceInGyroList.clear();
-			Autonomous.differenceInEncoderList.clear();
-			Autonomous.stepList.clear();
-			Autonomous.summaryList.clear();
-		}
+		DriveBase.setBraking(false);
 		MatchData.beginLogging(Mode.TELEOP);
 	}
 
@@ -202,9 +181,6 @@ public class Robot extends TimedRobot {
 		Teleop.endGameRumble();
 		Teleop.rangeDistance();
 		Teleop.elevatorRumble();
-		if (SmartDashboard.getBoolean("Record Robot", false)) {
-			Autonomous.record();
-		}
 		SmartDashboard.putNumber("Grabber Encoder Ticks", Initialization.grabberEncoder.getDistance());
 		SmartDashboard.putNumber("GRABBO", Initialization.grabberMotorController.get());
 		SmartDashboard.putNumber("Battery Consumed", formatValue(ChargeAccumulator.get()));
@@ -234,12 +210,6 @@ public class Robot extends TimedRobot {
 		MatchData.saveBulkLog();
 		MatchData.saveLog();
 		Initialization.gearaffesPID.reset();
-		SmartDashboard.putBoolean("Record Robot", false);
-		try {
-		Autonomous.printer();
-		} catch (IndexOutOfBoundsException ex ) {
-			
-		}
 	}
 
 	public void disabledPeriodic() {

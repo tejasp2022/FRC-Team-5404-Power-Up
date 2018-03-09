@@ -75,25 +75,20 @@ public class Test {
 			double leftRate = Initialization.leftDriveEncoder.getRate();
 			double rightRate = Initialization.rightDriveEncoder.getRate();
 			drive.arcadeDrive(0, 0);
-			BuildingBlocks.setBraking(true);
-			/*Initialization.FL.set(-Kp*leftRate);
-			Initialization.BL.set(-Kp*leftRate);
-			Initialization.FR.set(-Kp*rightRate);
-			Initialization.BR.set(-Kp*rightRate);*/
+			DriveBase.setBraking(true);
 			if(Math.abs(leftRate) < 0.8 && Math.abs(rightRate) < 0.8) {
 				double lbd = Math.abs(Initialization.leftDriveEncoder.getDistance() - leftStartedBrake);
 				double rbd = Math.abs(Initialization.rightDriveEncoder.getDistance() - rightStartedBrake);
 				System.out.println("Left Brake Distance: " + lbd);
 				System.out.println("Right Brake Distance: " + rbd);
 				System.out.println("AVG DIST: " + ((lbd + rbd) / 2));
-				//System
 				isBraking = false;
 				drive.arcadeDrive(0, 0);
 				return true;
 			} else {
 				return false;
 			}
-		} else { // arbitrary but we can test later
+		} else { 
 			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) < (Math.abs(dist))) {
 				if (dist > 0) {
 					drive.arcadeDrive(speed, Initialization.gearaffesPID.get(), false);																					
@@ -120,27 +115,21 @@ public class Test {
 		if(isBraking) {
 			double rate = Initialization.gyro.getRate();
 			drive.arcadeDrive(0, 0);
-			BuildingBlocks.setBraking(true);
-			/*Initialization.FL.set(-Kp*leftRate);
-			Initialization.BL.set(-Kp*leftRate);
-			Initialization.FR.set(-Kp*rightRate);
-			Initialization.BR.set(-Kp*rightRate);*/
+			DriveBase.setBraking(true);
 			if(Math.abs(rate) < 0.8) {
 				double gAngle = Initialization.gyro.getAngle();
 				double lbd = Math.abs(gAngle - gyroStartedBrake);
-				//double rbd = Math.abs(Initialization.rightDriveEncoder.getDistance() - rightStartedBrake);
 				System.out.println("Input Angle: " + angle);
 				System.out.println("Braked At: " + gyroStartedBrake);
 				System.out.println("Stopped At: " + gAngle);
 				System.out.println("Gyro Brake Angle: " + lbd);
-				//System
 				isBraking = false;
 				drive.arcadeDrive(0, 0);
 				return true;
 			} else {
 				return false;
 			}
-		} else { // arbitrary but we can test later
+		} else { 
 			if (Math.abs(Initialization.gyro.getAngle()) < (Math.abs(angle))) {
 				if (angle > 0) {
 					drive.arcadeDrive(0, speed, false);																					

@@ -51,9 +51,9 @@ public class Teleop {
 	
 	public static void drive() {
 		if(Initialization.driver.getRawButton(3)) {
-			BuildingBlocks.setBraking(true);
+			DriveBase.setBraking(true);
 		} else {
-			BuildingBlocks.setBraking(false);
+			DriveBase.setBraking(false);
 		}
 		double finalMoveMultiplier = Initialization.driver.getRawButton(5) ? 1: Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.moveMultiplier;
 		double finalRotateMultiplier = Initialization.driver.getRawButton(6) ? 1: Initialization.driver.getRawAxis(3) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
@@ -75,7 +75,7 @@ public class Teleop {
 		boolean goSlowTop = (Math.abs(Initialization.elevatorEncoder.getDistance()) > 72 && Math.signum(Initialization.elevator.get()) == 1);
 		if (elevatorAutomationInProgress) {
 			double speed = goSlowBottom ? Initialization.automationBottomSpeed: goSlowTop ? Initialization.automationTopSpeed : Initialization.automationHighSpeed;
-			BuildingBlocks.setElevatorHeight(elevatorTargetHeight, speed);
+			Elevator.setElevatorHeight(elevatorTargetHeight, speed);
 
 		} else if (Initialization.operator.getRawButtonPressed(1)) { // A
 			elevatorAutomationInProgress = true;
@@ -176,29 +176,26 @@ public class Teleop {
 	
 	public static void grabber() {
 		if (grabberAutomationInProgress) {
-			double upSpeed = 0.8;
-			double downSpeed = 0.6;
 			if(Initialization.operator.getPOV() == 270) {
 				grabberAutomationInProgress = false;
 			} else {
-				BuildingBlocks.setGrabberPosition(grabberTargetAngle, upSpeed, downSpeed);
+				Grabber.setGrabberPosition(grabberTargetAngle, Grabber.grabberUpSpeed, Grabber.grabberDownSpeed);
 			}
-
 		} else if( Initialization.operator.getPOV()!= -1) {
 			if(Initialization.operator.getPOV() == 0) {
 				grabberAutomationInProgress = true;
 				grabberTargetAngle = Prefs.getDouble("Grabber Preset High", 150); 
-				BuildingBlocks.doGrabberRelease = true;
+				Grabber.doGrabberRelease = true;
 				
 			} else if (Initialization.operator.getPOV() == 90) {
 				grabberAutomationInProgress = true;
 				grabberTargetAngle = Prefs.getDouble("Grabber Preset Medium", 90); 
-				BuildingBlocks.doGrabberRelease = false;
+				Grabber.doGrabberRelease = false;
 	
 			} else if (Initialization.operator.getPOV() == 180) {
 				grabberAutomationInProgress = true;
 				grabberTargetAngle = Prefs.getDouble("Grabber Preset Low", 0);
-				BuildingBlocks.doGrabberRelease = false;
+				Grabber.doGrabberRelease = false;
 				
 			} else if (Initialization.operator.getPOV() == 270) {
 				grabberAutomationInProgress = false;
@@ -218,7 +215,7 @@ public class Teleop {
 		}
 	}
 	public static double calculateGrabberOutput(double operatorOutput) {
-		double holdSpeed = BuildingBlocks.calculateGrabberHoldSpeed();
+		double holdSpeed = Grabber.calculateGrabberHoldSpeed();
 		if(operatorOutput >= 0) {
 			return holdSpeed + (1 - holdSpeed) * operatorOutput;
 		} else {
