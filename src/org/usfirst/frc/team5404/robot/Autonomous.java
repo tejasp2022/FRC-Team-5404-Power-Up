@@ -102,6 +102,12 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(64.8, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> DriveBase.moveUntilContact(16.2 - Initialization.robotDepth, Initialization.autoMoveContactHigh, Initialization.autoMoveContactLow));
 			Initialization.switchSequence.add((Void) -> Elevator.eject());
+			// Untested Portion - Moves Robot to Exchange Zone
+			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(-70, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> DriveBase.rotateAndBrake(90, Initialization.autoRotateSpeed));
+			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(60 - Initialization.robotDepth, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> DriveBase.rotateAndBrake(90, Initialization.autoRotateSpeed));
+			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(34, Initialization.autoMoveSpeed));
 					
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
