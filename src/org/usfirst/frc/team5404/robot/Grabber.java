@@ -7,7 +7,10 @@ public class Grabber {
 	
 	public static boolean setGrabberState(boolean state) {
 		Initialization.grabberPiston.set(state);
-		return true;
+		if (BuildingBlocks.delay(0.5)) {
+			return true;
+		}
+		return false;
 	}
 	
 	public static double calculateGrabberHoldSpeed() {
@@ -63,11 +66,11 @@ public class Grabber {
 	
 	public static boolean cubeToEndEffector() {
 		if (setGrabberState(true)) {
-			if (BuildingBlocks.delay(0.5)) {
+			
 				if (DriveBase.moveAndBrake(5, -0.5)) {
 					if (setGrabberPosition(Prefs.getDouble("Grabber Preset High", 150), grabberUpSpeed, grabberDownSpeed)) {
 						if (setGrabberState(false)) {
-							if (BuildingBlocks.delay(0.5)) {
+							
 								if (setGrabberPosition(0, grabberUpSpeed, grabberDownSpeed)) {
 									if(DriveBase.moveAndBrake(5, 0.5)) {
 										return true;
@@ -77,15 +80,11 @@ public class Grabber {
 						}
 					}
 				}
-
-			}
-		}
 		return false;
 	}
 	
 	public static boolean cubeToExtend() {
 		if (setGrabberState(true)) {
-			if (BuildingBlocks.delay(0.5)) {
 				if (DriveBase.moveAndBrake(5, -0.5)) {
 					if (setGrabberPosition(Prefs.getDouble("Grabber Preset Medium", 90), grabberUpSpeed, grabberDownSpeed)) {
 						if(DriveBase.moveAndBrake(5, 0.5)) {
@@ -94,7 +93,6 @@ public class Grabber {
 					}
 				}
 
-			}
 		}
 		return false;
 	}
