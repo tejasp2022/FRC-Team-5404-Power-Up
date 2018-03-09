@@ -90,7 +90,6 @@ public class Grabber {
                     			}
                 		}
            		 }
-
         	}
         return false;
     }
