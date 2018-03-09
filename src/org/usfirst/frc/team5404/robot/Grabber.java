@@ -65,36 +65,34 @@ public class Grabber {
 	}
 	
 	public static boolean cubeToEndEffector() {
-		if (setGrabberState(true)) {
-			
-				if (DriveBase.moveAndBrake(5, -0.5)) {
-					if (setGrabberPosition(Prefs.getDouble("Grabber Preset High", 150), grabberUpSpeed, grabberDownSpeed)) {
-						if (setGrabberState(false)) {
-							
-								if (setGrabberPosition(0, grabberUpSpeed, grabberDownSpeed)) {
-									if(DriveBase.moveAndBrake(5, 0.5)) {
-										return true;
-									}
-								}
-							}
-						}
-					}
-				}
-		return false;
-	}
+        	if (setGrabberState(true)) {
+            		if (DriveBase.moveAndBrake(5, -0.5)) {
+                		if (setGrabberPosition(Prefs.getDouble("Grabber Preset High", 150), grabberUpSpeed, grabberDownSpeed)) {
+                    			if (setGrabberState(false)) {
+                       		 		if (setGrabberPosition(0, grabberUpSpeed, grabberDownSpeed)) {
+                            				if (DriveBase.moveAndBrake(5, 0.5)) {
+                                				return true;
+                            				}
+                        			}
+                    			}
+                		}
+            		}
+        	}
+        return false;
+    }
 	
-	public static boolean cubeToExtend() {
-		if (setGrabberState(true)) {
-				if (DriveBase.moveAndBrake(5, -0.5)) {
-					if (setGrabberPosition(Prefs.getDouble("Grabber Preset Medium", 90), grabberUpSpeed, grabberDownSpeed)) {
-						if(DriveBase.moveAndBrake(5, 0.5)) {
-							return true;
-						}
-					}
-				}
+    	public static boolean cubeToExtend() {
+        	if (setGrabberState(true)) {
+            		if (DriveBase.moveAndBrake(5, -0.5)) {
+                		if (setGrabberPosition(Prefs.getDouble("Grabber Preset Medium", 90), grabberUpSpeed, grabberDownSpeed)) {
+                    			if (DriveBase.moveAndBrake(5, 0.5)) {
+                        			return true;
+                    			}
+                		}
+           		 }
 
-		}
-		return false;
-	}
+        	}
+        return false;
+    }
 
 }
