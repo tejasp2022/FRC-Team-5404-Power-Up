@@ -1,6 +1,16 @@
 package org.usfirst.frc.team5404.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Grabber {
+	
+	public Grabber() {
+		Initialization.grabberSequence.add((Void) -> setGrabberState(true));
+		Initialization.grabberSequence.add((Void) -> DriveBase.moveAndBrake(5, -0.5));
+		Initialization.grabberSequence.add((Void) -> setGrabberPosition(Prefs.getDouble("Grabber Preset High", 150), grabberUpSpeed, grabberDownSpeed));
+		Initialization.grabberSequence.add((Void) -> setGrabberState(false));
+		Initialization.grabberSequence.add((Void) -> setGrabberPosition(0, grabberUpSpeed, grabberDownSpeed) &  DriveBase.moveAndBrake(5, 0.5) );
+	}
 	
 	public static double grabberUpSpeed = 0.8;
 	public static double grabberDownSpeed = 0.6;
@@ -80,6 +90,25 @@ public class Grabber {
         	}
         return false;
     }
+	
+	
+	public static int grabberProcess = 0;
+
+	public static boolean cubeToEndEffectorGood() {
+		if (grabberProcess < Initialization.grabberSequence.size()) {
+			if (Initialization.grabberSequence.get(grabberProcess).apply(null)) {
+				BuildingBlocks.resetSomeSensors();
+				grabberProcess++;
+				DriveBase.successesContact = 0;
+				Initialization.gearaffesPID.reset();
+				Initialization.gearaffesPID.enable();
+				DriveBase.setBraking(false);
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
     	public static boolean cubeToExtend() {
         	if (setGrabberState(true)) {

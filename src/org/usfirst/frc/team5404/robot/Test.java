@@ -19,7 +19,16 @@ public class Test {
 		Initialization.controllerEncoderPairs.add(new SmartController("BR", Initialization.BR, Initialization.rightDriveEncoder, true));
 		Initialization.testSequence = new ArrayList<>();
 		if (SmartDashboard.getBoolean("Motor Series Test", false)) {
+			Initialization.testSequence.add((Void) -> {
+				DriveBase.setBraking(Prefs.getBoolean("Test Brake On", false));
+				return true;
+			});
+			Initialization.testSequence.add((Void) -> BuildingBlocks.delay(1));
 			Initialization.testSequence.add((Void) -> motorSeriesTest(Initialization.controllerEncoderPairs, Prefs.getDouble("Test Power", 0.6), 5));
+			Initialization.testSequence.add((Void) -> {
+				DriveBase.setBraking(false);
+				return true;
+			});
 		} else if (SmartDashboard.getBoolean("Motor Individual Test", false)) {
 			Initialization.testSequence.add((Void) -> motorIndividualTest(Initialization.controllerEncoderPairs.get(3), 5));
 		} else if (SmartDashboard.getBoolean("Elevator Speed Range Test", false)) {
@@ -36,6 +45,20 @@ public class Test {
 			double angle = Prefs.getDouble("Test Drive Angle", 90);
 			double speed = Prefs.getDouble("Test Drive Speed", 0.5);
 			Initialization.testSequence.add((Void)-> rotateBrakeTest(Initialization.gearaffesDrive, angle, speed));
+		} else if(SmartDashboard.getBoolean("Multiple Rotation Test", false)) {
+			Average.reset();
+			Average.newAverage("speed");
+			Average.newAverage("angle");
+			for(int i = 0; i < 30; i++) {
+				Initialization.testSequence.add((Void) -> rotateBrakeTest(Initialization.gearaffesDrive, Prefs.getDouble("Test Drive Angle", 90),
+						Prefs.getDouble("Test Drive Speed", 0.9)));
+				Initialization.testSequence.add((Void) -> BuildingBlocks.delay(1.5));
+			}
+			Initialization.testSequence.add((Void) -> {
+				System.out.println("AVGSpeed: " + Average.get("speed"));
+				System.out.println("AVGAngle: " + Average.get("angle"));
+				return true;
+			});
 		}
 		principalV = Initialization.pdp.getVoltage();
 	}
@@ -116,15 +139,17 @@ public class Test {
 			double rate = Initialization.gyro.getRate();
 			drive.arcadeDrive(0, 0);
 			DriveBase.setBraking(true);
-			if(Math.abs(rate) < 0.8) {
+			if(Math.abs(rate) < 0.3) {
 				double gAngle = Initialization.gyro.getAngle();
 				double lbd = Math.abs(gAngle - gyroStartedBrake);
 				System.out.println("Input Angle: " + angle);
 				System.out.println("Braked At: " + gyroStartedBrake);
 				System.out.println("Stopped At: " + gAngle);
 				System.out.println("Gyro Brake Angle: " + lbd);
+				Average.add("angle", gAngle - angle);
 				isBraking = false;
 				drive.arcadeDrive(0, 0);
+				DriveBase.setBraking(false);
 				return true;
 			} else {
 				return false;
@@ -142,6 +167,7 @@ public class Test {
 				gyroStartedBrake = Initialization.gyro.getAngle();
 				double gRate = Math.abs(Initialization.gyro.getRate());
 				System.out.println("Spin Rate: " + gRate);
+				Average.add("speed", gRate);
 				drive.arcadeDrive(0, 0);
 				isBraking = true;
 				return false;

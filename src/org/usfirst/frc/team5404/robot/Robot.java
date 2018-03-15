@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		assignPreferenceVariables();
+		BuildingBlocks.tries = 0;
 		BuildingBlocks.getMatchData();
 		Autonomous.determineAutonomousSequence();
 		autoProcess = 0;
@@ -81,6 +82,12 @@ public class Robot extends TimedRobot {
 
 	int playbackI = 0;
 	public void autonomousPeriodic() {
+		/*if(!rotateCalled) {
+			if(DriveBase.moveAndBrake(Prefs.getDouble("Test Drive Distance", 120), Prefs.getDouble("Test Drive Speed", 0.9))) {
+				rotateCalled = true;
+			}
+		}
+		/**/
 		if (SmartDashboard.getBoolean("Playback Robot", false)) {
 		
 		} else {
@@ -158,7 +165,8 @@ public class Robot extends TimedRobot {
 				System.err.println("Valid Autonomous Strategy Not Found");
 			} 
 		}
-		MatchData.log();
+		displaySensors();
+		MatchData.log();/**/
 	}
 
 	public void teleopInit() {
@@ -202,13 +210,22 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 		if (SmartDashboard.getBoolean("Run Test Sequence", false)) {
 			Test.runTestSequence();
+		} else {
+			SmartDashboard.putString("Test Sequence", "Finished test sequence.");
+			SmartDashboard.putBoolean("Run Test Sequence", false);
+			SmartDashboard.putBoolean("Motor Series Test", false);
+			SmartDashboard.putBoolean("Motor Individual Test", false);
+			SmartDashboard.putBoolean("Elevator Speed Range Test", false);
+			SmartDashboard.putBoolean("Motor Brake Test", false);
+			SmartDashboard.putBoolean("Rotate Brake Test", false);
+			SmartDashboard.putBoolean("Multiple Rotation Test", false);
 		}
 		MatchData.log();
 	}
 
 	public void disabledInit() {
-		MatchData.saveBulkLog();
-		MatchData.saveLog();
+		//MatchData.saveBulkLog();
+		//MatchData.saveLog();
 		Initialization.gearaffesPID.reset();
 	}
 

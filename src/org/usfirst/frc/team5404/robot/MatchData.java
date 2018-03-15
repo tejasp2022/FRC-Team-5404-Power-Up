@@ -35,7 +35,7 @@ public class MatchData {
 			isLogging = true;
 		}
 	}
-	public static void log() {
+	public static void log() {/*
 		MatchDataFrame frame = new MatchDataFrame(Timer.getFPGATimestamp() - timeStampBegin);
 		Set<Map.Entry<String, Function<Void, Double>>> entrySet = matchCollectors.entrySet();
 		for(Map.Entry<String, Function<Void, Double>> entry : entrySet) {
@@ -43,7 +43,7 @@ public class MatchData {
 			double val = entry.getValue().apply(null);
 			frame.putData(id, val);
 		}
-		dataLog.add(frame);
+		dataLog.add(frame);*/
 	}
 	public static void saveBulkLog() {
 		if(beginLogAt > 0) {

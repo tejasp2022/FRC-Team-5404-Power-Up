@@ -153,7 +153,7 @@ public class Teleop {
 		}
 	}
 
-	
+	public static boolean intakeInProgress = false;
 	public static void intake() {
 		/*if(Initialization.operator.getRawButton(7)){
 			Initialization.intakeMotorControllerLeft.set(Initialization.intakeSpeed);
@@ -162,8 +162,17 @@ public class Teleop {
 			Initialization.intakeMotorControllerLeft.set(-Initialization.intakeSpeed);
 			Initialization.intakeMotorControllerRight.set(-Initialization.intakeSpeed);
 		}*/
-		
-		Initialization.intakePiston.set(Initialization.operator.getRawButton(8));
+		if(Initialization.driver.getRawButtonPressed(8)) {
+			intakeInProgress = true;
+		}
+		if(intakeInProgress) {
+			Initialization.intakePiston.set(true);
+			if(BuildingBlocks.delay(.75)) {
+				intakeInProgress = false;
+			}
+		} else {
+			Initialization.intakePiston.set(false);
+		}
 	}
 	
 	public static void ejectCube() {

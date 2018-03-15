@@ -67,6 +67,8 @@ public class Initialization {
 		public static ArrayList<Function<Void, Boolean>> scaleThenSwitchSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> switchThenSwitchSequence = new ArrayList<Function<Void, Boolean>>();
 	
+		public static ArrayList<Function<Void, Boolean>> grabberSequence = new ArrayList<Function<Void, Boolean>>();
+		
 	// Autonomous Moving Speeds
 		public static double autoDelayTime;
 		public static double autoMoveSpeed;
@@ -153,7 +155,7 @@ public class Initialization {
 		
 	// Grabber Encoder
 		public static Encoder grabberEncoder = new Encoder(PortIO.grabberEncoder1, PortIO.grabberEncoder2);
-		public static final double GRABBER_TICKS_PER_HALF_REVOLUTION = -956;//-39443.25;
+		public static final double GRABBER_TICKS_PER_HALF_REVOLUTION = -751.441;//-39443.25;
 		public static final double GRABBER_DEGREES_PER_TICK = 180 / GRABBER_TICKS_PER_HALF_REVOLUTION; // 0.00456352
 
 	// Limit Switches
@@ -174,7 +176,7 @@ public class Initialization {
 		public static Solenoid endEffectorPiston = new Solenoid(PortIO.endEffector);
 		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
 		public static Solenoid brakePiston1 = new Solenoid(PortIO.brake1);
-		//public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
+		public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
 		public static Solenoid climberPiston = new Solenoid (PortIO.climber);
 		public static Solenoid detacherPiston = new Solenoid(PortIO.detacher);
 		public static Solenoid intakePiston = new Solenoid(PortIO.intake);

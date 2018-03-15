@@ -10,7 +10,7 @@ public class DriveBase {
 			double rightRate = Initialization.rightDriveEncoder.getRate();
 			Initialization.gearaffesDrive.arcadeDrive(0, 0);
 			setBraking(true);
-			if(Math.abs(leftRate) < 15 || Math.abs(rightRate) < 15) {
+			if(Math.abs(leftRate) < 5 && Math.abs(rightRate) < 5) {
 				isBraking = false;
 				Initialization.gearaffesDrive.arcadeDrive(0, 0);
 				setBraking(false);
@@ -21,7 +21,7 @@ public class DriveBase {
 		} else { 
 			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) +
 					(Initialization.brakeB0 +
-							Math.abs(Initialization.leftDriveEncoder.getRate()) * Initialization.brakeB1)
+							Math.pow(Initialization.leftDriveEncoder.getRate(), 2) * Initialization.brakeB1)
 						< Math.abs(dist)) {
 				if (dist > 0) {
 					Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gearaffesPID.get(), false);																					
@@ -41,8 +41,8 @@ public class DriveBase {
 	
 	
 	public static void setBraking(boolean braking) {
-		Initialization.brakePiston1.set(braking);
-		//Initialization.brakePiston2.set(braking);
+		Initialization.brakePiston1.set(!braking);
+		Initialization.brakePiston2.set(braking);
 	}
 
 	public static boolean move(double dist, double speed) {
@@ -88,7 +88,7 @@ public class DriveBase {
 		if (successesContact < 5) {
 			double speed = Math.abs(Initialization.leftDriveEncoder.getDistance()) < 0.8 * dist ? highSpeed : lowSpeed;
 			Initialization.gearaffesDrive.arcadeDrive(speed, -Initialization.gyro.getAngle() * Initialization.move_KP, false);
-			if (Math.abs(Initialization.leftDriveEncoder.getRate()) <= 5 && Timer.getFPGATimestamp() > contactBegin + 0.4) {
+			if (Math.abs(Initialization.leftDriveEncoder.getRate()) <= 5 && Timer.getFPGATimestamp() > contactBegin + 0.2) {
 				successesContact++;
 			}
 			return false;
@@ -110,7 +110,7 @@ public class DriveBase {
 			double gRate = Math.abs(Initialization.gyro.getRate());
 			Initialization.gearaffesDrive.arcadeDrive(0, 0);
 			setBraking(true);
-			if(Math.abs(Initialization.gyro.getAngle()) >= Math.abs(angle) || gRate < 0.3) {
+			if(Math.abs(Initialization.gyro.getAngle()) >= Math.abs(angle) || gRate < 1) {
 				isBraking = false;
 				Initialization.gearaffesDrive.arcadeDrive(0, 0);
 				setBraking(false);
@@ -120,10 +120,11 @@ public class DriveBase {
 				return false;
 			}
 		} else {
-			double B0 = Prefs.getDouble("Brake Rotation B0", 6.12944);
-			double B1 = Prefs.getDouble("Brake Rotation B1", 0.000534458);
+			double A = Prefs.getDouble("Brake Rotation A", 6.12944);
+			double B = Prefs.getDouble("Brake Rotation B", 0);
+			double C = Prefs.getDouble("Brake Rotation C", 0.000534458);
 			double gRate = Math.abs(Initialization.gyro.getRate());
-			double predictedError = B0 + B1 * gRate * gRate;
+			double predictedError = C + B * gRate + A * gRate * gRate;
 			if (Math.abs(Initialization.gyro.getAngle() * Initialization.MultiplierForGyro) + predictedError < Math.abs(angle)) {
 				Robot.displaySensors();
 				if (angle > 0) {

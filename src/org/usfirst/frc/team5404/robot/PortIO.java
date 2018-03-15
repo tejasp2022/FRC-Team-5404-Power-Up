@@ -51,8 +51,8 @@ public class PortIO {
 		// Solenoids
 	        public static final int endEffector = 0;
 	        public static final int grabber = 1;
-	        public static final int brake1 = 2;
-	        //public static final int brake2 = 3;
+	        public static final int brake1 = 2; // right
+	        public static final int brake2 = 3; //left
 	        public static final int detacher = 4;
 	        public static final int climber = 5;
 	        public static final int intake = 6;
