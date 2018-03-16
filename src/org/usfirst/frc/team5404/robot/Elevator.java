@@ -10,6 +10,14 @@ public class Elevator {
 		}
 		return false;
 	}
+	public static boolean endeffOut() {
+		Initialization.endEffectorPiston.set(true);
+		return true;
+	}
+	public static boolean endeffIn() {
+		Initialization.endEffectorPiston.set(false);
+		return true;
+	}
 	
 	public static boolean autoElevatorHeight(double height) {
 		boolean goSlowBottom = (Math.abs(Initialization.elevatorEncoder.getDistance()) < 12 && Math.signum(Initialization.elevator.get()) == -1);

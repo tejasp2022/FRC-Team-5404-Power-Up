@@ -155,7 +155,7 @@ public class Initialization {
 		
 	// Grabber Encoder
 		public static Encoder grabberEncoder = new Encoder(PortIO.grabberEncoder1, PortIO.grabberEncoder2);
-		public static final double GRABBER_TICKS_PER_HALF_REVOLUTION = -751.441;//-39443.25;
+		public static final double GRABBER_TICKS_PER_HALF_REVOLUTION = -1294.14839;//-751.441;//-39443.25;
 		public static final double GRABBER_DEGREES_PER_TICK = 180 / GRABBER_TICKS_PER_HALF_REVOLUTION; // 0.00456352
 
 	// Limit Switches

@@ -19,9 +19,10 @@ public class DriveBase {
 				return false;
 			}
 		} else { 
+			double avg = (Math.abs(Initialization.leftDriveEncoder.getDistance()) + Math.abs(Initialization.rightDriveEncoder.getDistance())) / 2;
 			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) +
 					(Initialization.brakeB0 +
-							Math.pow(Initialization.leftDriveEncoder.getRate(), 2) * Initialization.brakeB1)
+							Math.pow(avg, 2) * Initialization.brakeB1)
 						< Math.abs(dist)) {
 				if (dist > 0) {
 					Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gearaffesPID.get(), false);																					
@@ -41,7 +42,7 @@ public class DriveBase {
 	
 	
 	public static void setBraking(boolean braking) {
-		Initialization.brakePiston1.set(!braking);
+		Initialization.brakePiston1.set(braking);
 		Initialization.brakePiston2.set(braking);
 	}
 

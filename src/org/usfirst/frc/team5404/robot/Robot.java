@@ -224,8 +224,8 @@ public class Robot extends TimedRobot {
 	}
 
 	public void disabledInit() {
-		//MatchData.saveBulkLog();
-		//MatchData.saveLog();
+		MatchData.saveBulkLog();
+		MatchData.saveLog();
 		Initialization.gearaffesPID.reset();
 	}
 

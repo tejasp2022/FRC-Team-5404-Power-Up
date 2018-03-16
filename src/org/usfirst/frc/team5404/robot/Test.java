@@ -19,16 +19,8 @@ public class Test {
 		Initialization.controllerEncoderPairs.add(new SmartController("BR", Initialization.BR, Initialization.rightDriveEncoder, true));
 		Initialization.testSequence = new ArrayList<>();
 		if (SmartDashboard.getBoolean("Motor Series Test", false)) {
-			Initialization.testSequence.add((Void) -> {
-				DriveBase.setBraking(Prefs.getBoolean("Test Brake On", false));
-				return true;
-			});
 			Initialization.testSequence.add((Void) -> BuildingBlocks.delay(1));
 			Initialization.testSequence.add((Void) -> motorSeriesTest(Initialization.controllerEncoderPairs, Prefs.getDouble("Test Power", 0.6), 5));
-			Initialization.testSequence.add((Void) -> {
-				DriveBase.setBraking(false);
-				return true;
-			});
 		} else if (SmartDashboard.getBoolean("Motor Individual Test", false)) {
 			Initialization.testSequence.add((Void) -> motorIndividualTest(Initialization.controllerEncoderPairs.get(3), 5));
 		} else if (SmartDashboard.getBoolean("Elevator Speed Range Test", false)) {
@@ -66,6 +58,7 @@ public class Test {
 	public static int testSequenceIndex;
 
 	public static void runTestSequence() {
+		DriveBase.setBraking(Prefs.getBoolean("Test Brake On", false));
 		if (testSequenceIndex < Initialization.testSequence.size()) {
 			if (Initialization.testSequence.get(testSequenceIndex).apply(null)) {
 				Robot.resetSensors();
@@ -258,7 +251,7 @@ public class Test {
 			diagnosticInfo.append("V\r\n\tConstant: ");
 			diagnosticInfo.append(d / I / V / timePerMotor);
 			diagnosticInfo.append("in/J");
-			Average.reset();
+			//Average.reset();
 			last.controller.set(0);
 			startTime = -1;
 			endTime = -1;
