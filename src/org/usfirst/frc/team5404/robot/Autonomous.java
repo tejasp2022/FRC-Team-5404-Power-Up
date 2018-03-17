@@ -183,7 +183,7 @@ public class Autonomous {
 
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("3")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
-			Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(242.375 - 6 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
+			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(244 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> DriveBase.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(276 + 8 - Initialization.robotWidth, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> DriveBase.rotateAndBrake(90, Initialization.autoRotateSpeed));

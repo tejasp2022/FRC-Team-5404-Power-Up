@@ -116,6 +116,7 @@ public class Teleop {
 	}
 
 	
+	public static boolean canWeClimb = false;
 	public static double lastAxisValueClimber = 0;
 	public static double lastAxisValueDetacher = 0;
 	public static int climberCount = 0;
@@ -123,16 +124,21 @@ public class Teleop {
 	public static boolean detacherOpen = false;
 
 	public static void climb() {
-		if (Math.abs(Initialization.operator.getRawAxis(2)) >= 0.8 && lastAxisValueClimber < 0.8) {
-			climberCount++;
-			if (climberCount % 2 == 0) { // Climber is Closed
-				Initialization.climberPiston.set(false);
-			} else {  // Climber is Open
-				Initialization.climberPiston.set(true);
-				climberOpen = true;
+		if(Timer.getFPGATimestamp() >= 120 || (Math.abs(Initialization.operator.getRawAxis(2)) >= 0.8 && Math.abs(Initialization.driver.getRawAxis(2)) >= 0.8) ) {
+			canWeClimb = true;
+		}
+		if(canWeClimb) {
+			if (Math.abs(Initialization.operator.getRawAxis(2)) >= 0.8 && lastAxisValueClimber < 0.8) {
+				climberCount++;
+				if (climberCount % 2 == 0) { // Climber is Closed
+					Initialization.climberPiston.set(false);
+				} else {  // Climber is Open
+					Initialization.climberPiston.set(true);
+					climberOpen = true;
+				}
 			}
 		}
-		if (climberOpen) { 
+		if (climberOpen) {
 			if(Math.abs(Initialization.operator.getRawAxis(3)) >= 0.8 && lastAxisValueDetacher < 0.8 ) { // Detacher is Open, Climber is Closed
 				Initialization.detacherPiston.set(true);
 				detacherOpen = true;
