@@ -56,7 +56,7 @@ public class Teleop {
 			DriveBase.setBraking(false);
 		}
 		double finalMoveMultiplier = Initialization.driver.getRawButton(5) ? 1: Initialization.driver.getRawAxis(2) > 0.8 ? 0.5 : Initialization.moveMultiplier;
-		double finalRotateMultiplier = Initialization.driver.getRawButton(6) ? 1: Initialization.driver.getRawAxis(3) > 0.8 ? 0.5 : Initialization.rotateMultiplier;
+		double finalRotateMultiplier = Initialization.rotateMultiplier;
 		Initialization.gearaffesDrive.arcadeDrive(Math.signum(Initialization.driver.getRawAxis(1)) * -finalMoveMultiplier * Math.pow(Initialization.driver.getRawAxis(1), 2), Math.signum(Initialization.driver.getRawAxis(4)) * finalRotateMultiplier* Math.pow(Initialization.driver.getRawAxis(4), 2), false);
 		SmartDashboard.putNumber("Robot Speedometer", Robot.formatValue(Math.abs(Initialization.leftDriveEncoder.getRate()) / 12));
 	}
@@ -65,6 +65,9 @@ public class Teleop {
 	static double elevatorTargetHeight;
 	
 	public static void elevate() {
+		if(Initialization.operator.getRawButton(1)) {
+			elevatorAutomationInProgress = false;
+		}
 		if (!Initialization.topLimitSwitch.get() || !Initialization.bottomLimitSwitch.get()) {
 			Initialization.elevator.set(0);
 			if (!Initialization.bottomLimitSwitch.get()) {
@@ -77,11 +80,7 @@ public class Teleop {
 			double speed = goSlowBottom ? Initialization.automationBottomSpeed: goSlowTop ? Initialization.automationTopSpeed : Initialization.automationHighSpeed;
 			Elevator.setElevatorHeight(elevatorTargetHeight, speed);
 
-		} else if (Initialization.operator.getRawButtonPressed(1)) { // A
-			elevatorAutomationInProgress = true;
-			elevatorTargetHeight = 0; // 0 feet - Portal or Switch
-
-		} else if (Initialization.operator.getRawButtonPressed(2)) { // B
+		}  else if (Initialization.operator.getRawButtonPressed(2)) { // B
 			elevatorAutomationInProgress = true;
 			elevatorTargetHeight = 32; // Scale is at 4 feet
 
@@ -124,6 +123,17 @@ public class Teleop {
 	public static boolean detacherOpen = false;
 
 	public static void climb() {
+		if(Initialization.climberPiston.get()) {
+			SmartDashboard.putString("Climber State", "Climber is Open");
+		} else {
+			SmartDashboard.putString("Climber State", "Climber is Open");
+		} 
+		if(Initialization.detacherPiston.get()) {
+			SmartDashboard.putString("Detacher State", "Detacher is Released");
+		} else {
+			SmartDashboard.putString("Detacher State", "Detacher is Connected");
+		} 
+		
 		if(Timer.getFPGATimestamp() >= 120 || (Math.abs(Initialization.operator.getRawAxis(2)) >= 0.8 && Math.abs(Initialization.driver.getRawAxis(2)) >= 0.8) ) {
 			canWeClimb = true;
 		}
@@ -161,14 +171,7 @@ public class Teleop {
 
 	public static boolean intakeInProgress = false;
 	public static void intake() {
-		/*if(Initialization.operator.getRawButton(7)){
-			Initialization.intakeMotorControllerLeft.set(Initialization.intakeSpeed);
-			Initialization.intakeMotorControllerRight.set(Initialization.intakeSpeed);
-		} else if (Initialization.operator.getRawButton(8)) {
-			Initialization.intakeMotorControllerLeft.set(-Initialization.intakeSpeed);
-			Initialization.intakeMotorControllerRight.set(-Initialization.intakeSpeed);
-		}*/
-		if(Initialization.driver.getRawButtonPressed(8)) {
+		if(Initialization.driver.getRawButtonPressed(6)) {
 			intakeInProgress = true;
 		}
 		if(intakeInProgress) {
@@ -190,6 +193,8 @@ public class Teleop {
 	public static double grabberTargetAngle;
 	
 	public static void grabber() {
+		
+		
 		if (grabberAutomationInProgress) {
 			if(Initialization.operator.getPOV() == 270) {
 				grabberAutomationInProgress = false;
@@ -207,11 +212,11 @@ public class Teleop {
 				grabberTargetAngle = Prefs.getDouble("Grabber Preset Medium", 90); 
 				Grabber.doGrabberRelease = false;
 	
-			} else if (Initialization.operator.getPOV() == 180) {
+			} else if (Initialization.operator.getPOV() == 180 || Grabber.restoreGrabber()) {
 				grabberAutomationInProgress = true;
 				grabberTargetAngle = Prefs.getDouble("Grabber Preset Low", 0);
 				Grabber.doGrabberRelease = false;
-				
+			
 			} else if (Initialization.operator.getPOV() == 270) {
 				grabberAutomationInProgress = false;
 			}

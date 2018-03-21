@@ -67,7 +67,8 @@ public class Initialization {
 		public static ArrayList<Function<Void, Boolean>> scaleThenSwitchSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> switchThenSwitchSequence = new ArrayList<Function<Void, Boolean>>();
 	
-		public static ArrayList<Function<Void, Boolean>> grabberSequence = new ArrayList<Function<Void, Boolean>>();
+		public static ArrayList<Function<Void, Boolean>> cubeToEndEffectorSequence = new ArrayList<Function<Void, Boolean>>();
+		public static ArrayList<Function<Void, Boolean>> cubeToExtendSequence = new ArrayList<Function<Void, Boolean>>();
 		
 	// Autonomous Moving Speeds
 		public static double autoDelayTime;
@@ -75,6 +76,7 @@ public class Initialization {
 		public static double autoMoveContactHigh;
 		public static double autoMoveContactLow;
 		public static double autoRotateSpeed;
+		public static double bumpSpeed;
 
 	// Automation Elevator Moving Speeds
 		public static double automationHighSpeed;

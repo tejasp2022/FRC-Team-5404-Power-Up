@@ -48,7 +48,7 @@ public class DriveBase {
 
 	public static boolean move(double dist, double speed) {
 		if (dist > 18) {
-			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) < (Math.abs(dist) - Initialization.prefs.getDouble("Brake Distance", 12))) {
+			if (Math.abs(Initialization.leftDriveEncoder.getDistance()) < (Math.abs(dist))) {
 				if (dist > 0) {
 					Initialization.gearaffesDrive.arcadeDrive(speed, Initialization.gearaffesPID.get(), false);																					
 				} else {

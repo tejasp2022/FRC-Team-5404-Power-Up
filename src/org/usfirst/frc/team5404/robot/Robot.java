@@ -193,6 +193,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("GRABBO", Initialization.grabberMotorController.get());
 		SmartDashboard.putNumber("Battery Consumed", formatValue(ChargeAccumulator.get()));
 		MatchData.log();
+
 	}
 
 	public void testInit() {
@@ -276,6 +277,7 @@ public class Robot extends TimedRobot {
 		Initialization.autoMoveContactHigh = Initialization.prefs.getDouble("Auto Move Contact High", 55) / 100;
 		Initialization.autoMoveContactLow = Initialization.prefs.getDouble("Auto Move Contact Low", 30) / 100;
 		Initialization.autoRotateSpeed = Initialization.prefs.getDouble("Auto Rotate Speed", 50) / 100;
+		Initialization.bumpSpeed = Prefs.getDouble("Bump Speed", 50)/100;
 
 		// Automation Moving Speeds
 		Initialization.autoDelayTime = Initialization.prefs.getDouble("Autonomous Delay", 0);
