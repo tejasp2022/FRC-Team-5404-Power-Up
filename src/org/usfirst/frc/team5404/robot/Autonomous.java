@@ -128,7 +128,7 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> DriveBase.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(34, Initialization.autoMoveSpeed));*/
 				
-		// Contralateral Switch Position 2
+		// Contralateral Switch Station 2
 		} else if (Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.switchSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed));
@@ -224,7 +224,7 @@ public class Autonomous {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(0.5));
 			Initialization.scaleSequence.add((Void) -> Elevator.autoElevatorHeight(0));
 			
-		// Contralateral Scale Position 2
+		// Contralateral Scale Station 2
 		} else if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("2")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
 			Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(59 - Initialization.robotDepth, Initialization.autoMoveSpeed) & Elevator.autoElevatorHeight(62));
@@ -338,14 +338,6 @@ public class Autonomous {
 			Initialization.switchSequence.add((Void) -> DriveBase.rotateAndBrake(-90, Initialization.autoRotateSpeed));
 			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(60 - Initialization.robotDepth, Initialization.autoMoveSpeed));
 			Initialization.switchSequence.add((Void) -> DriveBase.rotateAndBrake(-90, Initialization.autoRotateSpeed));
-			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(34, Initialization.autoMoveSpeed));*/
-			
-			
-			
-			
-			
-			
-			
-			
+			Initialization.switchSequence.add((Void) -> DriveBase.moveAndBrake(34, Initialization.autoMoveSpeed));*/	
 	}
 }
