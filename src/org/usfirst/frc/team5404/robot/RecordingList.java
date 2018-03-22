@@ -1,110 +1,76 @@
 package org.usfirst.frc.team5404.robot;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class RecordingList {
 	
-	public static void setRobotValues(int i) {
-		if(i<Initialization.FRList.size()) {
-			Initialization.FR.set(Initialization.FRList.get(i));
-			Initialization.BR.set(Initialization.BRList.get(i));
-			Initialization.FL.set(Initialization.FLList.get(i));
-			Initialization.BL.set(Initialization.BLList.get(i));
-			Initialization.elevator.set(Initialization.elvList.get(i));
-			Initialization.grabberMotorController.set(Initialization.grabberList.get(i));
-			Initialization.endEffectorPiston.set(Initialization.ejectPistonList.get(i));
-			Initialization.grabberPiston.set(Initialization.grabberPistonList.get(i));
-		}
-		Initialization.FR.set(0);
-		Initialization.BR.set(0);
-		Initialization.FL.set(0);
-		Initialization.BL.set(0);
-		Initialization.elevator.set(0);
-		Initialization.grabberMotorController.set(0);
-		Initialization.endEffectorPiston.set(false);
-		Initialization.grabberPiston.set(false);
+	public static ArrayList<Double> leftMotorsList = new ArrayList<Double>();
+	public static ArrayList<Double> leftEncoderList = new ArrayList<Double>();
+	public static ArrayList<Double> rightMotorsList = new ArrayList<Double>();
+	public static ArrayList<Double> rightEncoderList = new ArrayList<Double>();
+	public static ArrayList<Double> grabberMotorList = new ArrayList<Double>();
+	public static ArrayList<Double> grabberEncoderList = new ArrayList<Double>();
+	public static ArrayList<Double> grabberPistonList = new ArrayList<Double>();
+	public static ArrayList<Double> elevatorMotorList = new ArrayList<Double>();
+	public static ArrayList<Double> elevatorEncoderList = new ArrayList<Double>();
+	public static ArrayList<Double> elevatorPistonList = new ArrayList<Double>();
+	public static ArrayList<Double> intakeMotorList = new ArrayList<Double>();
+	public static ArrayList<Double> intakePistonList = new ArrayList<Double>();
+	
+	
+	public static void populate() {
+		leftMotorsList.add(Initialization.FL.get());
+		leftEncoderList.add(Initialization.leftDriveEncoder.getDistance());
+		rightMotorsList.add(Initialization.FR.get());
+		rightEncoderList.add(Initialization.rightDriveEncoder.getDistance());
+		grabberMotorList.add(Initialization.grabberMotorController.get());
+		grabberEncoderList.add(Initialization.grabberEncoder.getDistance());
+		grabberPistonList.add(Initialization.grabberPiston.get()? 1.0: 0.0);
+		elevatorMotorList.add(Initialization.elevator.get());
+		elevatorEncoderList.add(Initialization.elevatorEncoder.getDistance());
+		elevatorPistonList.add(Initialization.endEffectorPiston.get()? 1.0: 0.0);
+		intakeMotorList.add(0.0);
+		intakePistonList.add(0.0);
 	}
 	
-	
-	public static void populateTwoCube() {
-		Initialization.FRList.clear();
-		Initialization.BRList.clear();
-		Initialization.FLList.clear();
-		Initialization.BLList.clear();
-		Initialization.elvList.clear();
-		Initialization.grabberList.clear();
-		Initialization.ejectPistonList.clear();
-		Initialization.grabberPistonList.clear();
-		
-		Initialization.FRList.add(0.0);
-		
-		
-		
-		Initialization.BRList.add(0.0);
-		
-		
-		
-		Initialization.FLList.add(0.0);
-		
-		
-		
-		Initialization.BLList.add(0.0);
-		
-		
-		
-		Initialization.elvList.add(0.0);
-		
-		
-		
-		Initialization.grabberList.add(0.0);
-		
-		
-		
-		Initialization.ejectPistonList.add(false);
-		
-		
-		
-		Initialization.grabberPistonList.add(false);
-	}
-	
-	public static void populateThreeCube() {
-		Initialization.FRList.clear();
-		Initialization.BRList.clear();
-		Initialization.FLList.clear();
-		Initialization.BLList.clear();
-		Initialization.elvList.clear();
-		Initialization.grabberList.clear();
-		Initialization.ejectPistonList.clear();
-		Initialization.grabberPistonList.clear();
-		
-		Initialization.FRList.add(0.0);
-		
-		
-		
-		Initialization.BRList.add(0.0);
-		
-		
-		
-		Initialization.FLList.add(0.0);
-		
-		
-		
-		Initialization.BLList.add(0.0);
-		
-		
-		
-		Initialization.elvList.add(0.0);
-		
-		
-		
-		Initialization.grabberList.add(0.0);
-		
-		
-		
-		Initialization.ejectPistonList.add(false);
-		
-		
-		
-		Initialization.grabberPistonList.add(false);
-	}
-	
-
+	public static void sendToCSV() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd--HH:mm:ss");
+        Date date = new Date();
+        System.out.println(dateFormat.format(date)); 
+        String fileName = "/media/sda1/Log--" + dateFormat.format(date)+ "Recording.csv";
+        File file = new File(fileName);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter writer = new FileWriter(file);
+            StringBuilder sb = new StringBuilder();
+            String entry = "Time, Left Motor, Left Motor Encoder, Right Motor, Right Motor Encoder, Grabber Motor, Grabber Encoder, Grabber Piston, Elevator Motor, Elevator Encoder, Elevator Piston, Intake Motor, Intake Piston\n";
+            for (int i = 0; i < leftMotorsList.size(); i++) {
+                double time = (i + 1) * 20;
+                entry += time + ","
+                        + leftMotorsList.get(i) + ","
+                        + leftEncoderList.get(i) + ","
+                        + rightMotorsList.get(i) + ","
+                        + rightEncoderList.get(i) + ","
+                        + grabberMotorList.get(i) + ","
+                        + grabberEncoderList.get(i) + ","
+                        + grabberPistonList.get(i) + ","
+                        + elevatorMotorList.get(i) + ","
+                        + elevatorEncoderList.get(i) + ","
+                        + elevatorPistonList.get(i) + ","
+                        + intakeMotorList.get(i) + ","
+                        + intakePistonList.get(i) + "\n";
+            }
+            writer.write(entry);
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
