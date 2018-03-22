@@ -39,7 +39,7 @@ public class RecordingList {
 	}
 	
 	public static void sendToCSV() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd--HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss");
         Date date = new Date();
         System.out.println(dateFormat.format(date)); 
         String fileName = "/media/sda1/Log--" + dateFormat.format(date)+ "Recording.csv";
@@ -49,7 +49,6 @@ public class RecordingList {
                 file.createNewFile();
             }
             FileWriter writer = new FileWriter(file);
-            StringBuilder sb = new StringBuilder();
             String entry = "Time, Left Motor, Left Motor Encoder, Right Motor, Right Motor Encoder, Grabber Motor, Grabber Encoder, Grabber Piston, Elevator Motor, Elevator Encoder, Elevator Piston, Intake Motor, Intake Piston\n";
             for (int i = 0; i < leftMotorsList.size(); i++) {
                 double time = (i + 1) * 20;

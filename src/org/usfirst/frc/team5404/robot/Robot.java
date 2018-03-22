@@ -5,6 +5,7 @@
 ***************************************************************************************/
 package org.usfirst.frc.team5404.robot;
 
+import java.io.File;
 import java.text.DecimalFormat;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -55,6 +56,12 @@ public class Robot extends TimedRobot {
 			lastTime = sArray[0];
 		} catch (Exception e) {
 		}
+		if(autoPlayback == null && SmartDashboard.getBoolean("Playback Robot", false)) {
+			autoPlayback = Playback.loadFromFile(new File(Prefs.getString("Playback File", "")));
+			if(autoPlayback != null) {
+				System.out.println("Playback file loaded.");
+			}
+		}
 	}
 
 	public static int robotValuesI = 0;
@@ -76,11 +83,17 @@ public class Robot extends TimedRobot {
 		DriveBase.setBraking(false);
 		robotValuesI = 0;
 		MatchData.beginLogging(Mode.AUTO);
+		if (SmartDashboard.getBoolean("Playback Robot", false)) {
+			if(autoPlayback != null) {
+				autoPlayback.beginPlayback();
+			}
+		}
 	}
 
 	boolean rotateCalled = false;
 
 	int playbackI = 0;
+	private Playback autoPlayback = null;
 	public void autonomousPeriodic() {
 		/*if(!rotateCalled) {
 			if(DriveBase.moveAndBrake(Prefs.getDouble("Test Drive Distance", 120), Prefs.getDouble("Test Drive Speed", 0.9))) {
@@ -89,7 +102,9 @@ public class Robot extends TimedRobot {
 		}
 		/**/
 		if (SmartDashboard.getBoolean("Playback Robot", false)) {
-		
+			if(autoPlayback != null) {
+				autoPlayback.playbackPeriodic();
+			}
 		} else {
 			String union = Character.toString(Initialization.ourSwitchPosition) + Character.toString(Initialization.scalePosition);
 			if (union.equalsIgnoreCase("RL")) {
