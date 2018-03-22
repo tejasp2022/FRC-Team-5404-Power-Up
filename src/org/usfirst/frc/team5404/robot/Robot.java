@@ -193,7 +193,9 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("GRABBO", Initialization.grabberMotorController.get());
 		SmartDashboard.putNumber("Battery Consumed", formatValue(ChargeAccumulator.get()));
 		MatchData.log();
-
+		if(SmartDashboard.getBoolean("Record Teleop", false)) {
+			RecordingList.populate();
+		}
 	}
 
 	public void testInit() {
@@ -228,6 +230,10 @@ public class Robot extends TimedRobot {
 		MatchData.saveBulkLog();
 		MatchData.saveLog();
 		Initialization.gearaffesPID.reset();
+		if(SmartDashboard.getBoolean("Record Teleop", false)) {
+			RecordingList.sendToCSV();
+			SmartDashboard.putBoolean("Record Teleop", false);
+		}
 	}
 
 	public void disabledPeriodic() {
