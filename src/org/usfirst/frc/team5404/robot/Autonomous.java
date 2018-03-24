@@ -9,13 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
  
-	// Autonomous Routines
-
 	public static boolean crossAutoline() {
 		return DriveBase.moveAndBrake(126, 0.7);
 	}
 
-	public static void placeCubeOnSwitch() {	
+	public static boolean placeCubeOnSwitch() {	
 			if (Robot.autoProcess < Initialization.switchSequence.size()) {
 				if (Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
 					BuildingBlocks.resetSomeSensors();
@@ -25,15 +23,18 @@ public class Autonomous {
 					Initialization.gearaffesPID.enable();
 					DriveBase.setBraking(false);
 				}
+				SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+				return false;
 			} else {
 				Teleop.switchAutomationInProgress = false;
 				Teleop.scaleAutomationInProgress = false;
+				SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+				return true;
 			}
-		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 
 
-	public static void placeCubeOnScale() {
+	public static boolean placeCubeOnScale() {
 		if (Robot.autoProcess < Initialization.scaleSequence.size()) {
 			if (Initialization.scaleSequence.get(Robot.autoProcess).apply(null)) {
 				BuildingBlocks.resetSomeSensors();
@@ -42,14 +43,17 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
+			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+			return false;
 		} else {
 			Teleop.switchAutomationInProgress = false;
 			Teleop.scaleAutomationInProgress = false;
+			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+			return true;
 		}
-		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 	
-	public static void placeCubeOnScaleThenSwitch() {
+	public static boolean placeCubeOnScaleThenSwitch() {
 		if (Robot.autoProcess < Initialization.scaleThenSwitchSequence.size()) {
 			if (Initialization.scaleThenSwitchSequence.get(Robot.autoProcess).apply(null)) {
 				BuildingBlocks.resetSomeSensors();
@@ -58,14 +62,18 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
+			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+			return false;
 		} else {
 			Teleop.switchAutomationInProgress = false;
 			Teleop.scaleAutomationInProgress = false;
+			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+			return true;
 		}
-		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+		
 	}
 	
-	public static void placeCubeOnSwitchThenSwitch() {
+	public static boolean placeCubeOnSwitchThenSwitch() {
 		if (Robot.autoProcess < Initialization.switchThenSwitchSequence.size()) {
 			if (Initialization.switchThenSwitchSequence.get(Robot.autoProcess).apply(null)) {
 				BuildingBlocks.resetSomeSensors();
@@ -74,11 +82,14 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
+			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+			return false;
 		} else {
 			Teleop.switchAutomationInProgress = false;
 			Teleop.scaleAutomationInProgress = false;
+			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+			return true;
 		}
-		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 	
 	public static void determineAutonomousSequence() {
