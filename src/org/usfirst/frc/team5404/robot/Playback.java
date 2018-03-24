@@ -10,8 +10,10 @@ import java.util.List;
 
 import org.usfirst.frc.team5404.robot.GearaffesPID.GearaffesOutput;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Playback {
-	private final GearaffesPID leftEncoderPID, rightEncoderPID;
+	private final GearaffesPID leftEncoderPID, rightEncoderPID, gyroPID;
 	private final double[][] playbackData;
 	private int playbackIndex = 0;
 	private Playback(double[][] playbackData) {
@@ -20,6 +22,8 @@ public class Playback {
 				Prefs.getDouble("Playback Drive KI", 0), Initialization.leftDriveEncoder, new GearaffesOutput());
 		rightEncoderPID = new GearaffesPID(Prefs.getDouble("Playback Drive KP", 0.0001),
 				Prefs.getDouble("Playback Drive KI", 0), Initialization.rightDriveEncoder, new GearaffesOutput());
+		gyroPID = new GearaffesPID(Prefs.getDouble("Playback Gyro KP", 0.0),
+				Prefs.getDouble("Playback Gyro KI", 0.0), Initialization.gyro, new GearaffesOutput());
 	}
 	private static double[] parseDoubles(String[] values) {
 		double[] parsed = new double[values.length];
@@ -41,11 +45,11 @@ public class Playback {
 				lines.add(line);
 			}
 			reader.close();
-			double[][] playbackData = new double[lines.size()][];
+			double[][] playbackData = new double[lines.size()-1][];
 			for(int i = 1; i < lines.size(); i++) { // i=0 is headers
 				line = lines.get(i);
 				double[] inputs = parseDoubles(line.split(","));
-				playbackData[i] = inputs;
+				playbackData[i-1] = inputs;
 			}
 			return new Playback(playbackData);
 		} catch(IOException e) {
@@ -67,6 +71,7 @@ public class Playback {
 		return m >= .5;
 	}
 	public void playbackPeriodic() {
+		System.out.println("Index: " + playbackIndex);
 		// values
 		double[] vals = playbackData[playbackIndex];
 		double L_m_val = vals[1]; //vals[0] = time
@@ -81,14 +86,18 @@ public class Playback {
 		double E_p_val = vals[10];
 		double I_m_val = vals[11];
 		double I_p_val = vals[12];
+		double gyro_val = vals[13];
 		
 		// PIDs
 		leftEncoderPID.setSetpoint(L_e_val);
 		rightEncoderPID.setSetpoint(R_e_val);
-		
+		gyroPID.setSetpoint(gyro_val);
+		SmartDashboard.putNumber("LE", leftEncoderPID.getError());
+		SmartDashboard.putNumber("RE", rightEncoderPID.getError());
+		SmartDashboard.putNumber("GE", gyroPID.getError());
 		// Setting motor values
-		double L_out = constrain(L_m_val + leftEncoderPID.get());
-		double R_out = constrain(R_m_val + rightEncoderPID.get());
+		double L_out = constrain(L_m_val + leftEncoderPID.get() + gyroPID.get());
+		double R_out = constrain(R_m_val + rightEncoderPID.get() - gyroPID.get());
 		Initialization.BL.set(L_out);
 		Initialization.FL.set(L_out);
 		Initialization.BR.set(R_out);

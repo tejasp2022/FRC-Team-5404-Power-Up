@@ -21,7 +21,7 @@ public class RecordingList {
 	public static ArrayList<Double> elevatorPistonList = new ArrayList<Double>();
 	public static ArrayList<Double> intakeMotorList = new ArrayList<Double>();
 	public static ArrayList<Double> intakePistonList = new ArrayList<Double>();
-	
+	public static ArrayList<Double> gyroList = new ArrayList<Double>();
 	
 	public static void populate() {
 		leftMotorsList.add(Initialization.FL.get());
@@ -36,6 +36,7 @@ public class RecordingList {
 		elevatorPistonList.add(Initialization.endEffectorPiston.get()? 1.0: 0.0);
 		intakeMotorList.add(0.0);
 		intakePistonList.add(0.0);
+		gyroList.add(Initialization.gyro.getAngle());
 	}
 	
 	public static void sendToCSV() {
@@ -49,7 +50,7 @@ public class RecordingList {
                 file.createNewFile();
             }
             FileWriter writer = new FileWriter(file);
-            String entry = "Time, Left Motor, Left Motor Encoder, Right Motor, Right Motor Encoder, Grabber Motor, Grabber Encoder, Grabber Piston, Elevator Motor, Elevator Encoder, Elevator Piston, Intake Motor, Intake Piston\n";
+            String entry = "Time, Left Motor, Left Motor Encoder, Right Motor, Right Motor Encoder, Grabber Motor, Grabber Encoder, Grabber Piston, Elevator Motor, Elevator Encoder, Elevator Piston, Intake Motor, Intake Piston, Gyro\n";
             for (int i = 0; i < leftMotorsList.size(); i++) {
                 double time = (i + 1) * 20;
                 entry += time + ","
@@ -64,7 +65,8 @@ public class RecordingList {
                         + elevatorEncoderList.get(i) + ","
                         + elevatorPistonList.get(i) + ","
                         + intakeMotorList.get(i) + ","
-                        + intakePistonList.get(i) + "\n";
+                        + intakePistonList.get(i) + ","
+                        + gyroList.get(i) + "\n";
             }
             writer.write(entry);
             writer.close();

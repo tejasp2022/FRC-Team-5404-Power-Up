@@ -20,15 +20,13 @@ public class Robot extends TimedRobot {
 	public static int autoProcess = 0;
 
 	public void robotInit() {
-		Initialization.cam.startAutomaticCapture(0);
-		Initialization.cam.startAutomaticCapture(1);
+		//Initialization.cam.startAutomaticCapture(0);
+		//Initialization.cam.startAutomaticCapture(1);
 		Initialization.autoModeTable = NetworkTableInstance.getDefault().getTable("Automode");
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		resetSensors();
 		calibrateSensors();
-		SmartDashboard.putBoolean("Record Robot", false);
-		SmartDashboard.putBoolean("Playback Robot", false);
-		SmartDashboard.putBoolean("Reverse Playback Robot", false);
+		SmartDashboard.putBoolean("Record Teleop", false);
 	}
 
 	public static String lastTime = "0";
@@ -61,6 +59,8 @@ public class Robot extends TimedRobot {
 			if(autoPlayback != null) {
 				System.out.println("Playback file loaded.");
 			}
+		} else if(autoPlayback != null && !SmartDashboard.getBoolean("Playback Robot", false)) {
+			autoPlayback = null;
 		}
 	}
 
@@ -191,6 +191,9 @@ public class Robot extends TimedRobot {
 		calibrateSensors();
 		DriveBase.setBraking(false);
 		MatchData.beginLogging(Mode.TELEOP);
+		if(SmartDashboard.getBoolean("Record Teleop", false)) {
+			resetSensors();
+		}
 	}
 
 	public void teleopPeriodic() {

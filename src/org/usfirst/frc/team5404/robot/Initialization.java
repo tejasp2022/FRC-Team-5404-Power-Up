@@ -178,10 +178,10 @@ public class Initialization {
 		public static Solenoid endEffectorPiston = new Solenoid(PortIO.endEffector);
 		public static Solenoid grabberPiston = new Solenoid(PortIO.grabber);
 		public static Solenoid brakePiston1 = new Solenoid(PortIO.brake1);
-		public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
+		//public static Solenoid brakePiston2 = new Solenoid(PortIO.brake2);
 		public static Solenoid climberPiston = new Solenoid (PortIO.climber);
 		public static Solenoid detacherPiston = new Solenoid(PortIO.detacher);
-		public static Solenoid intakePiston = new Solenoid(PortIO.intake);
+		public static GSolenoid intakePiston = new GSolenoid(PortIO.intake);
 		
 		// PID
 		public static GearaffesPID gearaffesPID = new GearaffesPID(move_KP, move_KI, gyro, new GearaffesPID.GearaffesOutput());

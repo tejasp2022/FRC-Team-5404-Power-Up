@@ -43,7 +43,7 @@ public class DriveBase {
 	
 	public static void setBraking(boolean braking) {
 		Initialization.brakePiston1.set(braking);
-		Initialization.brakePiston2.set(braking);
+		//Initialization.brakePiston2.set(braking);
 	}
 
 	public static boolean move(double dist, double speed) {
