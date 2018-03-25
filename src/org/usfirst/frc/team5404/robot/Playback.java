@@ -71,6 +71,7 @@ public class Playback {
 		return m >= .5;
 	}
 	public void playbackPeriodic() {
+		if(playbackIndex <= playbackData.length-1) {
 		System.out.println("Index: " + playbackIndex);
 		// values
 		double[] vals = playbackData[playbackIndex];
@@ -106,10 +107,10 @@ public class Playback {
 		Initialization.grabberPiston.set(bool(G_p_val));
 		Initialization.elevator.set(E_m_val);
 		Initialization.endEffectorPiston.set(bool(E_p_val));
-		
-		
-		
-		
 		playbackIndex++;
+		return false;
+		} else {
+		return true;
+		}	
 	}
 }
