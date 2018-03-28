@@ -41,7 +41,7 @@ public class Test {
 			Average.reset();
 			Average.newAverage("speed");
 			Average.newAverage("angle");
-			for(int i = 0; i < 30; i++) {
+			for(int i = 0; i < 15; i++) {
 				Initialization.testSequence.add((Void) -> rotateBrakeTest(Initialization.gearaffesDrive, Prefs.getDouble("Test Drive Angle", 90),
 						Prefs.getDouble("Test Drive Speed", 0.9)));
 				Initialization.testSequence.add((Void) -> BuildingBlocks.delay(1.5));

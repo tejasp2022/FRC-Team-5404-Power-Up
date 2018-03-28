@@ -5,6 +5,8 @@
 ***************************************************************************************/
 package org.usfirst.frc.team5404.robot;
 
+import java.io.File;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous {
@@ -13,7 +15,7 @@ public class Autonomous {
 		return DriveBase.moveAndBrake(126, 0.7);
 	}
 
-	public static boolean placeCubeOnSwitch() {	
+	public static void placeCubeOnSwitch() {	
 			if (Robot.autoProcess < Initialization.switchSequence.size()) {
 				if (Initialization.switchSequence.get(Robot.autoProcess).apply(null)) {
 					BuildingBlocks.resetSomeSensors();
@@ -23,18 +25,15 @@ public class Autonomous {
 					Initialization.gearaffesPID.enable();
 					DriveBase.setBraking(false);
 				}
-				SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-				return false;
 			} else {
 				Teleop.switchAutomationInProgress = false;
 				Teleop.scaleAutomationInProgress = false;
-				SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-				return true;
 			}
+			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 
 
-	public static boolean placeCubeOnScale() {
+	public static void placeCubeOnScale() {
 		if (Robot.autoProcess < Initialization.scaleSequence.size()) {
 			if (Initialization.scaleSequence.get(Robot.autoProcess).apply(null)) {
 				BuildingBlocks.resetSomeSensors();
@@ -43,17 +42,14 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
-			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-			return false;
 		} else {
 			Teleop.switchAutomationInProgress = false;
 			Teleop.scaleAutomationInProgress = false;
-			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-			return true;
 		}
+		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 	
-	public static boolean placeCubeOnScaleThenSwitch() {
+	public static void placeCubeOnScaleThenSwitch() {
 		if (Robot.autoProcess < Initialization.scaleThenSwitchSequence.size()) {
 			if (Initialization.scaleThenSwitchSequence.get(Robot.autoProcess).apply(null)) {
 				BuildingBlocks.resetSomeSensors();
@@ -62,18 +58,15 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
-			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-			return false;
 		} else {
 			Teleop.switchAutomationInProgress = false;
 			Teleop.scaleAutomationInProgress = false;
-			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-			return true;
 		}
+		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 		
 	}
 	
-	public static boolean placeCubeOnSwitchThenSwitch() {
+	public static void placeCubeOnSwitchThenSwitch() {
 		if (Robot.autoProcess < Initialization.switchThenSwitchSequence.size()) {
 			if (Initialization.switchThenSwitchSequence.get(Robot.autoProcess).apply(null)) {
 				BuildingBlocks.resetSomeSensors();
@@ -82,14 +75,27 @@ public class Autonomous {
 				Initialization.gearaffesPID.reset();
 				Initialization.gearaffesPID.enable();
 			}
-			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-			return false;
 		} else {
 			Teleop.switchAutomationInProgress = false;
 			Teleop.scaleAutomationInProgress = false;
-			SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
-			return true;
 		}
+		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
+	}
+	
+	public static void placeCubeOnScaleThenScale() {
+		if (Robot.autoProcess < Initialization.scaleThenScaleSequence.size()) {
+			if (Initialization.scaleThenScaleSequence.get(Robot.autoProcess).apply(null)) {
+				BuildingBlocks.resetSomeSensors();
+				Robot.autoProcess++;
+				DriveBase.successesContact = 0;
+				Initialization.gearaffesPID.reset();
+				Initialization.gearaffesPID.enable();
+			}
+		} else {
+			Teleop.switchAutomationInProgress = false;
+			Teleop.scaleAutomationInProgress = false;
+		}
+		SmartDashboard.putNumber("Elevator Height", Robot.formatValue(Math.abs(Initialization.elevatorEncoder.getDistance()) / 12));
 	}
 	
 	public static void determineAutonomousSequence() {
@@ -196,7 +202,7 @@ public class Autonomous {
 		// Ipsilateral Scale Station 1
 		if (Initialization.scalePosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
 			Initialization.scaleSequence.add((Void) -> BuildingBlocks.delay(Initialization.finalDelay));
-			Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(325.65 - 24 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
+			Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(325.65 - 20 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed));
 			Initialization.scaleSequence.add((Void) -> DriveBase.rotateAndBrake(45, Initialization.autoRotateSpeed));
 			Initialization.scaleSequence.add((Void) -> Elevator.autoElevatorHeight(Initialization.autoScaleHeight));
 			Initialization.scaleSequence.add((Void) -> DriveBase.move(11, Initialization.autoMoveContactLow));
@@ -290,8 +296,8 @@ public class Autonomous {
 			Initialization.scaleThenSwitchSequence.add((Void) -> DriveBase.moveAndBrake(325.65 - Initialization.robotDepth / 2, Initialization.autoMoveSpeed) & Elevator.autoElevatorHeight(62));
 			Initialization.scaleThenSwitchSequence.add((Void) -> DriveBase.rotateAndBrake(90, Initialization.autoRotateSpeed));
 			//Initialization.scaleSequence.add((Void) -> Elevator.autoElevatorHeight(Initialization.autoScaleHeight));
-			Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(4, Initialization.autoMoveContactLow) & Elevator.eject());
-			Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(-4, Initialization.autoMoveContactLow));
+			//Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(4, Initialization.autoMoveContactLow) & Elevator.eject());
+			//Initialization.scaleSequence.add((Void) -> DriveBase.moveAndBrake(-4, Initialization.autoMoveContactLow));
 			//Initialization.scaleSequence.add((Void) -> Elevator.autoElevatorHeight(0));
 			// Untested Portion Below 
 			Initialization.scaleThenSwitchSequence.add((Void) -> DriveBase.rotateAndBrake(90, Initialization.autoRotateSpeed));
@@ -322,6 +328,21 @@ public class Autonomous {
 			//Initialization.scaleThenSwitchSequence.add((Void) -> Grabber.cubeToEndEffector());
 			Initialization.scaleThenSwitchSequence.add((Void) -> Elevator.eject());
 		}
+		
+		// Scale Then Scale Sequence
+			Initialization.scaleThenScaleSequence.clear();
+			if (Initialization.scalePosition == 'R' && Initialization.ourSwitchPosition == 'R' && Initialization.robotStartingPosition.equals("3")) {
+				Initialization.scaleThenScaleSequence.addAll(Initialization.scaleSequence);
+				Initialization.scaleThenScaleSequence.add((Void) -> Playback.setPlaybackFile("filePath"));
+				Initialization.scaleThenScaleSequence.add((Void) -> Robot.autoPlayback.playbackPeriodic());
+				
+			} else if (Initialization.scalePosition == 'L' && Initialization.ourSwitchPosition == 'L' && Initialization.robotStartingPosition.equals("1")) {
+				final Playback p_LL = Playback.loadFromFile(new File("filePath"));
+				Initialization.scaleThenScaleSequence.addAll(Initialization.scaleSequence);
+				Initialization.scaleThenScaleSequence.add((Void) -> p_LL.playbackPeriodic());
+			}
+			
+		
 		
 		// Switch Then Switch Sequence
 			Initialization.switchThenSwitchSequence.clear();

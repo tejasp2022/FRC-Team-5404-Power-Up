@@ -20,8 +20,8 @@ public class Robot extends TimedRobot {
 	public static int autoProcess = 0;
 
 	public void robotInit() {
-		//Initialization.cam.startAutomaticCapture(0);
-		//Initialization.cam.startAutomaticCapture(1);
+		Initialization.cam.startAutomaticCapture(0);
+		Initialization.cam.startAutomaticCapture(1);
 		Initialization.autoModeTable = NetworkTableInstance.getDefault().getTable("Automode");
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		resetSensors();
@@ -41,13 +41,6 @@ public class Robot extends TimedRobot {
 		}
 		String[] sArray = sendEntry.getValue().getStringArray();
 		if (!sArray[0].equals(lastTime)) {
-			String autoCode = sendEntry.getValue().getStringArray()[1];
-			Initialization.robotStartingPosition = autoCode.substring(0, 1);
-			Initialization.RLRStrat = autoCode.substring(1, 2);
-			Initialization.LLLStrat = autoCode.substring(2, 3);
-			Initialization.RRRStrat = autoCode.substring(3, 4);
-			Initialization.LRLStrat = autoCode.substring(4, 5);
-			Initialization.prefs.putString("Autonomous Code", autoCode);
 			Initialization.autoModeTable.getEntry("receivekey").setStringArray(sArray);
 		}
 		try {
@@ -64,9 +57,7 @@ public class Robot extends TimedRobot {
 		}
 	}
 
-	public static int robotValuesI = 0;
-	public static boolean needToPopulateTwoCube = true;
-	public static boolean needToPopulateThreeCube = true;
+
 	public void autonomousInit() {
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		assignPreferenceVariables();
@@ -78,10 +69,8 @@ public class Robot extends TimedRobot {
 		calibrateSensors();
 		Initialization.gearaffesPID = new GearaffesPID(Initialization.move_KP, Initialization.move_KI, Initialization.gyro, new GearaffesPID.GearaffesOutput());
 		Initialization.gearaffesPID.enable();
-		rotateCalled = false;
 		DriveBase.successesContact = 0;
 		DriveBase.setBraking(false);
-		robotValuesI = 0;
 		MatchData.beginLogging(Mode.AUTO);
 		if (SmartDashboard.getBoolean("Playback Robot", false)) {
 			if(autoPlayback != null) {
@@ -90,17 +79,9 @@ public class Robot extends TimedRobot {
 		}
 	}
 
-	boolean rotateCalled = false;
 
-	int playbackI = 0;
-	private Playback autoPlayback = null;
+	public static Playback autoPlayback = null;
 	public void autonomousPeriodic() {
-		/*if(!rotateCalled) {
-			if(DriveBase.moveAndBrake(Prefs.getDouble("Test Drive Distance", 120), Prefs.getDouble("Test Drive Speed", 0.9))) {
-				rotateCalled = true;
-			}
-		}
-		/**/
 		if (SmartDashboard.getBoolean("Playback Robot", false)) {
 			if(autoPlayback != null) {
 				autoPlayback.playbackPeriodic();
@@ -140,6 +121,9 @@ public class Robot extends TimedRobot {
 				} else if (Initialization.LLLStrat.equals("6")) { 
 					Initialization.autoScaleHeight = 44;
 					Autonomous.placeCubeOnScaleThenSwitch();
+				} else if (Initialization.LLLStrat.equals("7")) { 
+					Initialization.autoScaleHeight = 56;
+					Autonomous.placeCubeOnScaleThenScale();
 				}
 			} else if (union.equalsIgnoreCase("RR")) {
 				Initialization.finalDelay = Double.valueOf(Initialization.RRRDelay);
@@ -161,6 +145,9 @@ public class Robot extends TimedRobot {
 					Autonomous.placeCubeOnScaleThenSwitch();
 				} else if (Initialization.RRRStrat.equals("7")) {
 					Autonomous.placeCubeOnSwitchThenSwitch();
+				} else if (Initialization.LLLStrat.equals("7")) { 
+					Initialization.autoScaleHeight = 56;
+					Autonomous.placeCubeOnScaleThenScale();
 				}
 			} else if (union.equalsIgnoreCase("LR")) {
 				Initialization.finalDelay = Double.valueOf(Initialization.LRLDelay);
@@ -181,13 +168,12 @@ public class Robot extends TimedRobot {
 			} 
 		}
 		displaySensors();
-		MatchData.log();/**/
+		MatchData.log();
 	}
 
 	public void teleopInit() {
 		Initialization.gearaffesDrive.setSafetyEnabled(false);
 		assignPreferenceVariables();
-		//resetSensors();
 		calibrateSensors();
 		DriveBase.setBraking(false);
 		MatchData.beginLogging(Mode.TELEOP);

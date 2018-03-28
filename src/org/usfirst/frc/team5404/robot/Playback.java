@@ -70,47 +70,54 @@ public class Playback {
 	private static boolean bool(double m) {
 		return m >= .5;
 	}
-	public void playbackPeriodic() {
-		if(playbackIndex <= playbackData.length-1) {
-		System.out.println("Index: " + playbackIndex);
-		// values
-		double[] vals = playbackData[playbackIndex];
-		double L_m_val = vals[1]; //vals[0] = time
-		double L_e_val = vals[2];
-		double R_m_val = vals[3];
-		double R_e_val = vals[4];
-		double G_m_val = vals[5];
-		double G_e_val = vals[6];
-		double G_p_val = vals[7];
-		double E_m_val = vals[8];
-		double E_e_val = vals[9];
-		double E_p_val = vals[10];
-		double I_m_val = vals[11];
-		double I_p_val = vals[12];
-		double gyro_val = vals[13];
-		
-		// PIDs
-		leftEncoderPID.setSetpoint(L_e_val);
-		rightEncoderPID.setSetpoint(R_e_val);
-		gyroPID.setSetpoint(gyro_val);
-		SmartDashboard.putNumber("LE", leftEncoderPID.getError());
-		SmartDashboard.putNumber("RE", rightEncoderPID.getError());
-		SmartDashboard.putNumber("GE", gyroPID.getError());
-		// Setting motor values
-		double L_out = constrain(L_m_val + leftEncoderPID.get() + gyroPID.get());
-		double R_out = constrain(R_m_val + rightEncoderPID.get() - gyroPID.get());
-		Initialization.BL.set(L_out);
-		Initialization.FL.set(L_out);
-		Initialization.BR.set(R_out);
-		Initialization.FR.set(R_out);
-		Initialization.grabberMotorController.set(constrain(G_m_val)); // grabber encoder not used because really who cares right now
-		Initialization.grabberPiston.set(bool(G_p_val));
-		Initialization.elevator.set(E_m_val);
-		Initialization.endEffectorPiston.set(bool(E_p_val));
-		playbackIndex++;
-		return false;
+	public boolean playbackPeriodic() {
+		if (playbackIndex <= playbackData.length - 1) {
+			System.out.println("Index: " + playbackIndex);
+			// values
+			double[] vals = playbackData[playbackIndex];
+			double L_m_val = vals[1]; // vals[0] = time
+			double L_e_val = vals[2];
+			double R_m_val = vals[3];
+			double R_e_val = vals[4];
+			double G_m_val = vals[5];
+			double G_e_val = vals[6];
+			double G_p_val = vals[7];
+			double E_m_val = vals[8];
+			double E_e_val = vals[9];
+			double E_p_val = vals[10];
+			double I_m_val = vals[11];
+			double I_p_val = vals[12];
+			double gyro_val = vals[13];
+
+			// PIDs
+			leftEncoderPID.setSetpoint(L_e_val);
+			rightEncoderPID.setSetpoint(R_e_val);
+			gyroPID.setSetpoint(gyro_val);
+			SmartDashboard.putNumber("LE", leftEncoderPID.getError());
+			SmartDashboard.putNumber("RE", rightEncoderPID.getError());
+			SmartDashboard.putNumber("GE", gyroPID.getError());
+			
+			// Setting motor values
+			double L_out = constrain(L_m_val + leftEncoderPID.get() + gyroPID.get());
+			double R_out = constrain(R_m_val + rightEncoderPID.get() - gyroPID.get());
+			Initialization.BL.set(L_out);
+			Initialization.FL.set(L_out);
+			Initialization.BR.set(R_out);
+			Initialization.FR.set(R_out);
+			Initialization.grabberMotorController.set(constrain(G_m_val)); // grabber encoder not used because really who cares right now
+			Initialization.grabberPiston.set(bool(G_p_val));
+			Initialization.elevator.set(E_m_val);
+			Initialization.endEffectorPiston.set(bool(E_p_val));
+			playbackIndex++;
+			return false;
 		} else {
+			return true;
+		}
+	}	
+	
+	public static boolean setPlaybackFile(String file) {
+		Robot.autoPlayback = Playback.loadFromFile(new File(file));
 		return true;
-		}	
 	}
+	
 }

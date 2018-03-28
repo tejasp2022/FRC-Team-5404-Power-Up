@@ -66,7 +66,7 @@ public class Initialization {
 		public static ArrayList<Function<Void, Boolean>> scaleSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> scaleThenSwitchSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> switchThenSwitchSequence = new ArrayList<Function<Void, Boolean>>();
-	
+		public static ArrayList<Function<Void, Boolean>> scaleThenScaleSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> cubeToEndEffectorSequence = new ArrayList<Function<Void, Boolean>>();
 		public static ArrayList<Function<Void, Boolean>> cubeToExtendSequence = new ArrayList<Function<Void, Boolean>>();
 		
@@ -142,7 +142,7 @@ public class Initialization {
 	// Drive Encoders
 		public static Encoder rightDriveEncoder = new Encoder(PortIO.rdEncoder1, PortIO.rdEncoder2);
 		public static Encoder leftDriveEncoder = new Encoder(PortIO.ldEncoder1, PortIO.ldEncoder2);
-		public static final double DRIVE_TICKS_PER_REV = 213.6/1.85;
+		public static final double DRIVE_TICKS_PER_REV = 213.6;
 		public static double DRIVE_INCH_PER_REV = 18.8496;
 		public static double DRIVE_INCHES_PER_TICK = DRIVE_INCH_PER_REV / DRIVE_TICKS_PER_REV; // 0.08824719
 
